@@ -27,7 +27,7 @@ input, textarea {
     margin: 0 .25rem;
 }
 
-input.minutes {
+input.minutes, input.year {
     width: 4rem;
 }
 

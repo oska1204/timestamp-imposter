@@ -60,6 +60,7 @@ updateAll.addEventListener('click', () => {
 const template = document.createElement('template')
 template.innerHTML = `<div>
 <label>Search: <input type="text"></label>
+<label>Year: <input type="text" class="year"></label>
 <button class="update">Update</button>
 <button class="remove">Remove</button>
 <label>Minutes: <input type="number" value="0" min="0" class="minutes"></label>
@@ -76,12 +77,13 @@ customElements.define('elm-', class extends HTMLElement {
             const update = this.querySelector('.update')
             const remove = this.querySelector('.remove')
             const minutes = this.querySelector('.minutes')
+            const year = this.querySelector('.year')
             const input = this.querySelector('input')
             this.minutes = minutes
             this.update = update
             this.input = input
             update.addEventListener('click', () => {
-                fetch('https://www.omdbapi.com/?apikey=80bf610a&t=' + input.value)
+                fetch('https://www.omdbapi.com/?apikey=80bf610a&t=' + input.value + '&y=' + year.value)
                     .then(e => e.json())
                     .then(e => {
                         if (e.Runtime === undefined) {
