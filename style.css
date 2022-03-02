@@ -12,8 +12,9 @@ main {
 section {
     margin: 1rem .5rem;
 }
-section.elm div {
-    margin: 1rem 0;
+.wrap {
+    margin: .5rem 0;
+    padding: 0.25rem;
 }
 
 section.split label, section.list label {
@@ -37,4 +38,8 @@ elm- {
 
 .err {
     background-color: rgba(255, 0, 0, 20%);
+}
+
+.title {
+    margin: 0.25rem 0 0;
 }

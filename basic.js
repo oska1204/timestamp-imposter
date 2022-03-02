@@ -58,12 +58,13 @@ updateAll.addEventListener('click', () => {
 })
 
 const template = document.createElement('template')
-template.innerHTML = `<div>
+template.innerHTML = `<div class="wrap">
 <label>Search: <input type="text"></label>
 <label>Year: <input type="text" class="year"></label>
 <button class="update">Update</button>
 <button class="remove">Remove</button>
 <label>Minutes: <input type="number" value="0" min="0" class="minutes"></label>
+<div class="title"></div>
 </div>
 `
 
@@ -79,6 +80,7 @@ customElements.define('elm-', class extends HTMLElement {
             const minutes = this.querySelector('.minutes')
             const year = this.querySelector('.year')
             const input = this.querySelector('input')
+            const title = this.querySelector('.title')
             this.minutes = minutes
             this.update = update
             this.input = input
@@ -86,8 +88,17 @@ customElements.define('elm-', class extends HTMLElement {
                 fetch('https://www.omdbapi.com/?apikey=80bf610a&t=' + input.value + '&y=' + year.value)
                     .then(e => e.json())
                     .then(e => {
+                        let content
+                        if (e.Title || e.Year)
+                            content = `${e.Title} ${e.Year}`
+                        else if (e.Error === 'Movie not found!')
+                            content = e.Error + ' Try adding a year, or different search term.'
+                        else
+                            content = e.Error
+                        title.textContent = content
                         if (e.Runtime === undefined) {
                             this.classList.add('err')
+                            minutes.value = 0
                             return
                         }
                         minutes.value = e.Runtime.replace(/\D/g, '')
