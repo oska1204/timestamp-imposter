@@ -1,0 +1,40 @@
+:root {
+    background: #111;
+    color: #999;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+main {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+section {
+    margin: 1rem .5rem;
+}
+section.elm div {
+    margin: 1rem 0;
+}
+
+section.split label, section.list label {
+    display: flex;
+    margin: 1rem 0;
+}
+
+input, textarea {
+    color: inherit;
+    background: inherit;
+    margin: 0 .25rem;
+}
+
+input.minutes {
+    width: 4rem;
+}
+
+elm- {
+    display: block;
+}
+
+.err {
+    background-color: rgba(255, 0, 0, 20%);
+}
