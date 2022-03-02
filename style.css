@@ -43,3 +43,9 @@ elm- {
 .title {
     margin: 0.25rem 0 0;
 }
+
+:link {color: rgb(70,70,238);}
+
+:visited {
+    color: rgb(135, 46, 139);
+}

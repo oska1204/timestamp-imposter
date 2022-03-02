@@ -88,14 +88,18 @@ customElements.define('elm-', class extends HTMLElement {
                 fetch('https://www.omdbapi.com/?apikey=80bf610a&t=' + input.value + '&y=' + year.value)
                     .then(e => e.json())
                     .then(e => {
+                        title.innerHTML = ''
                         let content
-                        if (e.Title || e.Year)
-                            content = `${e.Title} ${e.Year}`
-                        else if (e.Error === 'Movie not found!')
+                        if (e.Title || e.Year) {
+                            content = document.createElement('a')    
+                            content.href = 'https://www.imdb.com/title/' + e.imdbID
+                            content.target = '_blank'
+                            content.textContent = `${e.Title} ${e.Year}`
+                        } else if (e.Error === 'Movie not found!')
                             content = e.Error + ' Try adding a year, or different search term.'
                         else
                             content = e.Error
-                        title.textContent = content
+                        title.append(content)
                         if (e.Runtime === undefined) {
                             this.classList.add('err')
                             minutes.value = 0
