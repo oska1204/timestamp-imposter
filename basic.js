@@ -84,21 +84,26 @@ customElements.define('elm-', class extends HTMLElement {
             this.minutes = minutes
             this.update = update
             this.input = input
+            let errCount = 0
             update.addEventListener('click', () => {
+                title.innerHTML = 'Loading...'
+                this.classList.remove('err')
                 fetch('https://www.omdbapi.com/?apikey=80bf610a&t=' + input.value + '&y=' + year.value)
                     .then(e => e.json())
                     .then(e => {
                         title.innerHTML = ''
                         let content
+                        errCount++
                         if (e.Title || e.Year) {
+                            errCount = 0
                             content = document.createElement('a')    
                             content.href = 'https://www.imdb.com/title/' + e.imdbID
                             content.target = '_blank'
                             content.textContent = `${e.Title} ${e.Year}`
                         } else if (e.Error === 'Movie not found!')
-                            content = e.Error + ' Try adding a year, or different search term.'
+                            content = e.Error + ' Try adding a year, or different search term.' + ' Error count: ' + errCount
                         else
-                            content = e.Error
+                            content = e.Error + ' Error count:' + errCount
                         title.append(content)
                         if (e.Runtime === undefined) {
                             this.classList.add('err')
@@ -106,7 +111,6 @@ customElements.define('elm-', class extends HTMLElement {
                             return
                         }
                         minutes.value = e.Runtime.replace(/\D/g, '')
-                        this.classList.remove('err')
                     })
             })
             remove.addEventListener('click', () => {
