@@ -12,23 +12,35 @@ main {
 section {
     margin: 1rem .5rem;
 }
+
 .wrap {
     margin: .5rem 0;
     padding: 0.25rem;
 }
 
-section.split label, section.list label {
+section.split label,
+section.list label {
     display: flex;
     margin: 1rem 0;
 }
 
-input, textarea {
-    color: inherit;
-    background: inherit;
-    margin: 0 .25rem;
+section label:first-child {
+    margin-top: 0;
 }
 
-input.minutes, input.year {
+input,
+textarea,
+button {
+    color: inherit;
+    background: #1b1b1b;
+    margin: 0 .25rem;
+    padding: 0.35rem;
+    border-radius: 0.75rem;
+    margin: 0 .25rem .25rem .25rem;
+}
+
+input.minutes,
+input.year {
     width: 4rem;
 }
 
@@ -44,8 +56,14 @@ elm- {
     margin: 0.25rem 0 0;
 }
 
-:link {color: rgb(70,70,238);}
+:link {
+    color: rgb(70, 70, 238);
+}
 
 :visited {
     color: rgb(135, 46, 139);
+}
+
+.api p {
+    margin-top: 0;
 }

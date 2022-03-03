@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timestamp imposter</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="amongE.png">
 </head>
 
 <body>
@@ -27,6 +28,11 @@
             <label>Offset in min: <input type="number" value="0" class="number"></label>
             <button class="format">Format</button>
             <label>Output: <textarea cols="30" rows="10"></textarea></label>
+        </section>
+        <section class="api">
+            <p>Should the api key expire, you can register for a free key at <a href="https://www.omdbapi.com" target="_blank">omdbapi.com</a>.</p>
+            <p>You can either set the key here: <input type="text" class="apikey" placeholder="api key"></p>
+            <p>Or you can add <a href="?apikey=KEY" target="_blank" class="key-link">?apikey=<span class="key-placeholder">KEY</span></a> to the url.</p>
         </section>
     </main>
     <script src="basic.js" defer></script>

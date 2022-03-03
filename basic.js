@@ -1,3 +1,7 @@
+const default_apikey = '80bf610a'
+let apikey
+
+const apikeyElm = document.querySelector('.apikey')
 const section = document.querySelector('section.elm')
 const add = document.querySelector('.add')
 const textarea = document.querySelector('.split .text')
@@ -8,9 +12,34 @@ const listText = document.querySelector('.list textarea')
 const updateAll = document.querySelector('.update-all')
 const format = document.querySelector('.format')
 const number = document.querySelector('.list [type="number"]')
+const keyPlaceholder = document.querySelector('.key-placeholder')
+const keyLink = document.querySelector('.key-link')
 
+const storageKey = sessionStorage.getItem('apikey')
+const urlKey = new URL(location).searchParams.get('apikey')
+if (storageKey)
+    apikey = storageKey
+else if (urlKey)
+    apikey = urlKey
+const updateKeyLink = function (key) {
+    sessionStorage.setItem('apikey', key || '')
+    keyPlaceholder.textContent = key || 'KEY'
+    keyLink.href = '?apikey=' + key || 'KEY'
+}
+updateKeyLink(apikey)
+apikeyElm.value = apikey || ''
+apikeyElm.addEventListener('input', function () {
+    apikey = this.value
+    updateKeyLink(apikey)
+})
 textarea.value = localStorage.getItem('textarea') || 'Aladdin ⏩ The Hangover'
 split.value = localStorage.getItem('split') || ' ⏩ '
+textarea.addEventListener('change', function () {
+    localStorage.setItem('textarea', this.value)
+})
+split.addEventListener('change', function () {
+    localStorage.setItem('split', this.value)
+})
 format.addEventListener('click', () => {
     const elms = Array.from(document.querySelectorAll('elm-'))
     const arr = elms.filter(e => e.minutes.value > 0)
@@ -30,12 +59,6 @@ format.addEventListener('click', () => {
             break;
     }
     listText.value = `[UTC${offsetResult}] ${dates.join(' ⏩ ')}`
-})
-textarea.addEventListener('change', function () {
-    localStorage.setItem('textarea', this.value)
-})
-split.addEventListener('change', function () {
-    localStorage.setItem('split', this.value)
 })
 add.addEventListener('click', () => {
     section.insertAdjacentHTML('beforeend', `<elm-></elm->`)
@@ -88,7 +111,7 @@ customElements.define('elm-', class extends HTMLElement {
             update.addEventListener('click', () => {
                 title.innerHTML = 'Loading...'
                 this.classList.remove('err')
-                fetch('https://www.omdbapi.com/?apikey=80bf610a&t=' + input.value + '&y=' + year.value)
+                fetch(`https://www.omdbapi.com/?apikey=${apikey || default_apikey}&t=${input.value}&y=${year.value}`)
                     .then(e => e.json())
                     .then(e => {
                         title.innerHTML = ''
@@ -96,12 +119,12 @@ customElements.define('elm-', class extends HTMLElement {
                         errCount++
                         if (e.Title || e.Year) {
                             errCount = 0
-                            content = document.createElement('a')    
+                            content = document.createElement('a')
                             content.href = 'https://www.imdb.com/title/' + e.imdbID
                             content.target = '_blank'
                             content.textContent = `${e.Title} ${e.Year}`
                         } else if (e.Error === 'Movie not found!')
-                            content = e.Error + ' Try adding a year, or different search term.' + ' Error count: ' + errCount
+                            content = e.Error + ' Try adding a year, or different search term.' + ' Error count:  ' + errCount
                         else
                             content = e.Error + ' Error count:' + errCount
                         title.append(content)
