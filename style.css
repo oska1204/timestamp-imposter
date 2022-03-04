@@ -43,6 +43,10 @@ input.year {
     width: 4rem;
 }
 
+input.imdb {
+    width: 5rem;
+}
+
 elm- {
     display: block;
 }

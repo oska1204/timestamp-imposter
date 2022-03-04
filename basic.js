@@ -35,14 +35,20 @@ apikeyElm.addEventListener('input', function () {
     apikey = this.value
     updateKeyLink(apikey)
 })
+
 textarea.value = localStorage.getItem('textarea') || 'Aladdin ⏩ The Hangover'
 split.value = localStorage.getItem('split') || ' ⏩ '
+startTime.value = sessionStorage.getItem('start-time') || ''
 textarea.addEventListener('change', function () {
     localStorage.setItem('textarea', this.value)
 })
 split.addEventListener('change', function () {
     localStorage.setItem('split', this.value)
 })
+startTime.addEventListener('change', function () {
+    sessionStorage.setItem('start-time', this.value)
+})
+
 format.addEventListener('click', () => {
     const elms = Array.from(document.querySelectorAll('elm-'))
     const arr = elms.filter(e => e.minutes.value > 0)
@@ -86,7 +92,8 @@ updateAll.addEventListener('click', () => {
 const template = document.createElement('template')
 template.innerHTML = `<div class="wrap">
 <label>Search: <input type="text"></label>
-<label>Year: <input type="text" class="year"></label>
+<label>Year: <input type="number" class="year"></label>
+<label>IMDb id: <input type="text" class="imdb"></label>
 <button class="update">Update</button>
 <button class="remove">Remove</button>
 <label>Minutes: <input type="number" value="0" min="0" class="minutes"></label>
@@ -101,12 +108,15 @@ customElements.define('elm-', class extends HTMLElement {
     connectedCallback() {
         if (!this.hasChildNodes()) {
             this.append(template.content.cloneNode(true))
-            const update = this.querySelector('.update')
-            const remove = this.querySelector('.remove')
-            const minutes = this.querySelector('.minutes')
-            const year = this.querySelector('.year')
-            const input = this.querySelector('input')
-            const title = this.querySelector('.title')
+            const query = this.querySelector.bind(this)
+
+            const update = query('.update')
+            const remove = query('.remove')
+            const minutes = query('.minutes')
+            const year = query('.year')
+            const input = query('input')
+            const title = query('.title')
+            const imdb = query('.imdb')
             this.minutes = minutes
             this.update = update
             this.input = input
@@ -114,9 +124,14 @@ customElements.define('elm-', class extends HTMLElement {
             update.addEventListener('click', () => {
                 title.innerHTML = 'Loading...'
                 this.classList.remove('err')
-                fetch(`https://www.omdbapi.com/?apikey=${apikey || default_apikey}&t=${input.value}&y=${year.value}`)
-                    .then(e => e.json())
+                const baseUrl = `https://www.omdbapi.com/?apikey=${apikey || default_apikey}`
+                const queryUrl = imdb.value
+                    ? `&i=${imdb.value}`
+                    : `&t=${input.value}&y=${year.value}`
+                fetch(baseUrl + queryUrl)
+                    .then(res => res.json())
                     .then(e => {
+                        this.json = e
                         title.innerHTML = ''
                         let content
                         errCount++
@@ -127,7 +142,7 @@ customElements.define('elm-', class extends HTMLElement {
                             content.target = '_blank'
                             content.textContent = `${e.Title} ${e.Year}`
                         } else if (e.Error === 'Movie not found!')
-                            content = e.Error + ' Try adding a year, or different search term.' + ' Error count:  ' + errCount
+                            content = e.Error + ' Try adding a year, different search term, or IMDb id.' + ' Error count:  ' + errCount
                         else
                             content = e.Error + ' Error count:' + errCount
                         title.append(content)

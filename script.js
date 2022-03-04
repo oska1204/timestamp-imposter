@@ -23,7 +23,7 @@ function getList(arr, minOffset, startTime) {
         const m = ('0' + d.getMinutes())
         const mt = m.length === 3 ? m.slice(1) : m
         const e = arr[i]
-        finalArr.push(`${e.getAttribute('text') || e.input.value} (${h}:${mt})`)
+        finalArr.push(`${e.getAttribute('text') || e.json?.Title || e.input.value} (${h}:${mt})`)
     }
     const elm = arr[arr.length - 1];
     if (elm) {
