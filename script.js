@@ -2,7 +2,10 @@ function minToMs(minutes) {
     return parseInt(minutes) * 60 * 1000
 }
 
-function getList(arr, minOffset) {
+function getList(arr, minOffset, startTime) {
+    const startDate = startTime
+        ? new Date(startTime)
+        : new Date
     const msOffset = minToMs(minOffset)
     let tempDate
     const finalArr = []
@@ -14,7 +17,7 @@ function getList(arr, minOffset) {
             const ms = minToMs(min)
             d = new Date(ms + tempDate)
         } else
-            d = new Date(Date.now() + msOffset)
+            d = new Date(startDate.getTime() + msOffset)
         tempDate = d.getTime()
         const h = d.getHours()
         const m = ('0' + d.getMinutes())

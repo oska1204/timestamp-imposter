@@ -1,19 +1,22 @@
 const default_apikey = '80bf610a'
 let apikey
 
-const apikeyElm = document.querySelector('.apikey')
-const section = document.querySelector('section.elm')
-const add = document.querySelector('.add')
-const textarea = document.querySelector('.split .text')
-const generate = document.querySelector('.generate')
-const split = document.querySelector('textarea.split')
-const list = document.querySelector('.list')
-const listText = document.querySelector('.list textarea')
-const updateAll = document.querySelector('.update-all')
-const format = document.querySelector('.format')
-const number = document.querySelector('.list [type="number"]')
-const keyPlaceholder = document.querySelector('.key-placeholder')
-const keyLink = document.querySelector('.key-link')
+const query = document.querySelector.bind(document)
+
+const apikeyElm = query('.apikey')
+const section = query('section.elm')
+const add = query('.add')
+const textarea = query('.split .text')
+const generate = query('.generate')
+const split = query('textarea.split')
+const list = query('.list')
+const listText = query('.list textarea')
+const updateAll = query('.update-all')
+const format = query('.format')
+const number = query('.list [type="number"]')
+const keyPlaceholder = query('.key-placeholder')
+const keyLink = query('.key-link')
+const startTime = query('.start-time')
 
 const storageKey = sessionStorage.getItem('apikey')
 const urlKey = new URL(location).searchParams.get('apikey')
@@ -43,7 +46,7 @@ split.addEventListener('change', function () {
 format.addEventListener('click', () => {
     const elms = Array.from(document.querySelectorAll('elm-'))
     const arr = elms.filter(e => e.minutes.value > 0)
-    const dates = getList(arr, number.value)
+    const dates = getList(arr, number.value, startTime.value)
     const offset = new Date().getTimezoneOffset() / - 60
     let offsetResult
     const offsetType = Math.sign(offset)

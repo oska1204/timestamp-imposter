@@ -15,8 +15,8 @@
     <h2>Click generate, then update all, then format</h2>
     <main>
         <section class="split">
-            <label>Input: <textarea cols="30" rows="10" class="text"></textarea></label>
-            <label>Split: <textarea class="split"></textarea></label>
+            <label class="ta">Input: <textarea cols="30" rows="10" class="text"></textarea></label>
+            <label class="ta">Split: <textarea class="split"></textarea></label>
             <button class="generate">Generate</button>
         </section>
         <section class="elm">
@@ -25,9 +25,10 @@
             <elm-></elm->
         </section>
         <section class="list">
+            <label>Start time: <input type="datetime-local" class="start-time"></label>
             <label>Offset in min: <input type="number" value="0" class="number"></label>
             <button class="format">Format</button>
-            <label>Output: <textarea cols="30" rows="10"></textarea></label>
+            <label class="ta">Output: <textarea cols="30" rows="10"></textarea></label>
         </section>
         <section class="api">
             <p>Should the api key expire, you can register for a free key at <a href="https://www.omdbapi.com" target="_blank">omdbapi.com</a>.</p>
