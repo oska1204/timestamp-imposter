@@ -9,36 +9,10 @@
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-main {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-section {
-    margin: 1rem .5rem;
-}
-
-.wrap {
-    margin: .5rem 0;
-    padding: 0.25rem;
-}
-
-label {
-    display: inline-block;
-}
-
-.split-wrapper label,
-.config-wrapper label {
-    margin: 1rem 0;
-}
-
-section :first-child {
-    margin-top: 0;
-}
-
 input,
 textarea,
-button {
+button,
+select {
     color: inherit;
     background: var(--secondary-dark, #1b1b1b);
     margin: 0 .25rem;
@@ -57,9 +31,35 @@ button {
     color: var(--secondary-light, #aaa);
 }
 
-.config-wrapper label {
-    display: block;
+main {
+    display: flex;
+    flex-wrap: wrap;
 }
+
+section {
+    margin: 1rem .5rem;
+}
+
+
+.list-wrapper label {
+    display: inline-block;
+}
+
+.elm-wrapper {
+    margin-top: 1rem;
+}
+
+.split-wrapper label,
+.config-wrapper label,
+.config-wrapper div,
+.output-wrapper label {
+    margin: 1rem 0;
+}
+
+section > :first-child {
+    margin-top: 0;
+}
+
 
 input.minutes,
 input.year {
@@ -72,6 +72,11 @@ input.imdb {
 
 elm- {
     display: block;
+}
+
+.wrap {
+    margin: .5rem 0;
+    padding: 0.25rem;
 }
 
 .err {
@@ -103,6 +108,15 @@ elm- {
     display: block;
 }
 
+.config-wrapper > label {
+    display: block;
+}
+
 label.ta {
     display: flex;
+}
+
+label.io {
+    display: grid;
+    grid-gap: 0.25rem;
 }

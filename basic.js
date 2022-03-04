@@ -4,7 +4,7 @@ let apikey
 const query = document.querySelector.bind(document)
 
 const apikeyElm = query('.apikey')
-const section = query('.elm-wrapper')
+const elmWrapper = query('.elm-wrapper')
 const add = query('.add')
 const textarea = query('.text')
 const generate = query('.generate')
@@ -20,6 +20,7 @@ const currentTime = query('.current-time')
 const clearTime = query('.clear-time')
 const tail = query('.tail')
 const join = query('.join')
+const preset = query('.preset')
 
 const storageKey = sessionStorage.getItem('apikey')
 const urlKey = new URL(location).searchParams.get('apikey')
@@ -47,6 +48,7 @@ startTime.value = time
 currentTime.textContent = time
 join.value = localStorage.getItem('join') || ' ⏩ '
 tail.value = localStorage.getItem('tail') || 'Cartoons'
+preset.value = sessionStorage.getItem('preset') || preset.value
 
 textarea.addEventListener('change', function () {
     localStorage.setItem('textarea', this.value)
@@ -66,6 +68,9 @@ join.addEventListener('change', function () {
 tail.addEventListener('change', function () {
     localStorage.setItem('tail', this.value)
 })
+preset.addEventListener('change', function () {
+    sessionStorage.setItem('preset', this.value)
+})
 
 clearTime.addEventListener('click', () => {
     startTime.value = ''
@@ -75,10 +80,10 @@ clearTime.addEventListener('click', () => {
 format.addEventListener('click', () => {
     const elms = Array.from(document.querySelectorAll('elm-'))
     const arr = elms.filter(e => e.minutes.value > 0)
-    const dates = getList(arr, number.value, startTime.value)
+    const list = getList(arr, number.value, startTime.value, preset.value)
     const offset = new Date().getTimezoneOffset() / - 60
-    let offsetResult
     const offsetType = Math.sign(offset)
+    let offsetResult
     switch (offsetType) {
         case 1:
             offsetResult = '+' + offset
@@ -90,17 +95,29 @@ format.addEventListener('click', () => {
             offsetResult = ''
             break;
     }
-    output.value = `[UTC${offsetResult}] ${dates.join(join.value || ' ⏩ ')}`
+    let startMsg
+    switch (preset.value) {
+        case 'time':
+            startMsg = `[UTC${offsetResult}]`
+            break;
+        case 'rating':
+            startMsg = `{IMDb, Rotten Tomatoes, Metacritic}`
+            break;
+        case 'rating + time':
+            startMsg = `{IMDb, Rotten Tomatoes, Metacritic} [UTC${offsetResult}]`
+            break;
+    }
+    output.value = `${startMsg} ${list.join(join.value || ' ⏩ ')}`
 })
 add.addEventListener('click', () => {
-    section.insertAdjacentHTML('beforeend', `<elm-></elm->`)
+    elmWrapper.insertAdjacentHTML('beforeend', `<elm-></elm->`)
 })
 generate.addEventListener('click', () => {
     const value = textarea.value
     const arr = value.split(split.value)
     arr.forEach(val => {
         const elm = document.createElement('elm-')
-        section.append(elm)
+        elmWrapper.append(elm)
         elm.setAttribute('text', val)
     });
 })
