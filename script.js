@@ -3,9 +3,12 @@ function minToMs(minutes) {
 }
 
 function getList(arr, minOffset, startTime) {
-    const startDate = startTime
-        ? new Date(startTime)
-        : new Date
+    const startDate = new Date
+    if (startTime) {
+        const [h, m] = startTime.split(':')
+        startDate.setHours(h)
+        startDate.setMinutes(m)
+    }
     const msOffset = minToMs(minOffset)
     let tempDate
     const finalArr = []
@@ -33,7 +36,7 @@ function getList(arr, minOffset, startTime) {
         const h = d.getHours()
         const m = ('0' + d.getMinutes())
         const mt = m.length === 3 ? m.slice(1) : m
-        finalArr.push(`(${h}:${mt})`)
+        finalArr.push(`${tail.value} (${h}:${mt})`)
     }
     return finalArr
 }

@@ -17,19 +17,23 @@ const number = query('.list [type="number"]')
 const keyPlaceholder = query('.key-placeholder')
 const keyLink = query('.key-link')
 const startTime = query('.start-time')
+const currentTime = query('.current-time')
+const clearTime = query('.clear-time')
+const tail = query('.tail')
 
 const storageKey = sessionStorage.getItem('apikey')
 const urlKey = new URL(location).searchParams.get('apikey')
 if (storageKey)
     apikey = storageKey
-else if (urlKey)
+else if (urlKey) {
     apikey = urlKey
+    updateKeyLink(apikey)
+}
 const updateKeyLink = function (key) {
     sessionStorage.setItem('apikey', key || '')
     keyPlaceholder.textContent = key || 'KEY'
     keyLink.href = '?apikey=' + key || 'KEY'
 }
-updateKeyLink(apikey)
 apikeyElm.value = apikey || ''
 apikeyElm.addEventListener('input', function () {
     apikey = this.value
@@ -38,7 +42,11 @@ apikeyElm.addEventListener('input', function () {
 
 textarea.value = localStorage.getItem('textarea') || 'Aladdin ⏩ The Hangover'
 split.value = localStorage.getItem('split') || ' ⏩ '
-startTime.value = sessionStorage.getItem('start-time') || ''
+const time = sessionStorage.getItem('start-time')
+startTime.value = time
+currentTime.textContent = time
+tail.value = localStorage.getItem('tail') || 'Cartoons'
+
 textarea.addEventListener('change', function () {
     localStorage.setItem('textarea', this.value)
 })
@@ -48,7 +56,18 @@ split.addEventListener('change', function () {
 startTime.addEventListener('change', function () {
     sessionStorage.setItem('start-time', this.value)
 })
+startTime.addEventListener('input', function () {
+    currentTime.textContent = this.value
+})
+tail.addEventListener('change', function () {
+    localStorage.setItem('tail', this.value)
+})
 
+clearTime.addEventListener('click', () => {
+    startTime.value = ''
+    currentTime.textContent = ''
+    sessionStorage.removeItem('start-time')
+})
 format.addEventListener('click', () => {
     const elms = Array.from(document.querySelectorAll('elm-'))
     const arr = elms.filter(e => e.minutes.value > 0)
@@ -121,6 +140,29 @@ customElements.define('elm-', class extends HTMLElement {
             this.update = update
             this.input = input
             let errCount = 0
+            const resFunc = e => {
+                this.json = e
+                title.innerHTML = ''
+                let content
+                errCount++
+                if (e.Title || e.Year) {
+                    errCount = 0
+                    content = document.createElement('a')
+                    content.href = 'https://www.imdb.com/title/' + e.imdbID
+                    content.target = '_blank'
+                    content.textContent = `${e.Title} ${e.Year}`
+                } else if (e.Error === 'Movie not found!')
+                    content = e.Error + ' Try adding a year, different search term, or IMDb id.' + ' Error count:  ' + errCount
+                else
+                    content = e.Error + ' Error count:' + errCount
+                title.append(content)
+                if (e.Runtime === undefined) {
+                    this.classList.add('err')
+                    minutes.value = 0
+                    return
+                }
+                minutes.value = e.Runtime.replace(/\D/g, '')
+            }
             update.addEventListener('click', () => {
                 title.innerHTML = 'Loading...'
                 this.classList.remove('err')
@@ -130,29 +172,7 @@ customElements.define('elm-', class extends HTMLElement {
                     : `&t=${input.value}&y=${year.value}`
                 fetch(baseUrl + queryUrl)
                     .then(res => res.json())
-                    .then(e => {
-                        this.json = e
-                        title.innerHTML = ''
-                        let content
-                        errCount++
-                        if (e.Title || e.Year) {
-                            errCount = 0
-                            content = document.createElement('a')
-                            content.href = 'https://www.imdb.com/title/' + e.imdbID
-                            content.target = '_blank'
-                            content.textContent = `${e.Title} ${e.Year}`
-                        } else if (e.Error === 'Movie not found!')
-                            content = e.Error + ' Try adding a year, different search term, or IMDb id.' + ' Error count:  ' + errCount
-                        else
-                            content = e.Error + ' Error count:' + errCount
-                        title.append(content)
-                        if (e.Runtime === undefined) {
-                            this.classList.add('err')
-                            minutes.value = 0
-                            return
-                        }
-                        minutes.value = e.Runtime.replace(/\D/g, '')
-                    })
+                    .then(resFunc)
             })
             remove.addEventListener('click', () => {
                 this.remove()

@@ -1,6 +1,9 @@
 :root {
-    background: #111;
-    color: #999;
+    --primary-light: #999;
+    --primary-dark: #111;
+    --secondary-dark: #1b1b1b;
+    background: var(--primary-dark, #111);
+    color: var(--primary-light, #999);
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
@@ -31,7 +34,7 @@ input,
 textarea,
 button {
     color: inherit;
-    background: #1b1b1b;
+    background: var(--secondary-dark, #1b1b1b);
     margin: 0 .25rem;
     padding: 0.35rem;
     border-radius: 0.75rem;
@@ -65,6 +68,11 @@ elm- {
 
 :visited {
     color: rgb(135, 46, 139);
+}
+
+[type=time] {
+    color: var(--secondary-dark, #1b1b1b);
+    background: var(--primary-light, #999);
 }
 
 .api p {
