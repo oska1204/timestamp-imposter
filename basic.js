@@ -4,22 +4,22 @@ let apikey
 const query = document.querySelector.bind(document)
 
 const apikeyElm = query('.apikey')
-const section = query('section.elm')
+const section = query('.elm-wrapper')
 const add = query('.add')
-const textarea = query('.split .text')
+const textarea = query('.text')
 const generate = query('.generate')
-const split = query('textarea.split')
-const list = query('.list')
-const listText = query('.list textarea')
+const split = query('.split')
+const output = query('.output')
 const updateAll = query('.update-all')
 const format = query('.format')
-const number = query('.list [type="number"]')
+const number = query('.number')
 const keyPlaceholder = query('.key-placeholder')
 const keyLink = query('.key-link')
 const startTime = query('.start-time')
 const currentTime = query('.current-time')
 const clearTime = query('.clear-time')
 const tail = query('.tail')
+const join = query('.join')
 
 const storageKey = sessionStorage.getItem('apikey')
 const urlKey = new URL(location).searchParams.get('apikey')
@@ -45,6 +45,7 @@ split.value = localStorage.getItem('split') || ' ⏩ '
 const time = sessionStorage.getItem('start-time')
 startTime.value = time
 currentTime.textContent = time
+join.value = localStorage.getItem('join') || ' ⏩ '
 tail.value = localStorage.getItem('tail') || 'Cartoons'
 
 textarea.addEventListener('change', function () {
@@ -58,6 +59,9 @@ startTime.addEventListener('change', function () {
 })
 startTime.addEventListener('input', function () {
     currentTime.textContent = this.value
+})
+join.addEventListener('change', function () {
+    localStorage.setItem('join', this.value)
 })
 tail.addEventListener('change', function () {
     localStorage.setItem('tail', this.value)
@@ -86,7 +90,7 @@ format.addEventListener('click', () => {
             offsetResult = ''
             break;
     }
-    listText.value = `[UTC${offsetResult}] ${dates.join(' ⏩ ')}`
+    output.value = `[UTC${offsetResult}] ${dates.join(join.value || ' ⏩ ')}`
 })
 add.addEventListener('click', () => {
     section.insertAdjacentHTML('beforeend', `<elm-></elm->`)

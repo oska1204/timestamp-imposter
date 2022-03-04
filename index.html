@@ -14,22 +14,26 @@
     <h1>Timestamp imposter</h1>
     <h2>Click generate, then update all, then format</h2>
     <main>
-        <section class="split">
+        <section class="split-wrapper">
+            <button class="generate">Generate</button>
             <label class="ta">Input: <textarea cols="30" rows="10" class="text"></textarea></label>
             <label class="ta">Split: <textarea class="split"></textarea></label>
-            <button class="generate">Generate</button>
         </section>
-        <section class="elm">
+        <section class="elm-wrapper">
             <button class="add">Add</button>
             <button class="update-all">Update all</button>
             <elm-></elm->
         </section>
-        <section class="list">
+        <section class="output-wrapper">
+            <button class="format">Format</button>
+            <label class="ta">Output: <textarea cols="30" rows="10" class="output"></textarea></label>
+        </section>
+        <section class="config-wrapper">
+            <h3>Format config</h3>
             <label>Start time: <input type="time" class="start-time"><button class="clear-time">Clear</button> <span class="current-time"></span></label>
             <label>Offset in min: <input type="number" value="0" class="number"></label>
-            <button class="format">Format</button>
+            <label class="ta">Join: <textarea class="join"></textarea></label>
             <label>Tail: <input type="text" class="tail"></label>
-            <label class="ta">Output: <textarea cols="30" rows="10"></textarea></label>
         </section>
         <section class="api">
             <p>Should the api key expire, you can register for a free key at <a href="https://www.omdbapi.com" target="_blank">omdbapi.com</a>.</p>
