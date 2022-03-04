@@ -21,6 +21,9 @@ const clearTime = query('.clear-time')
 const tail = query('.tail')
 const join = query('.join')
 const preset = query('.preset')
+const imdbCheck = query('.imdb-check')
+const tomatoCheck = query('.tomato-check')
+const metacriticCheck = query('.metacritic-check')
 
 const storageKey = sessionStorage.getItem('apikey')
 const urlKey = new URL(location).searchParams.get('apikey')
@@ -95,16 +98,25 @@ format.addEventListener('click', () => {
             offsetResult = ''
             break;
     }
+    const ratingsListUnfiltered = [
+        imdbCheck.checked ? 'IMDb' : '',
+        tomatoCheck.checked ? 'Rotten Tomatoes' : '',
+        metacriticCheck.checked ? 'Metacritic' : ''
+    ]
+    const ratingsInfoList = ratingsListUnfiltered.filter(e => e)
+    const ratingsInfo = ratingsInfoList.length
+        ? `{${ratingsInfoList.join(', ')}}`
+        : ''
     let startMsg
     switch (preset.value) {
         case 'time':
             startMsg = `[UTC${offsetResult}]`
             break;
         case 'rating':
-            startMsg = `{IMDb, Rotten Tomatoes, Metacritic}`
+            startMsg = `${ratingsInfo}`
             break;
         case 'rating + time':
-            startMsg = `{IMDb, Rotten Tomatoes, Metacritic} [UTC${offsetResult}]`
+            startMsg = `${ratingsInfo} [UTC${offsetResult}]`.trim()
             break;
     }
     output.value = `${startMsg} ${list.join(join.value || ' ⏩ ')}`

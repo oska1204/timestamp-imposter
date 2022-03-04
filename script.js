@@ -42,7 +42,12 @@ function getList(arr, minOffset, startTime, preset) {
                     tomato = e.Value
             })
             let { imdbRating, Metascore } = e.json || {}
-            const ratings = [imdbRating, tomato, Metascore].filter(e => e !== 'N/A' && e)
+            const ratingsUnfiltered = [
+                imdbCheck.checked ? imdbRating : '', 
+                tomatoCheck.checked ? tomato : '', 
+                metacriticCheck.checked ? Metascore : ''
+            ]
+            const ratings = ratingsUnfiltered.filter(e => e !== 'N/A' && e)
             ratingStr = ratings.length
                 ? `{${ratings.join(' ')}} `
                 : ''
