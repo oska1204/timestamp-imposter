@@ -46,7 +46,7 @@ apikeyElm.addEventListener('input', function () {
 })
 
 textarea.value = localStorage.getItem('textarea') || 'Aladdin ⏩ The Hangover'
-split.value = localStorage.getItem('split') || ' ⏩ '
+split.value = localStorage.getItem('split') || '⏩'
 const time = sessionStorage.getItem('start-time')
 startTime.value = time
 currentTime.textContent = time
@@ -213,7 +213,7 @@ customElements.define('elm-', class extends HTMLElement {
                 const baseUrl = `https://www.omdbapi.com/?apikey=${apikey || default_apikey}`
                 const queryUrl = imdb.value
                     ? `&i=${imdb.value}`
-                    : `&t=${input.value}&y=${year.value}`
+                    : `&t=${input.value.trim()}&y=${year.value}`
                 fetch(baseUrl + queryUrl)
                     .then(res => res.json())
                     .then(resFunc)
@@ -238,7 +238,7 @@ customElements.define('elm-', class extends HTMLElement {
     }
     attributeChangedCallback(name, oldVal, newVal) {
         if (name === 'text') {
-            this.input.value = newVal
+            this.input.value = newVal.trim()
         }
     }
 })

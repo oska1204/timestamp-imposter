@@ -17,7 +17,7 @@ function getList(arr, minOffset, startTime, preset) {
         if (arr.length === 0 || preset === 'rating' & !e)
             break
         const baseStr = e
-            ? `${e.getAttribute('text') || e.json?.Title || e.input.value}`
+            ? `${e.getAttribute('text') || e.json?.Title || e.input.value}`.trim()
             : tail.value
         let timeStr = ''
         let ratingStr = ''
@@ -49,7 +49,7 @@ function getList(arr, minOffset, startTime, preset) {
             ]
             const ratings = ratingsUnfiltered.filter(e => e !== 'N/A' && e)
             ratingStr = ratings.length
-                ? `{${ratings.join(' ')}} `
+                ? `{${ratings.join(' ')}}`
                 : ''
         }
         let result
@@ -58,13 +58,13 @@ function getList(arr, minOffset, startTime, preset) {
                 result = `${baseStr} ${timeStr}`
                 break;
             case 'rating':
-                result = `${ratingStr}${baseStr}`
+                result = `${ratingStr} ${baseStr}`
                 break;
             case 'rating + time':
-                result = `${ratingStr}${baseStr} ${timeStr}`
+                result = `${ratingStr} ${baseStr} ${timeStr}`
                 break;
         }
-        finalArr.push(result)
+        finalArr.push(result.trim())
     }
     return finalArr
 }
