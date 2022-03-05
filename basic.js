@@ -186,26 +186,29 @@ customElements.define('elm-', class extends HTMLElement {
             const resFunc = e => {
                 this.json = e
                 title.innerHTML = ''
-                let content = ''
                 if (e.Response === 'True') {
                     errCount = 0
-                    content = document.createElement('a')
-                    content.href = 'https://www.imdb.com/title/' + e.imdbID
-                    content.target = '_blank'
-                    content.textContent = `${e.Title} ${e.Year}`
+                    const link = document.createElement('a')
+                    link.href = 'https://www.imdb.com/title/' + e.imdbID
+                    link.target = '_blank'
+                    link.textContent = `${e.Title} ${e.Year}`
+                    const technical = link.cloneNode()
+                    technical.href += '/technical'
+                    technical.textContent = 'versions'
+                    title.append(link, ' — ', technical)
                     if (!e.Runtime || e.Runtime === 'N/A')
                         minutes.value = 0
                     else
                         minutes.value = e.Runtime.replace(/\D/g, '')
                 } else if (e.Response === 'False') {
                     errCount++
-                    content = e.Error
+                    let content = e.Error
                     if (e.Error === 'Movie not found!')
                         content += ' Try adding a year, or IMDb ID.'
                     content += ` Error count: ${errCount}`
+                    title.append(content)
                     this.classList.add('err')
                 }
-                title.append(content)
             }
             update.addEventListener('click', () => {
                 title.innerHTML = 'Loading...'
