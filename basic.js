@@ -142,14 +142,17 @@ updateAll.addEventListener('click', () => {
 })
 
 const template = document.createElement('template')
-template.innerHTML = `<div class="wrap">
+template.innerHTML = `
+<button class="up">⬆</button>
 <label>Search: <input type="text"></label>
 <label>Year: <input type="number" class="year"></label>
-<label>IMDb id: <input type="text" class="imdb"></label>
+<label>IMDb ID: <input type="text" class="imdb"></label>
 <button class="update">Update</button>
 <button class="remove">Remove</button>
-<label>Minutes: <input type="number" value="0" min="0" class="minutes"></label>
-<div class="title"></div>
+<div class="title-wrapper">
+    <button class="down">⬇</button>
+    <span class="title"></span>
+    <label>Minutes: <input type="number" value="0" min="0" class="minutes"></label>
 </div>
 `
 
@@ -169,6 +172,8 @@ customElements.define('elm-', class extends HTMLElement {
             const input = query('input')
             const title = query('.title')
             const imdb = query('.imdb')
+            const up = query('.up')
+            const down = query('.down')
             this.minutes = minutes
             this.update = update
             this.input = input
@@ -185,7 +190,7 @@ customElements.define('elm-', class extends HTMLElement {
                     content.target = '_blank'
                     content.textContent = `${e.Title} ${e.Year}`
                 } else if (e.Error === 'Movie not found!')
-                    content = e.Error + ' Try adding a year, different search term, or IMDb id.' + ' Error count:  ' + errCount
+                    content = e.Error + ' Try adding a year, or IMDb ID.' + ' Error count:  ' + errCount
                 else
                     content = e.Error + ' Error count:' + errCount
                 title.append(content)
@@ -206,9 +211,19 @@ customElements.define('elm-', class extends HTMLElement {
                 fetch(baseUrl + queryUrl)
                     .then(res => res.json())
                     .then(resFunc)
+                    .catch(err => {
+                        title.innerHTML = err.message
+                        this.classList.add('err')
+                    })
             })
             remove.addEventListener('click', () => {
                 this.remove()
+            })
+            up.addEventListener('click', () => {
+                this.previousElementSibling?.before(this)
+            })
+            down.addEventListener('click', () => {
+                this.nextElementSibling?.after(this)
             })
         }
     }

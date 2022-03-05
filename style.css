@@ -3,6 +3,7 @@
     --primary-dark: #111;
     --secondary-light: #aaa;
     --secondary-dark: #1b1b1b;
+    --tertiary-light: #bbb;
     --tertiary-dark: #2b2b2b;
     background: var(--primary-dark, #111);
     color: var(--primary-light, #999);
@@ -13,7 +14,7 @@ input,
 textarea,
 button,
 select {
-    color: inherit;
+    color: var(--secondary-light, #aaa);
     background: var(--secondary-dark, #1b1b1b);
     margin: 0 .25rem;
     padding: 0.35rem;
@@ -28,7 +29,7 @@ button {
 
 button {
     background: var(--tertiary-dark, #2b2b2b);
-    color: var(--secondary-light, #aaa);
+    color: var(--tertiary-light, #bbb);
 }
 
 main {
@@ -72,11 +73,7 @@ input.imdb {
 
 elm- {
     display: block;
-}
-
-.wrap {
-    margin: .5rem 0;
-    padding: 0.25rem;
+    padding: 0.5rem;
 }
 
 .err {
@@ -88,16 +85,16 @@ elm- {
 }
 
 :link {
-    color: rgb(70, 70, 238);
+    color: rgb(120, 120, 240);
 }
 
 :visited {
-    color: rgb(135, 46, 139);
+    color: rgb(200, 80, 140);
 }
 
 [type=time] {
     color: var(--secondary-dark, #1b1b1b);
-    background: var(--primary-light, #999);
+    background: var(--secondary-light, #aaa);
 }
 
 .api p {
@@ -119,4 +116,26 @@ label.ta {
 label.io {
     display: grid;
     grid-gap: 0.25rem;
+}
+
+elm-:nth-of-type(2n) {
+    background-color: var(--secondary-dark, #1b1b1b);
+}
+
+elm-.err:nth-of-type(2n) {
+    background-color: rgba(255, 50, 50, 20%);
+}
+
+.title-wrapper {
+    display: grid;
+    grid-template-columns: min-content 1fr auto;
+    grid-gap: 0.25rem;
+}
+
+.title-wrapper label {
+    margin-left: 1rem;
+}
+
+.down {
+    place-self: flex-start
 }
