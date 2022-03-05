@@ -24,6 +24,7 @@ const preset = query('.preset')
 const imdbCheck = query('.imdb-check')
 const tomatoCheck = query('.tomato-check')
 const metacriticCheck = query('.metacritic-check')
+const removeAll = query('.remove-all')
 
 const storageKey = sessionStorage.getItem('apikey')
 const urlKey = new URL(location).searchParams.get('apikey')
@@ -140,6 +141,10 @@ updateAll.addEventListener('click', () => {
             e.update.click()
     })
 })
+removeAll.addEventListener('click', () => {
+    const elms = document.querySelectorAll('elm-')
+    elms.forEach(e => e.remove())
+})
 
 const template = document.createElement('template')
 template.innerHTML = `
@@ -181,25 +186,26 @@ customElements.define('elm-', class extends HTMLElement {
             const resFunc = e => {
                 this.json = e
                 title.innerHTML = ''
-                let content
-                errCount++
-                if (e.Title || e.Year) {
+                let content = ''
+                if (e.Response === 'True') {
                     errCount = 0
                     content = document.createElement('a')
                     content.href = 'https://www.imdb.com/title/' + e.imdbID
                     content.target = '_blank'
                     content.textContent = `${e.Title} ${e.Year}`
-                } else if (e.Error === 'Movie not found!')
-                    content = e.Error + ' Try adding a year, or IMDb ID.' + ' Error count:  ' + errCount
-                else
-                    content = e.Error + ' Error count:' + errCount
-                title.append(content)
-                if (e.Runtime === undefined) {
+                    if (!e.Runtime || e.Runtime === 'N/A')
+                        minutes.value = 0
+                    else
+                        minutes.value = e.Runtime.replace(/\D/g, '')
+                } else if (e.Response === 'False') {
+                    errCount++
+                    content = e.Error
+                    if (e.Error === 'Movie not found!')
+                        content += ' Try adding a year, or IMDb ID.'
+                    content += ` Error count: ${errCount}`
                     this.classList.add('err')
-                    minutes.value = 0
-                    return
                 }
-                minutes.value = e.Runtime.replace(/\D/g, '')
+                title.append(content)
             }
             update.addEventListener('click', () => {
                 title.innerHTML = 'Loading...'
