@@ -1,6 +1,29 @@
 const default_apikey = '80bf610a'
 let apikey
 
+const setTheme = bool => {
+    const { classList } = document.documentElement
+    if (bool)
+        classList.add('light')
+    else
+        classList.remove('light')
+}
+const lightFunc = mediaQuery => {
+    if (localStorage.getItem('theme'))
+        return
+    setTheme(mediaQuery.matches)
+}
+const mediaLight = matchMedia('(prefers-color-scheme: light)')
+lightFunc(mediaLight)
+mediaLight.addEventListener('change', lightFunc)
+const themeFunc = () => {
+    const { classList } = document.documentElement
+    const val = !classList.contains('light')
+    setTheme(val)
+    localStorage.setItem('theme', val)
+}
+setTheme(localStorage.getItem('theme') === 'true')
+
 const query = document.querySelector.bind(document)
 
 const apikeyElm = query('.apikey')
@@ -12,7 +35,7 @@ const split = query('.split')
 const output = query('.output')
 const updateAll = query('.update-all')
 const format = query('.format')
-const number = query('.number')
+const offset = query('.offset')
 const keyPlaceholder = query('.key-placeholder')
 const keyLink = query('.key-link')
 const startTime = query('.start-time')
@@ -25,6 +48,7 @@ const imdbCheck = query('.imdb-check')
 const tomatoCheck = query('.tomato-check')
 const metacriticCheck = query('.metacritic-check')
 const removeAll = query('.remove-all')
+const toggleTheme = query('.toggle-theme')
 
 const storageKey = sessionStorage.getItem('apikey')
 const urlKey = new URL(location).searchParams.get('apikey')
@@ -75,7 +99,14 @@ tail.addEventListener('change', function () {
 preset.addEventListener('change', function () {
     sessionStorage.setItem('preset', this.value)
 })
+offset.addEventListener('change', function () {
+    if (!this.value)
+        this.value = 0
+})
 
+toggleTheme.addEventListener('click', () => {
+    themeFunc()
+})
 clearTime.addEventListener('click', () => {
     startTime.value = ''
     currentTime.textContent = ''
@@ -84,16 +115,16 @@ clearTime.addEventListener('click', () => {
 format.addEventListener('click', () => {
     const elms = Array.from(document.querySelectorAll('elm-'))
     const arr = elms.filter(e => e.minutes.value > 0)
-    const list = getList(arr, number.value, startTime.value, preset.value)
-    const offset = new Date().getTimezoneOffset() / - 60
-    const offsetType = Math.sign(offset)
+    const list = getList(arr, offset.value, startTime.value, preset.value)
+    const timezoneOffset = new Date().getTimezoneOffset() / - 60
+    const offsetType = Math.sign(timezoneOffset)
     let offsetResult
     switch (offsetType) {
         case 1:
-            offsetResult = '+' + offset
+            offsetResult = '+' + timezoneOffset
             break;
         case -1:
-            offsetResult = '-' + offset
+            offsetResult = '-' + timezoneOffset
             break;
         case 0:
             offsetResult = ''
@@ -148,16 +179,25 @@ removeAll.addEventListener('click', () => {
 
 const template = document.createElement('template')
 template.innerHTML = `
-<button class="up">⬆</button>
-<label>Search: <input type="text"></label>
-<label>Year: <input type="number" class="year"></label>
-<label>IMDb ID: <input type="text" class="imdb"></label>
-<button class="update">Update</button>
-<button class="remove">Remove</button>
-<div class="title-wrapper">
+<div>
+    <button class="up">⬆</button>
     <button class="down">⬇</button>
-    <span class="title"></span>
-    <label>Minutes: <input type="number" value="0" min="0" class="minutes"></label>
+</div>
+<div>
+    <div>
+        <label>Search: <input type="text"></label>
+        <label>Year: <input type="number" class="year"></label>
+        <label>IMDb ID: <input type="text" class="imdb"></label>
+        <button class="update">Update</button>
+        <button class="remove">Remove</button>
+    </div>
+    <div class="title-wrapper">
+        <span class="title"></span>
+        <label class="minute-label">Minutes: <input type="number" value="0" min="0" class="minutes"></label>
+    </div>
+</div>
+<div>
+    <img class="poster">
 </div>
 `
 
@@ -179,10 +219,17 @@ customElements.define('elm-', class extends HTMLElement {
             const imdb = query('.imdb')
             const up = query('.up')
             const down = query('.down')
+            const poster = query('.poster')
             this.minutes = minutes
             this.update = update
             this.input = input
+            this.poster = poster
             let errCount = 0
+            const errFunc = () => {
+                this.classList.add('err')
+                poster.src = ''
+                poster.alt = ''
+            }
             const resFunc = e => {
                 this.json = e
                 title.innerHTML = ''
@@ -191,7 +238,7 @@ customElements.define('elm-', class extends HTMLElement {
                     const link = document.createElement('a')
                     link.href = 'https://www.imdb.com/title/' + e.imdbID
                     link.target = '_blank'
-                    link.textContent = `${e.Title} ${e.Year}`
+                    link.textContent = `${e.Title} (${e.Year})`
                     const technical = link.cloneNode()
                     technical.href += '/technical'
                     technical.textContent = 'versions'
@@ -200,14 +247,18 @@ customElements.define('elm-', class extends HTMLElement {
                         minutes.value = 0
                     else
                         minutes.value = e.Runtime.replace(/\D/g, '')
+                    poster.src = e.Poster
+                    poster.alt = `${e.Title} poster`
                 } else if (e.Response === 'False') {
                     errCount++
                     let content = e.Error
                     if (e.Error === 'Movie not found!')
-                        content += ' Try adding a year, or IMDb ID.'
+                        content += ' Try adding a year, search term, or IMDb ID.'
+                    else if (e.Error === 'Incorrect IMDb ID.')
+                        content += ' Try adding a year, search term, or IMDb ID.'
                     content += ` Error count: ${errCount}`
                     title.append(content)
-                    this.classList.add('err')
+                    errFunc()
                 }
             }
             update.addEventListener('click', () => {
@@ -222,7 +273,7 @@ customElements.define('elm-', class extends HTMLElement {
                     .then(resFunc)
                     .catch(err => {
                         title.innerHTML = err.message
-                        this.classList.add('err')
+                        errFunc()
                     })
             })
             remove.addEventListener('click', () => {
@@ -241,7 +292,10 @@ customElements.define('elm-', class extends HTMLElement {
     }
     attributeChangedCallback(name, oldVal, newVal) {
         if (name === 'text') {
-            this.input.value = newVal.trim()
+            const val = newVal.trim()
+            if (newVal !== val)
+                this.setAttribute(name, val)
+            this.input.value = val
         }
     }
 })

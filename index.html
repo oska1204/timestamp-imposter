@@ -11,8 +11,13 @@
 </head>
 
 <body>
-    <h1>Timestamp imposter</h1>
-    <h2>Click generate, then update all, then format</h2>
+    <header>
+        <div>
+            <h1>Timestamp imposter</h1>
+            <h2>Click generate, then update all, then format</h2>
+        </div>
+        <button class="toggle-theme"><span>☀</span></button>
+    </header>
     <main>
         <section class="split-wrapper">
             <button class="generate">Generate</button>
@@ -46,7 +51,7 @@
                 <button class="clear-time">Clear</button>
                 <span class="current-time"></span>
             </div>
-            <label>Offset in min: <input type="number" value="0" class="number"></label>
+            <label>Offset in min: <input type="number" value="0" class="offset"></label>
             <label class="ta">Join: <textarea class="join"></textarea></label>
             <label>Tail: <input type="text" class="tail"></label>
             <label>IMDb rating: <input type="checkbox" class="imdb-check" checked></label>
