@@ -30,9 +30,25 @@
     box-sizing: border-box;
 }
 
+:link {
+    color: rgb(120, 120, 240);
+}
+
+:visited {
+    color: rgb(200, 80, 140);
+}
+
+.light :link {
+    color: rgb(40, 40, 240);
+}
+.light :visited {
+    color: rgb(200, 00, 140);
+}
+
 body {
     margin: 1.5rem;
 }
+
 
 input,
 textarea,
@@ -137,14 +153,6 @@ elm- > div:first-of-type, elm- > div:nth-of-type(2) {
 
 .title {
     margin: 0.25rem 0.5rem;
-}
-
-:link {
-    color: rgb(120, 120, 240);
-}
-
-:visited {
-    color: rgb(200, 80, 140);
 }
 
 [type="time"] {
