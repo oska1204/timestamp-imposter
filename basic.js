@@ -78,6 +78,18 @@ join.value = localStorage.getItem('join') || ' ⏩ '
 tail.value = localStorage.getItem('tail') || 'Cartoons'
 preset.value = sessionStorage.getItem('preset') || preset.value
 
+try {
+    const elmsHTML = JSON.parse(localStorage.getItem('elms'))
+    if (elmsHTML.length)
+        elmWrapper.innerHTML = ''
+    elmsHTML.forEach(html => {
+        elmWrapper.insertAdjacentHTML('beforeEnd', html)
+    })
+} catch (err) {
+    console.error(err);
+}
+
+
 textarea.addEventListener('change', function () {
     localStorage.setItem('textarea', this.value)
 })
@@ -168,13 +180,24 @@ generate.addEventListener('click', () => {
 updateAll.addEventListener('click', () => {
     const elms = document.querySelectorAll('elm-')
     elms.forEach(e => {
-        if (e.input.value)
+        if (e.search.value)
             e.update.click()
     })
 })
 removeAll.addEventListener('click', () => {
     const elms = document.querySelectorAll('elm-')
     elms.forEach(e => e.remove())
+})
+addEventListener('beforeunload', () => {
+    const elms = Array.from(document.querySelectorAll('elm-'))
+    elms.forEach(e => {
+        if (e.json)
+            e.setAttribute('json', JSON.stringify(e.json))
+        e.setAttribute('minutes', e.minutes.value)
+    })
+    const elmsHTML = elms.map(e => e.outerHTML)
+    const jsonString = JSON.stringify(elmsHTML)
+    localStorage.setItem('elms', jsonString)
 })
 
 const template = document.createElement('template')
@@ -185,7 +208,7 @@ template.innerHTML = `
 </div>
 <div>
     <div>
-        <label>Search: <input type="text"></label>
+        <label>Search: <input type="text" class="search"></label>
         <label>Year: <input type="number" class="year"></label>
         <label>IMDb ID: <input type="text" class="imdb"></label>
         <button class="update">Update</button>
@@ -204,25 +227,30 @@ template.innerHTML = `
 customElements.define('elm-', class extends HTMLElement {
     constructor() {
         super()
+        this._temp = []
     }
     connectedCallback() {
         if (!this.hasChildNodes()) {
             this.append(template.content.cloneNode(true))
+        }
+        if (!this._init) {
+            this._init = true
             const query = this.querySelector.bind(this)
 
             const update = query('.update')
             const remove = query('.remove')
             const minutes = query('.minutes')
             const year = query('.year')
-            const input = query('input')
+            const search = query('.search')
             const title = query('.title')
             const imdb = query('.imdb')
             const up = query('.up')
             const down = query('.down')
             const poster = query('.poster')
-            this.minutes = minutes
             this.update = update
-            this.input = input
+            this.minutes = minutes
+            this.year = year
+            this.search = search
             this.poster = poster
             let errCount = 0
             const errFunc = () => {
@@ -267,7 +295,7 @@ customElements.define('elm-', class extends HTMLElement {
                 const baseUrl = `https://www.omdbapi.com/?apikey=${apikey || default_apikey}`
                 const queryUrl = imdb.value
                     ? `&i=${imdb.value}`
-                    : `&t=${input.value.trim()}&y=${year.value}`
+                    : `&t=${search.value.trim()}&y=${year.value}`
                 fetch(baseUrl + queryUrl)
                     .then(res => res.json())
                     .then(resFunc)
@@ -285,17 +313,39 @@ customElements.define('elm-', class extends HTMLElement {
             down.addEventListener('click', () => {
                 this.nextElementSibling?.after(this)
             })
+            this._temp.forEach(argList => {
+                this.attributeChangedHandler(...argList)
+            })
         }
     }
     static get observedAttributes() {
-        return ['text']
+        return ['text', 'minutes', 'json', 'search', 'year']
     }
-    attributeChangedCallback(name, oldVal, newVal) {
+    attributeChangedCallback() {
+        if (!this._init) {
+            this._temp.push(arguments)
+            return
+        } else
+            this.attributeChangedHandler(...arguments)
+    }
+    attributeChangedHandler(name, oldVal, newVal) {
         if (name === 'text') {
             const val = newVal.trim()
             if (newVal !== val)
                 this.setAttribute(name, val)
-            this.input.value = val
+            this.search.value = val
+        } else if (name === 'minutes') {
+            this.minutes.value = newVal
+        } else if (name === 'json') {
+            try {
+                this.json = JSON.parse(newVal)
+            } catch (err) {
+                console.error(err);
+            }
+        } else if (name === 'search') {
+            this.search.value = newVal
+        } else if (name === 'year') {
+            this.year.value = newVal
         }
     }
 })

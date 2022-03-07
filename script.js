@@ -17,7 +17,7 @@ function getList(arr, minOffset, startTime, preset) {
         if (arr.length === 0 || preset === 'rating' & !e)
             break
         const baseStr = e
-            ? `${e.getAttribute('text') || e.json?.Title || e.input.value}`.trim()
+            ? `${e.getAttribute('text') || e.json?.Title || e.search.value}`.trim()
             : tail.value
         let timeStr = ''
         let ratingStr = ''
