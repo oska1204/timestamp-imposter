@@ -14,8 +14,8 @@
     color: var(--primary-color, #999);
     background: var(--primary-background, #111);
     font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
-    word-spacing: 0.2em;
-}    
+    word-spacing: 0.1em;
+}
 
 :root.light {
     --primary-color: var(--tertiary-dark);
@@ -24,7 +24,7 @@
     --secondary-background: var(--secondary-light);
     --tertiary-color: var(--primary-dark);
     --tertiary-background: var(--primary-light);
-}    
+}
 
 * {
     box-sizing: border-box;
@@ -49,7 +49,6 @@ body {
     margin: 1.5rem;
 }
 
-
 input,
 textarea,
 button,
@@ -63,7 +62,8 @@ select {
 }
 
 input,
-button {
+button,
+select {
     font-family: inherit;
 }
 
@@ -102,7 +102,7 @@ main {
 }
 
 section {
-    margin: 1rem .5rem 1rem 0;
+    margin: 1rem 0.5rem 1rem 0;
 }
 
 .list-wrapper label {
@@ -148,8 +148,9 @@ elm- {
     background-color: rgba(255, 50, 50, 35%);
 }
 
-elm- > div:first-of-type, elm- > div:nth-of-type(2) {
-    padding: .5rem 0 .5rem .5rem;
+elm- > div:first-of-type,
+elm- > div:nth-of-type(2) {
+    padding: 0.5rem 0 0.5rem 0.5rem;
 }
 
 .title {
