@@ -88,37 +88,46 @@ try {
 } catch (err) {
     console.error(err);
 }
+addEventListener('beforeunload', () => {
+    const elms = Array.from(document.querySelectorAll('elm-'))
+    elms.forEach(e => {
+        if (e.json)
+            e.setAttribute('json', JSON.stringify(e.json))
+        e.setAttribute('minutes', e.minutes.value)
+        e.setAttribute('search', e.search.value)
+        e.setAttribute('year', e.year.value)
+        e.setAttribute('imdb', e.imdb.value)
+    })
+    const elmsHTML = elms.map(e => e.cloneNode().outerHTML)
+    const jsonString = JSON.stringify(elmsHTML)
+    localStorage.setItem('elms', jsonString)
+})
 
-
-textarea.addEventListener('change', function () {
-    localStorage.setItem('textarea', this.value)
-})
-split.addEventListener('change', function () {
-    localStorage.setItem('split', this.value)
-})
-startTime.addEventListener('change', function () {
-    sessionStorage.setItem('start-time', this.value)
-})
+const setLocalStorage = (elm, name) => {
+    elm.addEventListener('change', () => {
+        localStorage.setItem(name, elm.value)
+    })
+}
+const setSessionStorage = (elm, name) => {
+    elm.addEventListener('change', () => {
+        sessionStorage.setItem(name, elm.value)
+    })
+}
+setLocalStorage(textarea, 'textarea')
+setLocalStorage(split, 'split')
+setLocalStorage(join, 'join')
+setLocalStorage(tail, 'tail')
+setSessionStorage(startTime, 'start-time')
+setSessionStorage(preset, 'preset')
 startTime.addEventListener('input', function () {
     currentTime.textContent = this.value
-})
-join.addEventListener('change', function () {
-    localStorage.setItem('join', this.value)
-})
-tail.addEventListener('change', function () {
-    localStorage.setItem('tail', this.value)
-})
-preset.addEventListener('change', function () {
-    sessionStorage.setItem('preset', this.value)
 })
 offset.addEventListener('change', function () {
     if (!this.value)
         this.value = 0
 })
 
-toggleTheme.addEventListener('click', () => {
-    themeFunc()
-})
+toggleTheme.addEventListener('click', themeFunc)
 clearTime.addEventListener('click', () => {
     startTime.value = ''
     currentTime.textContent = ''
@@ -188,17 +197,6 @@ removeAll.addEventListener('click', () => {
     const elms = document.querySelectorAll('elm-')
     elms.forEach(e => e.remove())
 })
-addEventListener('beforeunload', () => {
-    const elms = Array.from(document.querySelectorAll('elm-'))
-    elms.forEach(e => {
-        if (e.json)
-            e.setAttribute('json', JSON.stringify(e.json))
-        e.setAttribute('minutes', e.minutes.value)
-    })
-    const elmsHTML = elms.map(e => e.outerHTML)
-    const jsonString = JSON.stringify(elmsHTML)
-    localStorage.setItem('elms', jsonString)
-})
 
 const template = document.createElement('template')
 template.innerHTML = `
@@ -230,10 +228,9 @@ customElements.define('elm-', class extends HTMLElement {
         this._temp = []
     }
     connectedCallback() {
-        if (!this.hasChildNodes()) {
-            this.append(template.content.cloneNode(true))
-        }
         if (!this._init) {
+            if (!this.hasChildNodes())
+                this.append(template.content.cloneNode(true))
             this._init = true
             const query = this.querySelector.bind(this)
 
@@ -251,16 +248,18 @@ customElements.define('elm-', class extends HTMLElement {
             this.minutes = minutes
             this.year = year
             this.search = search
+            this.imdb = imdb
             this.poster = poster
             let errCount = 0
-            const errFunc = () => {
+            this.errFunc = () => {
                 this.classList.add('err')
-                poster.src = ''
-                poster.alt = ''
+                poster.removeAttribute('src')
+                poster.removeAttribute('alt')
             }
-            const resFunc = e => {
+            this.resFunc = e => {
                 this.json = e
                 title.innerHTML = ''
+                console.log(e.Poster);
                 if (e.Response === 'True') {
                     errCount = 0
                     const link = document.createElement('a')
@@ -286,7 +285,7 @@ customElements.define('elm-', class extends HTMLElement {
                         content += ' Try adding a year, search term, or IMDb ID.'
                     content += ` Error count: ${errCount}`
                     title.append(content)
-                    errFunc()
+                    this.errFunc()
                 }
             }
             update.addEventListener('click', () => {
@@ -298,10 +297,10 @@ customElements.define('elm-', class extends HTMLElement {
                     : `&t=${search.value.trim()}&y=${year.value}`
                 fetch(baseUrl + queryUrl)
                     .then(res => res.json())
-                    .then(resFunc)
+                    .then(this.resFunc)
                     .catch(err => {
                         title.innerHTML = err.message
-                        errFunc()
+                        this.errFunc()
                     })
             })
             remove.addEventListener('click', () => {
@@ -319,12 +318,11 @@ customElements.define('elm-', class extends HTMLElement {
         }
     }
     static get observedAttributes() {
-        return ['text', 'minutes', 'json', 'search', 'year']
+        return ['text', 'minutes', 'json', 'search', 'year', 'imdb']
     }
     attributeChangedCallback() {
         if (!this._init) {
             this._temp.push(arguments)
-            return
         } else
             this.attributeChangedHandler(...arguments)
     }
@@ -333,19 +331,18 @@ customElements.define('elm-', class extends HTMLElement {
             const val = newVal.trim()
             if (newVal !== val)
                 this.setAttribute(name, val)
-            this.search.value = val
-        } else if (name === 'minutes') {
-            this.minutes.value = newVal
+            else
+                this.search.value = val
         } else if (name === 'json') {
             try {
-                this.json = JSON.parse(newVal)
+                const json = JSON.parse(newVal)
+                this.resFunc(json)
+                this.json = json
             } catch (err) {
                 console.error(err);
             }
-        } else if (name === 'search') {
-            this.search.value = newVal
-        } else if (name === 'year') {
-            this.year.value = newVal
+        } else {
+            this[name].value = newVal
         }
     }
 })
