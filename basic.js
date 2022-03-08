@@ -285,8 +285,10 @@ customElements.define('elm-', class extends HTMLElement {
                         minutes.value = 0
                     else
                         minutes.value = e.Runtime.replace(/\D/g, '')
-                    poster.src = e.Poster
-                    poster.alt = `${e.Title} poster`
+                    if (e.Poster && e.Poster !== 'N/A') {
+                        poster.src = e.Poster
+                        poster.alt = `${e.Title} poster`
+                    }
                 } else if (e.Response === 'False') {
                     errCount++
                     let content = e.Error
