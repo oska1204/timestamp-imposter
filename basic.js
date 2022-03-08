@@ -49,6 +49,7 @@ const tomatoCheck = query('.tomato-check')
 const metacriticCheck = query('.metacritic-check')
 const removeAll = query('.remove-all')
 const toggleTheme = query('.toggle-theme')
+const squareBrackets = query('.square-brackets')
 
 const storageKey = sessionStorage.getItem('apikey')
 const urlKey = new URL(location).searchParams.get('apikey')
@@ -71,12 +72,13 @@ apikeyElm.addEventListener('input', function () {
 
 textarea.value = localStorage.getItem('textarea') || 'Aladdin ⏩ The Hangover'
 split.value = localStorage.getItem('split') || '⏩'
+join.value = localStorage.getItem('join') || ' ⏩ '
+tail.value = localStorage.getItem('tail') || 'Cartoons'
+squareBrackets.checked = !!localStorage.getItem('square-brackets')
+preset.value = sessionStorage.getItem('preset') || preset.value
 const time = sessionStorage.getItem('start-time')
 startTime.value = time
 currentTime.textContent = time
-join.value = localStorage.getItem('join') || ' ⏩ '
-tail.value = localStorage.getItem('tail') || 'Cartoons'
-preset.value = sessionStorage.getItem('preset') || preset.value
 
 try {
     const elmsHTML = JSON.parse(localStorage.getItem('elms'))
@@ -125,6 +127,12 @@ startTime.addEventListener('input', function () {
 offset.addEventListener('change', function () {
     if (!this.value)
         this.value = 0
+})
+squareBrackets.addEventListener('change', function () {
+    if (this.checked)
+        localStorage.setItem('square-brackets', '1')
+    else
+        localStorage.removeItem('square-brackers')
 })
 
 toggleTheme.addEventListener('click', themeFunc)

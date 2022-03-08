@@ -33,7 +33,9 @@ function getList(arr, minOffset, startTime, preset) {
             tempDate = d.getTime()
             const h = d.getHours()
             const m = ('0' + d.getMinutes()).slice(-2)
-            timeStr = `(${h}:${m})`
+            timeStr = squareBrackets.checked
+                ? `[${h}:${m}]`
+                : `(${h}:${m})`
         }
         if ((preset === 'rating' || preset === 'rating + time') && e) {
             let tomato
