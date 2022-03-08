@@ -300,7 +300,7 @@ customElements.define('elm-', class extends HTMLElement {
                 }
             }
             update.addEventListener('click', () => {
-                if (!e.search.value && !e.imdb.value)
+                if (!this.search.value && !this.imdb.value)
                     return
                 title.innerHTML = 'Loading...'
                 this.classList.remove('err')
