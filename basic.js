@@ -76,6 +76,10 @@ split.value = localStorage.getItem('split') || '⏩'
 join.value = localStorage.getItem('join') || ' ⏩ '
 tail.value = localStorage.getItem('tail') || 'Cartoons'
 squareBrackets.checked = !!localStorage.getItem('square-brackets')
+radioGenerate.forEach(e => {
+    if (e.value === localStorage.getItem('radio-generate'))
+        e.checked = true
+})
 preset.value = sessionStorage.getItem('preset') || preset.value
 const time = sessionStorage.getItem('start-time')
 startTime.value = time
@@ -120,6 +124,7 @@ setLocalStorage(textarea, 'textarea')
 setLocalStorage(split, 'split')
 setLocalStorage(join, 'join')
 setLocalStorage(tail, 'tail')
+radioGenerate.forEach(e => setLocalStorage(e, 'radio-generate'))
 setSessionStorage(startTime, 'start-time')
 setSessionStorage(preset, 'preset')
 startTime.addEventListener('input', function () {
@@ -198,10 +203,7 @@ generate.addEventListener('click', () => {
 })
 updateAll.addEventListener('click', () => {
     const elms = document.querySelectorAll('elm-')
-    elms.forEach(e => {
-        if (e.search.value)
-            e.update.click()
-    })
+    elms.forEach(e => e.update.click())
 })
 removeAll.addEventListener('click', () => {
     const elms = document.querySelectorAll('elm-')
@@ -298,6 +300,8 @@ customElements.define('elm-', class extends HTMLElement {
                 }
             }
             update.addEventListener('click', () => {
+                if (!e.search.value && !e.imdb.value)
+                    return
                 title.innerHTML = 'Loading...'
                 this.classList.remove('err')
                 const baseUrl = `https://www.omdbapi.com/?apikey=${apikey || default_apikey}`
