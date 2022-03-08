@@ -50,6 +50,7 @@ const metacriticCheck = query('.metacritic-check')
 const removeAll = query('.remove-all')
 const toggleTheme = query('.toggle-theme')
 const squareBrackets = query('.square-brackets')
+const radioGenerate = Array.from(document.getElementsByName('generate-type'))
 
 const storageKey = sessionStorage.getItem('apikey')
 const urlKey = new URL(location).searchParams.get('apikey')
@@ -82,7 +83,7 @@ currentTime.textContent = time
 
 try {
     const elmsHTML = JSON.parse(localStorage.getItem('elms'))
-    if (elmsHTML.length)
+    if (elmsHTML.length !== undefined)
         elmWrapper.innerHTML = ''
     elmsHTML.forEach(html => {
         elmWrapper.insertAdjacentHTML('beforeEnd', html)
@@ -191,7 +192,8 @@ generate.addEventListener('click', () => {
     arr.forEach(val => {
         const elm = document.createElement('elm-')
         elmWrapper.append(elm)
-        elm.setAttribute('text', val)
+        const radioElm = radioGenerate.filter(e => e.checked)[0]
+        elm.setAttribute(radioElm.value, val)
     });
 })
 updateAll.addEventListener('click', () => {
@@ -267,7 +269,6 @@ customElements.define('elm-', class extends HTMLElement {
             this.resFunc = e => {
                 this.json = e
                 title.innerHTML = ''
-                console.log(e.Poster);
                 if (e.Response === 'True') {
                     errCount = 0
                     const link = document.createElement('a')
