@@ -6,7 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timestamp imposter</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/elm-.css">
     <link rel="icon" href="amongE.png">
 </head>
 
@@ -64,7 +65,7 @@
             <label>Rotten Tomatoes: <input type="checkbox" class="tomato-check" checked></label>
             <label>Metacritic: <input type="checkbox" class="metacritic-check" checked></label>
         </section>
-        <section class="api">
+        <section class="api-wrapper">
             <p>Should the api key expire, you can register for a free key at <a href="https://www.omdbapi.com"
                     target="_blank">omdbapi.com</a>.</p>
             <p>You can either set the key here: <input type="text" class="apikey" placeholder="api key"></p>
@@ -72,8 +73,11 @@
                         class="key-placeholder">KEY</span></a> to the url.</p>
         </section>
     </main>
-    <script src="basic.js" defer></script>
-    <script src="script.js" defer></script>
+    <script src="scripts/elements.js"></script>
+    <script src="scripts/functions.js"></script>
+    <script src="scripts/theme.js"></script>
+    <script src="scripts/basic.js"></script>
+    <script src="scripts/elm-.js"></script>
 </body>
 
 </html>

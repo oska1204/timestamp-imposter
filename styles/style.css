@@ -59,7 +59,6 @@ select,
     margin: 0 0.25rem;
     padding: 0.35rem;
     border-radius: 0.75rem;
-    margin: 0 0.25rem 0.75rem 0.25rem;
 }
 
 input,
@@ -72,6 +71,11 @@ select {
 button {
     background: var(--tertiary-background, #2b2b2b);
     color: var(--tertiary-color, #bbb);
+}
+
+[type="time"] {
+    color: var(--secondary-dark, #1b1b1b);
+    background: var(--secondary-light, #aaa);
 }
 
 header {
@@ -107,75 +111,8 @@ section {
     margin: 1rem 0.5rem 1rem 0;
 }
 
-.list-wrapper label {
-    display: inline-block;
-}
-
-.elm-wrapper {
-    margin-top: 1rem;
-}
-
-.split-wrapper > label,
-.split-wrapper > div,
-.config-wrapper > label,
-.config-wrapper > div,
-.output-wrapper > label {
-    margin: .75rem 0;
-}
-
 section > :first-child {
     margin-top: 0;
-}
-
-input.minutes,
-input.year {
-    width: 4.5rem;
-}
-
-input.imdb {
-    width: 5.5rem;
-}
-
-elm- {
-    display: grid;
-    grid-auto-flow: column;
-    position: relative;
-    grid-template-columns: min-content 1fr auto;
-}
-
-.err {
-    background-color: rgba(255, 0, 0, 15%);
-}
-
-.light .err {
-    background-color: rgba(255, 50, 50, 35%);
-}
-
-elm- > div:first-of-type,
-elm- > div:nth-of-type(2) {
-    padding: 0.5rem 0 0.5rem 0.5rem;
-}
-
-.title {
-    margin: 0.25rem 0.5rem 0.25rem 0;
-    max-width: 30rem;
-}
-
-[type="time"] {
-    color: var(--secondary-dark, #1b1b1b);
-    background: var(--secondary-light, #aaa);
-}
-
-.api p {
-    margin-top: 0;
-}
-
-.config label {
-    display: block;
-}
-
-.config-wrapper > label {
-    display: block;
 }
 
 label.ta {
@@ -187,41 +124,12 @@ label.io {
     grid-gap: 0.25rem;
 }
 
-elm-:nth-of-type(2n) {
-    background-color: rgba(85, 85, 85, 10%);
-}
-
-elm-.err:nth-of-type(2n) {
-    background-color: rgba(255, 50, 50, 15%);
-}
-
-.light elm-.err:nth-of-type(2n) {
-    background-color: rgba(255, 0, 0, 35%);
-}
-
-.title-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
-.title-wrapper label {
-    margin-left: 0.5rem;
-}
-
-.up,
-.down {
-    display: block;
-}
-
-.minute-label {
-    place-self: end;
-}
-
-.poster {
-    width: 100px;
-    display: block;
-    margin-left: 0.75rem;
+.split-wrapper > label,
+.split-wrapper > div,
+.config-wrapper > label,
+.config-wrapper > div,
+.output-wrapper > label {
+    margin: .75rem 0;
 }
 
 .radio {
@@ -232,4 +140,20 @@ elm-.err:nth-of-type(2n) {
 
 .radio input {
     margin-bottom: 0;
+}
+
+.list-wrapper label {
+    display: inline-block;
+}
+
+.elm-wrapper {
+    margin-top: 1rem;
+}
+
+.api-wrapper p {
+    margin-top: 0;
+}
+
+.config-wrapper > label {
+    display: block;
 }
