@@ -9,6 +9,9 @@ function getList(arr, minOffset, startTime, preset) {
         startDate.setHours(h)
         startDate.setMinutes(m)
     }
+    const tzInput = minToMs(timezoneInput.value * 60)
+    const tzOffset = minToMs(startDate.getTimezoneOffset())
+    startDate.setTime(startDate.getTime() + tzInput + tzOffset)
     const msOffset = minToMs(minOffset)
     let tempDate
     const finalArr = []
@@ -45,8 +48,8 @@ function getList(arr, minOffset, startTime, preset) {
             })
             let { imdbRating, Metascore } = e.json || {}
             const ratingsUnfiltered = [
-                imdbCheck.checked ? imdbRating : '', 
-                tomatoCheck.checked ? tomato : '', 
+                imdbCheck.checked ? imdbRating : '',
+                tomatoCheck.checked ? tomato : '',
                 metacriticCheck.checked ? Metascore : ''
             ]
             const ratings = ratingsUnfiltered.filter(e => e !== 'N/A' && e)

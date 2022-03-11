@@ -84,6 +84,7 @@ setLocalStorage(textarea, 'textarea')
 setLocalStorage(split, 'split')
 setLocalStorage(join, 'join')
 setLocalStorage(tail, 'tail')
+setLocalStorage(timezoneInput, 'timezone-input')
 radioGenerate.forEach(e => setLocalStorage(e, 'radio-generate'))
 setSessionStorage(startTime, 'start-time')
 setSessionStorage(preset, 'preset')
@@ -107,20 +108,6 @@ format.addEventListener('click', () => {
     const elms = Array.from(document.querySelectorAll('elm-'))
     const arr = elms.filter(e => e.minutes.value > 0)
     const list = getList(arr, offset.value, startTime.value, preset.value)
-    const timezoneOffset = new Date().getTimezoneOffset() / - 60
-    const offsetType = Math.sign(timezoneOffset)
-    let offsetResult
-    switch (offsetType) {
-        case 1:
-            offsetResult = '+' + timezoneOffset
-            break;
-        case -1:
-            offsetResult = '-' + timezoneOffset
-            break;
-        case 0:
-            offsetResult = ''
-            break;
-    }
     const ratingsListUnfiltered = [
         imdbCheck.checked ? 'IMDb' : '',
         tomatoCheck.checked ? 'Rotten Tomatoes' : '',
@@ -133,13 +120,13 @@ format.addEventListener('click', () => {
     let startMsg
     switch (preset.value) {
         case 'time':
-            startMsg = `[UTC${offsetResult}]`
+            startMsg = `[${timezoneFunc()}]`
             break;
         case 'rating':
             startMsg = `${ratingsInfo}`
             break;
         case 'rating + time':
-            startMsg = `${ratingsInfo} [UTC${offsetResult}]`.trim()
+            startMsg = `${ratingsInfo} [${timezoneFunc()}]`.trim()
             break;
     }
     output.value = `${startMsg} ${list.join(join.value || ' ⏩ ')}`
@@ -164,4 +151,42 @@ updateAll.addEventListener('click', () => {
 removeAll.addEventListener('click', () => {
     const elms = document.querySelectorAll('elm-')
     elms.forEach(e => e.remove())
+})
+const timezoneFunc = () => {
+    let plus
+    switch (Math.sign(timezoneInput.valueAsNumber)) {
+        case 1:
+        case 0:
+            plus = '+'
+            break;
+        case -1:
+            plus = '-'
+            break;
+    }
+    const [start, end = 0] = timezoneInput.value.split('.')
+    const startInMin = parseFloat(start)
+    const startStr = startInMin.toString().replace(/^-/, '')
+    const endInSec = parseInt(end) * .6
+    const endInSecStr = `${endInSec}0`.slice(0, 2)
+    const endStr = endInSec === 0
+        ? ''
+        : `:${endInSecStr}`
+    const str = `UTC${plus}${startStr}${endStr}`.replace(/\+0$/, '')
+    timezoneSpan.textContent = str
+    return str
+}
+const defaultTimezone = (new Date).getTimezoneOffset() / - 60
+timezoneInput.addEventListener('input', timezoneFunc)
+timezoneInput.addEventListener('change', function () {
+    if (!this.value)
+        timezoneInput.value = defaultTimezone
+    timezoneFunc()
+})
+timezoneInput.value = localStorage.getItem('timezone-input')
+    || defaultTimezone
+timezoneFunc()
+timezoneReset.addEventListener('click', () => {
+    timezoneInput.value = defaultTimezone
+    timezoneFunc()
+    localStorage.removeItem('timezone-input')
 })

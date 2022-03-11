@@ -2,5 +2,5 @@
 
 ## Todo-list
 
-- [ ] Set custom timezone
+- [x] Set custom timezone
 - [ ] Set custom format

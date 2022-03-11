@@ -129,7 +129,7 @@ label.io {
 .config-wrapper > label,
 .config-wrapper > div,
 .output-wrapper > label {
-    margin: .75rem 0;
+    margin: 0.75rem 0;
 }
 
 .radio {
@@ -156,4 +156,8 @@ label.io {
 
 .config-wrapper > label {
     display: block;
+}
+
+.timezone {
+    width: 4rem;
 }
