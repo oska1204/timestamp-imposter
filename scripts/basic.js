@@ -38,9 +38,13 @@ radioGenerate.forEach(e => {
         e.checked = true
 })
 preset.value = sessionStorage.getItem('preset') || preset.value
-const time = sessionStorage.getItem('start-time')
+
+const defaultTimezone = (new Date).getTimezoneOffset() / - 60
+const defaultTimezoneStr = `UTC${defaultTimezone >= 0 ? '+' : ''}${defaultTimezone}`
+const time = sessionStorage.getItem('start-time') || ''
 startTime.value = time
-currentTime.textContent = time
+if (time)
+    currentTime.textContent = `${defaultTimezoneStr} ${time}`
 
 try {
     const elmsHTML = JSON.parse(localStorage.getItem('elms'))
@@ -90,7 +94,7 @@ setSessionStorage(startTime, 'start-time')
 setSessionStorage(preset, 'preset')
 
 startTime.addEventListener('input', function () {
-    currentTime.textContent = this.value
+    currentTime.textContent = `${defaultTimezoneStr} ${this.value}`
 })
 offset.addEventListener('change', function () {
     if (!this.value)
@@ -175,7 +179,6 @@ const timezoneFunc = () => {
     timezoneSpan.textContent = str
     return str
 }
-const defaultTimezone = (new Date).getTimezoneOffset() / - 60
 timezoneInput.addEventListener('input', timezoneFunc)
 timezoneInput.addEventListener('change', function () {
     if (!this.value)

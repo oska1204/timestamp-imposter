@@ -8,7 +8,7 @@ template.innerHTML = `
     <div>
         <label>Search: <input type="text" class="search"></label>
         <label>Year: <input type="number" class="year"></label>
-        <label>IMDb ID: <input type="text" class="imdb"></label>
+        <label>IMDb ID/Link: <input type="text" class="imdb"></label>
         <button class="update">Update</button>
         <button class="remove">Remove</button>
     </div>
@@ -85,6 +85,21 @@ customElements.define('elm-', class extends HTMLElement {
         this.imdb = imdb
         this.poster = poster
         let errCount = 0
+        const updateEnter = elm =>
+            elm.addEventListener('keyup', e => {
+                if (e.key === 'Enter')
+                    this.updateFunc()
+            })
+        updateEnter(search)
+        updateEnter(year)
+        updateEnter(imdb)
+        imdb.addEventListener('change', function () {
+            this.value = this.value.match(/[a-z]{2}\d+/).toString()
+        })
+        minutes.addEventListener('change', function () {
+            if (this.value !== '0')
+                this.classList.remove('err')
+        })
         this.errFunc = () => {
             minutes.value = 0
             this.classList.add('err')
@@ -105,11 +120,13 @@ customElements.define('elm-', class extends HTMLElement {
                 technical.href += '/technical'
                 technical.textContent = 'versions'
                 title.append(link, ' — ', technical)
+                minutes.classList.remove('err')
                 if (e.minutes)
                     minutes.value = e.minutes
-                else if (!e.Runtime || e.Runtime === 'N/A')
+                else if (!e.Runtime || e.Runtime === 'N/A') {
                     minutes.value = 0
-                else
+                    minutes.classList.add('err')
+                } else
                     minutes.value = e.Runtime.replace(/\D/g, '') || e.minutes
                 if (e.Poster && e.Poster !== 'N/A') {
                     poster.src = e.Poster
@@ -127,7 +144,7 @@ customElements.define('elm-', class extends HTMLElement {
                 this.errFunc()
             }
         }
-        update.addEventListener('click', () => {
+        this.updateFunc = () => {
             if (!this.search.value && !this.imdb.value)
                 return
             title.innerHTML = 'Loading...'
@@ -143,7 +160,8 @@ customElements.define('elm-', class extends HTMLElement {
                     title.innerHTML = err.message
                     this.errFunc()
                 })
-        })
+        }
+        update.addEventListener('click', this.updateFunc)
         remove.addEventListener('click', () => {
             this.remove()
         })
