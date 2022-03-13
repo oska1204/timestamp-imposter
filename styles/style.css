@@ -117,6 +117,7 @@ section > :first-child {
 
 label.ta {
     display: flex;
+    width: fit-content;
 }
 
 label.io {
@@ -156,8 +157,9 @@ label.io {
 
 .config-wrapper > label {
     display: block;
+    width: fit-content;
 }
 
-.timezone {
+.timezone-input, .offset {
     width: 4rem;
 }
