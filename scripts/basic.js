@@ -33,6 +33,15 @@ switch (localStorage.getItem('square-brackets')) {
         squareBrackets.checked = false
         break;
 }
+switch (localStorage.getItem('streamElementsCurTimeCheck')) {
+    case 'true':
+    default:
+        streamElementsCurTimeCheck.checked = true
+        break;
+    case 'false':
+        streamElementsCurTimeCheck.checked = false
+        break;
+}
 radioGenerate.forEach(e => {
     if (e.value === localStorage.getItem('radio-generate'))
         e.checked = true
@@ -103,6 +112,9 @@ offset.addEventListener('change', function () {
 squareBrackets.addEventListener('change', function () {
     localStorage.setItem('square-brackets', this.checked)
 })
+streamElementsCurTimeCheck.addEventListener('change', function () {
+    localStorage.setItem('streamElementsCurTimeCheck', this.checked)
+})
 clearTime.addEventListener('click', () => {
     startTime.value = ''
     currentTime.textContent = ''
@@ -121,16 +133,29 @@ format.addEventListener('click', () => {
     const ratingsInfo = ratingsInfoList.length
         ? `{${ratingsInfoList.join(', ')}}`
         : ''
+    let streamElementsCurTime = ''
+    if (streamElementsCurTimeCheck.checked)
+        streamElementsCurTime = `Current time: \${time.Etc/GMT${timezoneFunc().replace('UTC', '').replace(/[-+]/, e => {
+            switch (e) {
+                case '-':
+                    return '+'
+                    break
+                case '+':
+                    return '-'
+                    break
+            }
+        })}} `
+    const timeStr = `[${streamElementsCurTime}${timezoneFunc()}]`
     let startMsg
     switch (preset.value) {
         case 'time':
-            startMsg = `[${timezoneFunc()}]`
+            startMsg = timeStr
             break;
         case 'rating':
-            startMsg = `${ratingsInfo}`
+            startMsg = ratingsInfo
             break;
         case 'rating + time':
-            startMsg = `${ratingsInfo} [${timezoneFunc()}]`.trim()
+            startMsg = `${ratingsInfo} ${timeStr}`.trim()
             break;
     }
     output.value = `${startMsg} ${list.join(join.value || ' ⏩ ')}`
