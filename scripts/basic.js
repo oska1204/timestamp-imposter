@@ -170,7 +170,16 @@ generate.addEventListener('click', () => {
         const elm = document.createElement('elm-')
         elmWrapper.append(elm)
         const radioElm = radioGenerate.filter(e => e.checked)[0]
-        elm.setAttribute(radioElm.value, val)
+        switch (radioElm.value) {
+            case 'text':
+                const [searchVal, yearVal = ''] = val.trim().split(/(?= \d{4})/)
+                elm.setAttribute(radioElm.value, searchVal)
+                elm.setAttribute('year', yearVal.trim())
+                break;
+            case 'imdb':
+                elm.setAttribute(radioElm.value, val)
+                break;
+        }
     });
 })
 updateAll.addEventListener('click', () => {
