@@ -135,7 +135,7 @@ format.addEventListener('click', () => {
         : ''
     let streamElementsCurTime = ''
     if (streamElementsCurTimeCheck.checked)
-        streamElementsCurTime = `Current time: \${time.Etc/GMT${timezoneFunc().replace('UTC', '').replace(/[-+]/, e => {
+        streamElementsCurTime = `Current time: \${time.Etc/GMT${timezoneFunc().replace(/UTC|:\d{2}/g, '').replace(/[-+]/, e => {
             switch (e) {
                 case '-':
                     return '+'
