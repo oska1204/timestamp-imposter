@@ -227,3 +227,7 @@ timezoneReset.addEventListener('click', () => {
     timezoneFunc()
     localStorage.removeItem('timezone-input')
 })
+form.addEventListener('submit', function (e) {
+    if (!this.elements.text.value.trim())
+        e.preventDefault()
+})
