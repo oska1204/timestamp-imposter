@@ -1,20 +1,18 @@
 function dataConst(queryElm = document) {
-    const s = document.createElement('script')
     const elms = Array.from(queryElm.querySelectorAll('[data-const]'))
     const arr = elms.filter(e => e)
     window.__temp = arr
-    const scriptArr = arr.map((e, i) => {
+    arr.forEach((e, i) => {
+        const s = document.createElement('script')
         const val = e.dataset.const
-        return `const ${val} = window.__temp[${i}];\n`
+        s.text = `const ${val} = window.__temp[${i}];\n`
+        document.head.append(s)
+        s.remove()
+        e.removeAttribute('data-const')
     })
-    s.text = scriptArr.join('')
-    document.head.append(s)
-    arr.forEach(e => e.removeAttribute('data-const'))
     delete window.__temp
-    s.remove()
 }
 function dataConstAll(queryElm = document) {
-    const s = document.createElement('script')
     const elms = Array.from(queryElm.querySelectorAll('[data-const-all]'))
     const arrFiltered = elms.filter(e => e)
     const tempArr = []
@@ -25,13 +23,14 @@ function dataConstAll(queryElm = document) {
     })
     const arr = tempArr.map(e => Array.from(queryElm.querySelectorAll(`[data-const-all="${e}"]`)))
     window.__tempAll = arr
-    const scriptArr = arr.map((e, i) => {
-        const val = e[0].dataset.constAll
-        return `const ${val} = window.__tempAll[${i}];\n`
+    arr.forEach((e, i) => {
+        const s = document.createElement('script')
+        const elm = e[0]
+        const val = elm.dataset.constAll
+        s.text = `const ${val} = window.__tempAll[${i}];\n`
+        document.head.append(s)
+        s.remove()
+        elm.removeAttribute('data-const-all')
     })
-    s.text = scriptArr.join('')
-    document.head.append(s)
-    arrFiltered.forEach(e => e.removeAttribute('data-const-all'))
     delete window.__tempAll
-    s.remove()
 }
