@@ -131,6 +131,9 @@ customElements.define('elm-', class extends HTMLElement {
                 if (e.Poster && e.Poster !== 'N/A') {
                     poster.src = e.Poster
                     poster.alt = `${e.Title} poster`
+                } else {
+                    poster.removeAttribute('src')
+                    poster.removeAttribute('alt')
                 }
             } else if (e.Response === 'False') {
                 errCount++

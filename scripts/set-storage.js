@@ -34,14 +34,7 @@ setLocalStorage(timezoneInput, 'timezone-input')
 radioGenerate.forEach(e => setLocalStorage(e, 'radio-generate'))
 setSessionStorage(startTime, 'start-time')
 setSessionStorage(preset, 'preset')
-
-startTime.addEventListener('input', function () {
-    currentTime.textContent = `${defaultTimezoneStr} ${this.value}`
-})
-offset.addEventListener('change', function () {
-    if (!this.value)
-        this.value = 0
-})
+setSessionStorage(offset, 'offset')
 
 const setCheckbox = (elm, name) => {
     elm.addEventListener('change', function () {
@@ -54,9 +47,3 @@ setCheckbox(streamElementsCurTimeCheck,
 setCheckbox(imdbCheck, 'imdb-check')
 setCheckbox(tomatoCheck, 'tomato-check')
 setCheckbox(metacriticCheck, 'metacritic-check')
-
-clearTime.addEventListener('click', () => {
-    startTime.value = ''
-    currentTime.textContent = ''
-    sessionStorage.removeItem('start-time')
-})

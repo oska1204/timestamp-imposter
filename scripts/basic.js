@@ -20,6 +20,20 @@ apikeyElm.addEventListener('input', function () {
     updateKeyLink(apikey)
 })
 
+startTime.addEventListener('input', function () {
+    currentTime.textContent = `${defaultTimezoneStr} ${this.value}`
+})
+offset.addEventListener('change', function () {
+    if (!this.value)
+        this.value = 0
+})
+
+clearTime.addEventListener('click', () => {
+    startTime.value = ''
+    currentTime.textContent = ''
+    sessionStorage.removeItem('start-time')
+})
+
 format.addEventListener('click', () => {
     const elms = Array.from(document.querySelectorAll('elm-'))
     const arr = elms.filter(e => e.minutes.value > 0)
