@@ -180,35 +180,36 @@ customElements.define('elm-', class extends HTMLElement {
             this.attributeChangedHandler(...argList)
         })
         this._temp = []
+        const mouseMove = (e, f) => {
+            const val = f.pageY - e.layerY - this.offsetTop
+            this.style.transform = `translate(0, ${val}px)`
+            this.mouseMoveVal = f.pageY - e.layerY
+        }
+        const mouseUp = (e, f) => {
+            if (this.mouseMoveVal) {
+                const offsetTop = this.mouseMoveVal
+                const firstElm = elmWrapper.firstElementChild
+                if (offsetTop < firstElm.offsetTop + (firstElm.offsetHeight / 2))
+                    elmWrapper.prepend(this)
+                Array.from(elmWrapper.children).forEach(g => {
+                    if (g.offsetTop < offsetTop + (g.offsetHeight / 2))
+                        g.after(this)
+                })
+            }
+            this.style.zIndex = ''
+            this.style.background = ''
+            this.style.transform = ''
+            document.removeEventListener('mousemove', this.mouseMove)
+            document.removeEventListener('mouseup', this.mouseUp)
+            this.mouseMoveVal = null
+        }
         drag.onmousedown = e => {
-            window.host = this
             this.style.zIndex = '1'
             this.style.background = '#8888'
-            document.onmousemove = f => {
-                const val = f.pageY - e.layerY - this.offsetTop
-                this.style.transform = `translate(0, ${val}px)`
-                window.hostVal = f.pageY - (e.layerY / 2) + (this.offsetHeight / 2)
-            }
-            document.onmouseup = e => {
-                if (window.hostVal) {
-                    const host = window.host
-                    const offsetTop = window.hostVal
-                    const firstElm = elmWrapper.firstElementChild
-                    if (offsetTop < firstElm.offsetTop + firstElm.offsetHeight)
-                        elmWrapper.prepend(host)
-                    Array.from(elmWrapper.children).forEach(f => {
-                        if (f.offsetTop < offsetTop)
-                            f.after(host)
-                    })
-                }
-                host.style.zIndex = ''
-                host.style.background = ''
-                host.style.transform = ''
-                document.onmousemove = null
-                document.onmouseup = null
-                window.host = null
-                window.hostVal = null
-            }
+            this.mouseMove = mouseMove.bind(this, e)
+            this.mouseUp = mouseUp.bind(this, e)
+            document.addEventListener('mousemove', this.mouseMove)
+            document.addEventListener('mouseup', this.mouseUp)
         }
     }
 })

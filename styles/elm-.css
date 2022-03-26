@@ -38,8 +38,10 @@ elm- button {
 }
 
 .up,
+.drag,
 .down {
     display: block;
+    user-select: none;
 }
 
 input.minutes,
