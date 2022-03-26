@@ -2,6 +2,7 @@ const template = document.createElement('template')
 template.innerHTML = `
 <div>
     <button class="up">⬆</button>
+    <button class="drag">:::</button>
     <button class="down">⬇</button>
 </div>
 <div>
@@ -78,6 +79,7 @@ customElements.define('elm-', class extends HTMLElement {
         const up = query('.up')
         const down = query('.down')
         const poster = query('.poster')
+        const drag = query('.drag')
         this.update = update
         this.minutes = minutes
         this.year = year
@@ -178,5 +180,35 @@ customElements.define('elm-', class extends HTMLElement {
             this.attributeChangedHandler(...argList)
         })
         this._temp = []
+        drag.onmousedown = e => {
+            window.host = this
+            this.style.zIndex = '1'
+            this.style.background = '#8888'
+            document.onmousemove = f => {
+                const val = f.pageY - e.layerY - this.offsetTop
+                this.style.transform = `translate(0, ${val}px)`
+                window.hostVal = f.pageY - (e.layerY / 2) + (this.offsetHeight / 2)
+            }
+            document.onmouseup = e => {
+                if (window.hostVal) {
+                    const host = window.host
+                    const offsetTop = window.hostVal
+                    const firstElm = elmWrapper.firstElementChild
+                    if (offsetTop < firstElm.offsetTop + firstElm.offsetHeight)
+                        elmWrapper.prepend(host)
+                    Array.from(elmWrapper.children).forEach(f => {
+                        if (f.offsetTop < offsetTop)
+                            f.after(host)
+                    })
+                }
+                host.style.zIndex = ''
+                host.style.background = ''
+                host.style.transform = ''
+                document.onmousemove = null
+                document.onmouseup = null
+                window.host = null
+                window.hostVal = null
+            }
+        }
     }
 })

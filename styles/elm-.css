@@ -4,6 +4,7 @@ elm- {
     position: relative;
     grid-template-columns: min-content 1fr auto;
     background-color: rgba(85, 85, 85, 5%);
+    transition: background-color .2s;
 }
 
 .err {
