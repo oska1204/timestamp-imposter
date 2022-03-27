@@ -85,6 +85,8 @@ customElements.define('elm-', class extends HTMLElement {
             }
         } else if (name === 'title_json') {
             try {
+                if (!newVal)
+                    return
                 const json = JSON.parse(newVal)
                 this.titleJson = json
                 this.formatSearch(json)
@@ -162,8 +164,6 @@ customElements.define('elm-', class extends HTMLElement {
         this.errFunc = () => {
             minutes.value = 0
             this.classList.add('err')
-            poster.removeAttribute('src')
-            poster.removeAttribute('alt')
         }
         const resFalse = e => {
             errCount++
@@ -201,9 +201,6 @@ customElements.define('elm-', class extends HTMLElement {
                 if (e.Poster && e.Poster !== 'N/A') {
                     poster.src = e.Poster
                     poster.alt = `${e.Title} poster`
-                } else {
-                    poster.removeAttribute('src')
-                    poster.removeAttribute('alt')
                 }
             } else if (e.Response === 'False') {
                 resFalse(e)
@@ -231,6 +228,8 @@ customElements.define('elm-', class extends HTMLElement {
         const fetchApi = (fn, queryUrl) => {
             const baseUrl = `https://www.omdbapi.com/?apikey=${apikey || default_apikey}`
             this.classList.add('loading')
+            poster.removeAttribute('src')
+            poster.removeAttribute('alt')
             return fetch(baseUrl + queryUrl)
                 .then(res => res.json())
                 .then(fn)
