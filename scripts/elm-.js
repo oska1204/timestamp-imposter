@@ -21,8 +21,8 @@ template.innerHTML = `
     </div>
     <div class="select-title-wrapper">
         <select class="select-title"></select>
-        <label><input type="number" class="season" placeholder="Season"></label>
-        <label><input type="number" class="episode" placeholder="Episode"></label>
+        <label><input type="number" class="season" placeholder="Season" min="0"></label>
+        <label><input type="number" class="episode" placeholder="Episode" min="0"></label>
     </div>
     <div class="title-wrapper">
         <span class="title"></span>
@@ -150,6 +150,8 @@ customElements.define('elm-', class extends HTMLElement {
         })
         const updateChange = elm => {
             elm.addEventListener('change', () => {
+                if (elm.valueAsNumber <= 0 && elm.valueAsNumber !== undefined)
+                    elm.value = ''
                 this.classList.remove('err')
                 fetchApi(this.resFunc, `&i=${selectTitle.value}&season=${season.value}&episode=${episode.value}`)
             })
@@ -205,6 +207,7 @@ customElements.define('elm-', class extends HTMLElement {
             } else if (e.Response === 'False') {
                 resFalse(e)
             }
+            return e
         }
         this.formatSearch = searchArr => {
             searchArr.forEach(f => {
@@ -224,8 +227,9 @@ customElements.define('elm-', class extends HTMLElement {
             } else if (e.Response === 'False') {
                 resFalse(e)
             }
+            return e
         }
-        const fetchApi = (fn, queryUrl) => {
+        const fetchApi = (fn, queryUrl, extraFn = ff => ff) => {
             const baseUrl = `https://www.omdbapi.com/?apikey=${apikey || default_apikey}`
             this.classList.add('loading')
             poster.removeAttribute('src')
@@ -233,6 +237,7 @@ customElements.define('elm-', class extends HTMLElement {
             return fetch(baseUrl + queryUrl)
                 .then(res => res.json())
                 .then(fn)
+                .then(extraFn)
                 .then(e => {
                     this.classList.remove('loading')
                     return e
@@ -249,7 +254,12 @@ customElements.define('elm-', class extends HTMLElement {
             title.innerHTML = 'Loading...'
             this.classList.remove('err')
             if (imdb.value.match(imdbIDRegex)) {
-                fetchApi(this.resFunc, `&i=${imdb.value}&season=${season.value}&episode=${episode.value}`)
+                fetchApi(this.resFunc, `&i=${imdb.value}`, e => {
+                    this.titleJson = [e]
+                    selectTitle.innerHTML = `
+                        <option value="${e.imdbID}">${e.Title} (${e.Year})</option>
+                    `
+                })
             } else {
                 fetchApi(this.searchFunc, `&s=${search.value.trim()}&y=${year.value}&type=${selectType.value}`)
             }
