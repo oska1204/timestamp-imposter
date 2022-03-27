@@ -4,7 +4,7 @@ elm- {
     position: relative;
     grid-template-columns: min-content 1fr auto;
     background-color: rgba(85, 85, 85, 5%);
-    transition: background-color .2s;
+    transition: background-color 0.2s;
 }
 
 .err {
@@ -50,7 +50,13 @@ input.year {
 }
 
 input.imdb {
-    width: 5.5rem;
+    width: 6rem;
+}
+
+.select-title-wrapper {
+    display: grid;
+    grid-template-columns: minmax(100px, 30rem);
+    margin-bottom: 0.75rem;
 }
 
 .title-wrapper {
@@ -74,10 +80,46 @@ input.imdb {
 
 .poster {
     width: 100px;
+    height: 150px;
     display: block;
     margin-left: 0.75rem;
+    object-fit: contain;
+    object-position: top right;
 }
 
 .poster:not([src]) {
     visibility: hidden;
+}
+
+.loading-overlay {
+    background: radial-gradient(#4448, transparent);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    display: grid;
+}
+
+.circle {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    margin: auto;
+    /* background: red; */
+    border: 5px transparent solid;
+    border-top: 5px #888 solid;
+    border-radius: 50%;
+    animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+    to {
+        transform: rotate(1turn)
+    }
+}
+
+elm-:not(.loading) .loading-overlay {
+    display: none;
 }

@@ -6,6 +6,9 @@ addEventListener('beforeunload', () => {
         e.setAttribute('search', e.search.value)
         e.setAttribute('year', e.year.value)
         e.setAttribute('imdb', e.imdb.value)
+        e.setAttribute('select_type', e.select_type.value)
+        e.setAttribute('title_json', JSON.stringify(e.titleJson) || '')
+        e.setAttribute('select_title', e.select_title.value)
         if (!e.json)
             return
         e.json.minutes = e.minutes.value

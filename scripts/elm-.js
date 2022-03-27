@@ -7,11 +7,20 @@ template.innerHTML = `
 </div>
 <div>
     <div>
-        <label>Search: <input type="text" class="search"></label>
-        <label>Year: <input type="number" class="year"></label>
-        <label>IMDb ID/Link: <input type="text" class="imdb"></label>
+        <label><input type="text" class="search" placeholder="Search"></label>
+        <label><input type="number" class="year" placeholder="Year"></label>
+        <label><input type="text" class="imdb" placeholder="IMDb ID/Link"></label>
+        <select class="select-type">
+            <option value="">--type--</option>
+            <option value="movie">Movie</option>
+            <option value="series">Series</option>
+            <option value="episode">Episode</option>
+        </select>
         <button class="update">Update</button>
         <button class="remove">Remove</button>
+    </div>
+    <div class="select-title-wrapper">
+        <select class="select-title"></select>
     </div>
     <div class="title-wrapper">
         <span class="title"></span>
@@ -19,7 +28,10 @@ template.innerHTML = `
     </div>
 </div>
 <div>
-    <img class="poster">
+    <img class="poster" width="100" height="150">
+</div>
+<div class="loading-overlay">
+    <div class="circle"></div>
 </div>
 `
 
@@ -32,7 +44,17 @@ customElements.define('elm-', class extends HTMLElement {
         this.init()
     }
     static get observedAttributes() {
-        return ['text', 'minutes', 'json', 'search', 'year', 'imdb']
+        return [
+            'text',
+            'minutes',
+            'json',
+            'search',
+            'year',
+            'imdb',
+            'select_type',
+            'select_title',
+            'title_json'
+        ]
     }
     attributeChangedCallback() {
         if (!this._init)
@@ -54,6 +76,15 @@ customElements.define('elm-', class extends HTMLElement {
                 const json = JSON.parse(newVal)
                 this.resFunc(json)
                 this.json = json
+            } catch (err) {
+                console.error(err);
+            }
+        } else if (name === 'title_json') {
+            try {
+                const json = JSON.parse(newVal)
+                this.titleJson = json
+                this.formatSearch(json)
+                this['select_title'].value = this.getAttribute('select_title')
             } catch (err) {
                 console.error(err);
             }
@@ -80,12 +111,18 @@ customElements.define('elm-', class extends HTMLElement {
         const down = query('.down')
         const poster = query('.poster')
         const drag = query('.drag')
+        const selectTitle = query('.select-title')
+        const selectType = query('.select-type')
         this.update = update
         this.minutes = minutes
         this.year = year
         this.search = search
         this.imdb = imdb
         this.poster = poster
+        this.select_title = selectTitle
+        this.select_type = selectType
+
+        const imdbIDRegex = /[a-z]{2}\d{7,}/
         let errCount = 0
         const updateEnter = elm =>
             elm.addEventListener('keyup', e => {
@@ -96,7 +133,13 @@ customElements.define('elm-', class extends HTMLElement {
         updateEnter(year)
         updateEnter(imdb)
         imdb.addEventListener('change', function () {
-            this.value = this.value.match(/[a-z]{2}\d+/).toString()
+            this.value = this.value.match(imdbIDRegex).toString()
+        })
+        selectType.addEventListener('change', () => {
+            this.updateFunc()
+        })
+        selectTitle.addEventListener('change', () => {
+            fetchApi(this.resFunc, `&i=${selectTitle.value}`)
         })
         minutes.addEventListener('change', function () {
             if (this.value !== '0')
@@ -107,6 +150,17 @@ customElements.define('elm-', class extends HTMLElement {
             this.classList.add('err')
             poster.removeAttribute('src')
             poster.removeAttribute('alt')
+        }
+        const resFalse = e => {
+            errCount++
+            let content = e.Error
+            if (e.Error === 'Movie not found!')
+                content += ' Try adding a year, search term, or IMDb ID.'
+            else if (e.Error === 'Incorrect IMDb ID.')
+                content += ' Try adding a year, search term, or IMDb ID.'
+            content += ` Error count: ${errCount}`
+            title.append(content)
+            this.errFunc()
         }
         this.resFunc = e => {
             this.json = e
@@ -138,33 +192,55 @@ customElements.define('elm-', class extends HTMLElement {
                     poster.removeAttribute('alt')
                 }
             } else if (e.Response === 'False') {
-                errCount++
-                let content = e.Error
-                if (e.Error === 'Movie not found!')
-                    content += ' Try adding a year, search term, or IMDb ID.'
-                else if (e.Error === 'Incorrect IMDb ID.')
-                    content += ' Try adding a year, search term, or IMDb ID.'
-                content += ` Error count: ${errCount}`
-                title.append(content)
-                this.errFunc()
+                resFalse(e)
             }
+        }
+        this.formatSearch = searchArr => {
+            searchArr.forEach(f => {
+                selectTitle.insertAdjacentHTML('beforeend', `
+                    <option value="${f.imdbID}">${f.Title} (${f.Year})</option>
+                `)
+            })
+        }
+        this.searchFunc = e => {
+            title.innerHTML = ''
+            selectTitle.innerHTML = ''
+            if (e.Response === 'True') {
+                this.titleJson = e.Search
+                fetchApi(this.resFunc, `&i=${e.Search[0].imdbID}`)
+                selectTitle.innerHTML = ''
+                this.formatSearch(e.Search)
+            } else if (e.Response === 'False') {
+
+                resFalse(e)
+            }
+        }
+        const fetchApi = (fn, queryUrl) => {
+            const baseUrl = `https://www.omdbapi.com/?apikey=${apikey || default_apikey}`
+            this.classList.add('loading')
+            return fetch(baseUrl + queryUrl)
+                .then(res => res.json())
+                .then(fn)
+                .then(e => {
+                    this.classList.remove('loading')
+                    return e
+                })
+                .catch(err => {
+                    title.innerHTML = err.message
+                    this.errFunc()
+                    this.classList.remove('loading')
+                })
         }
         this.updateFunc = () => {
             if (!this.search.value && !this.imdb.value)
                 return
             title.innerHTML = 'Loading...'
             this.classList.remove('err')
-            const baseUrl = `https://www.omdbapi.com/?apikey=${apikey || default_apikey}`
-            const queryUrl = imdb.value
-                ? `&i=${imdb.value}`
-                : `&t=${search.value.trim()}&y=${year.value}`
-            fetch(baseUrl + queryUrl)
-                .then(res => res.json())
-                .then(this.resFunc)
-                .catch(err => {
-                    title.innerHTML = err.message
-                    this.errFunc()
-                })
+            if (imdb.value.match(imdbIDRegex)) {
+                fetchApi(this.resFunc, `&i=${imdb.value}`)
+            } else {
+                fetchApi(this.searchFunc, `&s=${search.value.trim()}&y=${year.value}&type=${selectType.value}`)
+            }
         }
         update.addEventListener('click', this.updateFunc)
         remove.addEventListener('click', () => {
