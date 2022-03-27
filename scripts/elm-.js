@@ -21,6 +21,8 @@ template.innerHTML = `
     </div>
     <div class="select-title-wrapper">
         <select class="select-title"></select>
+        <label><input type="number" class="season" placeholder="Season"></label>
+        <label><input type="number" class="episode" placeholder="Episode"></label>
     </div>
     <div class="title-wrapper">
         <span class="title"></span>
@@ -53,7 +55,9 @@ customElements.define('elm-', class extends HTMLElement {
             'imdb',
             'select_type',
             'select_title',
-            'title_json'
+            'title_json',
+            'season',
+            'episode'
         ]
     }
     attributeChangedCallback() {
@@ -111,16 +115,20 @@ customElements.define('elm-', class extends HTMLElement {
         const down = query('.down')
         const poster = query('.poster')
         const drag = query('.drag')
-        const selectTitle = query('.select-title')
         const selectType = query('.select-type')
+        const selectTitle = query('.select-title')
+        const season = query('.season')
+        const episode = query('.episode')
         this.update = update
         this.minutes = minutes
         this.year = year
         this.search = search
         this.imdb = imdb
         this.poster = poster
-        this.select_title = selectTitle
         this.select_type = selectType
+        this.select_title = selectTitle
+        this.season = season
+        this.episode = episode
 
         const imdbIDRegex = /[a-z]{2}\d{7,}/
         let errCount = 0
@@ -138,9 +146,15 @@ customElements.define('elm-', class extends HTMLElement {
         selectType.addEventListener('change', () => {
             this.updateFunc()
         })
-        selectTitle.addEventListener('change', () => {
-            fetchApi(this.resFunc, `&i=${selectTitle.value}`)
-        })
+        const updateChange = elm => {
+            elm.addEventListener('change', () => {
+                this.classList.remove('err')
+                fetchApi(this.resFunc, `&i=${selectTitle.value}&season=${season.value}&episode=${episode.value}`)
+            })
+        }
+        updateChange(selectTitle)
+        updateChange(season)
+        updateChange(episode)
         minutes.addEventListener('change', function () {
             if (this.value !== '0')
                 this.classList.remove('err')
@@ -207,11 +221,10 @@ customElements.define('elm-', class extends HTMLElement {
             selectTitle.innerHTML = ''
             if (e.Response === 'True') {
                 this.titleJson = e.Search
-                fetchApi(this.resFunc, `&i=${e.Search[0].imdbID}`)
+                fetchApi(this.resFunc, `&i=${e.Search[0].imdbID}&season=${season.value}&episode=${episode.value}`)
                 selectTitle.innerHTML = ''
                 this.formatSearch(e.Search)
             } else if (e.Response === 'False') {
-
                 resFalse(e)
             }
         }
@@ -237,7 +250,7 @@ customElements.define('elm-', class extends HTMLElement {
             title.innerHTML = 'Loading...'
             this.classList.remove('err')
             if (imdb.value.match(imdbIDRegex)) {
-                fetchApi(this.resFunc, `&i=${imdb.value}`)
+                fetchApi(this.resFunc, `&i=${imdb.value}&season=${season.value}&episode=${episode.value}`)
             } else {
                 fetchApi(this.searchFunc, `&s=${search.value.trim()}&y=${year.value}&type=${selectType.value}`)
             }

@@ -9,6 +9,8 @@ addEventListener('beforeunload', () => {
         e.setAttribute('select_type', e.select_type.value)
         e.setAttribute('title_json', JSON.stringify(e.titleJson) || '')
         e.setAttribute('select_title', e.select_title.value)
+        e.setAttribute('season', e.season.value)
+        e.setAttribute('episode', e.episode.value)
         if (!e.json)
             return
         e.json.minutes = e.minutes.value

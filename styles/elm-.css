@@ -33,7 +33,8 @@ elm- > div:nth-of-type(2) {
 }
 
 elm- input,
-elm- button {
+elm- button,
+elm- select {
     margin: 0 0.5rem 0.75rem 0;
 }
 
@@ -53,10 +54,16 @@ input.imdb {
     width: 6rem;
 }
 
+.season,
+.episode {
+    width: 5rem;
+}
+
 .select-title-wrapper {
     display: grid;
     grid-template-columns: minmax(100px, 30rem);
     margin-bottom: 0.75rem;
+    grid-auto-flow: column;
 }
 
 .title-wrapper {
