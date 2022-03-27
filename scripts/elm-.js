@@ -21,8 +21,8 @@ template.innerHTML = `
     </div>
     <div class="select-title-wrapper">
         <select class="select-title"></select>
-        <label><input type="number" class="season" placeholder="Season" min="0"></label>
-        <label><input type="number" class="episode" placeholder="Episode" min="0"></label>
+        <label>s<input type="number" class="season" placeholder="Season" min="0"></label>
+        <label>ep<input type="number" class="episode" placeholder="Episode" min="0"></label>
     </div>
     <div class="title-wrapper">
         <span class="title"></span>
@@ -75,6 +75,8 @@ customElements.define('elm-', class extends HTMLElement {
                 this.setAttribute(name, val)
             else
                 this.search.value = val
+        } else if (name === 'imdb') {
+            this[name].value = newVal.match(this.imdbIDRegex)?.toString() || newVal
         } else if (name === 'json') {
             try {
                 const json = JSON.parse(newVal)
@@ -133,6 +135,7 @@ customElements.define('elm-', class extends HTMLElement {
         this.episode = episode
 
         const imdbIDRegex = /[a-z]{2}\d{7,}/
+        this.imdbIDRegex = imdbIDRegex
         let errCount = 0
         const updateEnter = elm =>
             elm.addEventListener('keyup', e => {
@@ -143,7 +146,7 @@ customElements.define('elm-', class extends HTMLElement {
         updateEnter(year)
         updateEnter(imdb)
         imdb.addEventListener('change', function () {
-            this.value = this.value.match(imdbIDRegex).toString()
+            this.value = this.value.match(imdbIDRegex)?.toString() || this.value
         })
         selectType.addEventListener('change', () => {
             this.updateFunc()

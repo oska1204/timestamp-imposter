@@ -86,9 +86,13 @@ generate.addEventListener('click', () => {
         const radioElm = radioGenerate.filter(e => e.checked)[0]
         switch (radioElm.value) {
             case 'text':
+                const reg = /s(\d+)ep?(\d+)/i
                 const [searchVal, yearVal = ''] = val.trim().split(/(?= \d{4}$)/)
-                elm.setAttribute(radioElm.value, searchVal)
+                elm.setAttribute(radioElm.value, searchVal.replace(reg, ''))
                 elm.setAttribute('year', yearVal.trim())
+                const [s, ep] = val.match(reg)?.slice(1)
+                elm.setAttribute('season', s)
+                elm.setAttribute('episode', ep)
                 break;
             case 'imdb':
                 elm.setAttribute(radioElm.value, val)
