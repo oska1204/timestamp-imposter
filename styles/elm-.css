@@ -68,6 +68,10 @@ input.imdb {
     max-width: 23rem;
 }
 
+elm-:not(.series) .select-title-wrapper label {
+    display: none;
+}
+
 .title-wrapper {
     display: flex;
     flex-wrap: wrap;

@@ -155,8 +155,20 @@ customElements.define('elm-', class extends HTMLElement {
             elm.addEventListener('change', () => {
                 if (elm.valueAsNumber <= 0 && elm.valueAsNumber !== undefined)
                     elm.value = ''
+                if (season.value === '' && episode.value !== '' ||
+                    season.value !== '' && episode.value === '')
+                    return
                 this.classList.remove('err')
-                fetchApi(this.resFunc, `&i=${selectTitle.value}&season=${season.value}&episode=${episode.value}`)
+                const [id, type] = selectTitle.value.split(',')
+                let queryUrl = `&i=${id}`
+                if (type === 'series')
+                    queryUrl += `&season=${season.value}&episode=${episode.value}`
+                if (type !== 'series' && (
+                    elm === season ||
+                    elm === episode
+                ))
+                    return
+                fetchApi(this.resFunc, queryUrl)
             })
         }
         updateChange(selectTitle)
@@ -207,6 +219,11 @@ customElements.define('elm-', class extends HTMLElement {
                     poster.src = e.Poster
                     poster.alt = `${e.Title} poster`
                 }
+                if (e.Type === 'series' || e.Type === 'episode') {
+                    this.classList.add('series')
+                } else {
+                    this.classList.remove('series')
+                }
             } else if (e.Response === 'False') {
                 resFalse(e)
             }
@@ -215,7 +232,7 @@ customElements.define('elm-', class extends HTMLElement {
         this.formatSearch = searchArr => {
             searchArr.forEach(f => {
                 selectTitle.insertAdjacentHTML('beforeend', `
-                    <option value="${f.imdbID}">${f.Title} (${f.Year})</option>
+                    <option value="${f.imdbID},${f.Type}">${f.Title} (${f.Year})</option>
                 `)
             })
         }
@@ -224,7 +241,11 @@ customElements.define('elm-', class extends HTMLElement {
             selectTitle.innerHTML = ''
             if (e.Response === 'True') {
                 this.titleJson = e.Search
-                fetchApi(this.resFunc, `&i=${e.Search[0].imdbID}&season=${season.value}&episode=${episode.value}`)
+                const [id, type] = selectTitle.value.split(',')
+                let queryUrl = `&i=${e.Search[0].imdbID}`
+                if (type === 'series')
+                    queryUrl += `&season=${season.value}&episode=${episode.value}`
+                fetchApi(this.resFunc, queryUrl)
                 selectTitle.innerHTML = ''
                 this.formatSearch(e.Search)
             } else if (e.Response === 'False') {
@@ -260,7 +281,7 @@ customElements.define('elm-', class extends HTMLElement {
                 fetchApi(this.resFunc, `&i=${imdb.value}`, e => {
                     this.titleJson = [e]
                     selectTitle.innerHTML = `
-                        <option value="${e.imdbID}">${e.Title} (${e.Year})</option>
+                        <option value="${e.imdbID},${e.Type}">${e.Title} (${e.Year})</option>
                     `
                 })
             } else {
