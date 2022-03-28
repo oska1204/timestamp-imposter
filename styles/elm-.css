@@ -68,7 +68,7 @@ input.imdb {
     max-width: 23rem;
 }
 
-elm-:not(.series) .select-title-wrapper label {
+elm-.movie .select-title-wrapper label {
     display: none;
 }
 

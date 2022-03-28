@@ -219,10 +219,10 @@ customElements.define('elm-', class extends HTMLElement {
                     poster.src = e.Poster
                     poster.alt = `${e.Title} poster`
                 }
-                if (e.Type === 'series' || e.Type === 'episode') {
-                    this.classList.add('series')
+                if (e.Type === 'movie') {
+                    this.classList.add('movie')
                 } else {
-                    this.classList.remove('series')
+                    this.classList.remove('movie')
                 }
             } else if (e.Response === 'False') {
                 resFalse(e)
