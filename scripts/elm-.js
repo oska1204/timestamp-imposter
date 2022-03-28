@@ -155,13 +155,14 @@ customElements.define('elm-', class extends HTMLElement {
             elm.addEventListener('change', () => {
                 if (elm.valueAsNumber <= 0 && elm.valueAsNumber !== undefined)
                     elm.value = ''
-                if (season.value === '' && episode.value !== '' ||
-                    season.value !== '' && episode.value === '')
-                    return
                 this.classList.remove('err')
                 const [id, type] = selectTitle.value.split(',')
                 let queryUrl = `&i=${id}`
-                if (type === 'series')
+                if (type === 'series' && !(
+                    season.value === '' && episode.value !== '' ||
+                    season.value !== '' && episode.value === '' ||
+                    season.value === '' && episode.value === ''
+                ))
                     queryUrl += `&season=${season.value}&episode=${episode.value}`
                 if (type !== 'series' && (
                     elm === season ||
@@ -243,7 +244,11 @@ customElements.define('elm-', class extends HTMLElement {
                 this.titleJson = e.Search
                 const s = e.Search[0]
                 let queryUrl = `&i=${s.imdbID}`
-                if (s.Type === 'series')
+                if (s.Type === 'series' && !(
+                    season.value === '' && episode.value !== '' ||
+                    season.value !== '' && episode.value === '' ||
+                    season.value === '' && episode.value === ''
+                ))
                     queryUrl += `&season=${season.value}&episode=${episode.value}`
                 fetchApi(this.resFunc, queryUrl)
                 selectTitle.innerHTML = ''
