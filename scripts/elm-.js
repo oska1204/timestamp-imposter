@@ -241,9 +241,9 @@ customElements.define('elm-', class extends HTMLElement {
             selectTitle.innerHTML = ''
             if (e.Response === 'True') {
                 this.titleJson = e.Search
-                const [id, type] = selectTitle.value.split(',')
-                let queryUrl = `&i=${e.Search[0].imdbID}`
-                if (type === 'series')
+                const s = e.Search[0]
+                let queryUrl = `&i=${s.imdbID}`
+                if (s.Type === 'series')
                     queryUrl += `&season=${season.value}&episode=${episode.value}`
                 fetchApi(this.resFunc, queryUrl)
                 selectTitle.innerHTML = ''
