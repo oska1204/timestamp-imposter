@@ -290,12 +290,19 @@ customElements.define('elm-', class extends HTMLElement {
             if (this.mouseMoveVal) {
                 const offsetTop = this.mouseMoveVal
                 const firstElm = elmWrapper.firstElementChild
-                if (offsetTop < firstElm.offsetTop + (firstElm.offsetHeight / 2))
+                const lastElm = elmWrapper.lastElementChild
+                if (offsetTop < firstElm.offsetTop)
                     elmWrapper.prepend(this)
-                Array.from(elmWrapper.children).forEach(g => {
-                    if (g.offsetTop < offsetTop + (g.offsetHeight / 2))
+                if (offsetTop > lastElm.offsetTop)
+                    elmWrapper.append(this)
+                for (const g of elmWrapper.children) {
+                    const topLine = g.offsetTop
+                    const bottomLine = topLine + g.offsetHeight
+                    if (topLine < offsetTop && bottomLine > offsetTop) {
                         g.after(this)
-                })
+                        break
+                    }
+                }
             }
             this.style.zIndex = ''
             this.style.background = ''
