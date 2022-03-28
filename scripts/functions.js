@@ -19,9 +19,24 @@ function getList(arr, minOffset, startTime, preset) {
         const e = arr[i]
         if (arr.length === 0 || preset === 'rating' & !e)
             break
-        const baseStr = e
-            ? `${e.getAttribute('text') || e.json?.Title || e.search.value}`.trim()
-            : tail.value
+        let baseStr
+        if (e) {
+            const text = e.getAttribute('text')
+            const title = e.json?.Title
+            const search = e.search.value
+            const defaultFormat = `${text || title || search}`
+            if (customFormatCheck.checked) {
+                try {
+                    baseStr = eval(`\`${customFormatInput.value}\``) || defaultFormat
+                } catch (err) {
+                    baseStr = defaultFormat
+                    console.error(err)
+                }
+            } else {
+                baseStr = defaultFormat
+            }
+        } else
+            baseStr = tail.value
         let timeStr = ''
         let ratingStr = ''
         if ((preset === 'time' || preset === 'rating + time')) {
@@ -69,7 +84,7 @@ function getList(arr, minOffset, startTime, preset) {
                 result = `${ratingStr} ${baseStr} ${timeStr}`
                 break;
         }
-        finalArr.push(result.trim())
+        finalArr.push(result)
     }
     return finalArr
 }

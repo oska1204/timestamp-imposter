@@ -1,5 +1,6 @@
 textarea.value = localStorage.getItem('textarea') || 'Aladdin ⏩ The Hangover'
 split.value = localStorage.getItem('split') || '⏩'
+customFormatInput.value = localStorage.getItem('customFormatInput') || '${text || title || search}'
 join.value = localStorage.getItem('join') || ' ⏩ '
 tail.value = localStorage.getItem('tail') || 'Cartoons'
 
@@ -13,6 +14,7 @@ const getCheckbox = (elm, name) => {
             break;
     }
 }
+getCheckbox(customFormatCheck, 'customFormatCheck')
 getCheckbox(squareBrackets, 'square-brackets')
 getCheckbox(streamElementsCurTimeCheck,
     'stream-elements-cur-time-check')

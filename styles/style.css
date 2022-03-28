@@ -160,6 +160,24 @@ label.io {
     width: fit-content;
 }
 
-.timezone-input, .offset {
+.timezone-input,
+.offset {
     width: 4rem;
+}
+
+.config-wrapper [for="custom-format"] {
+    display: inline;
+}
+
+[name="custom-format"]:checked + label {
+    display: block;
+}
+.config-wrapper .custom-format-input,
+.config-wrapper .custom-format-input textarea {
+    width: 100%;
+}
+
+.config-wrapper .custom-format-input {
+    display: none;
+    font-family: monospace;
 }

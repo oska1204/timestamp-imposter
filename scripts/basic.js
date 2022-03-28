@@ -27,6 +27,10 @@ offset.addEventListener('change', function () {
     if (!this.value)
         this.value = 0
 })
+customFormatInput.addEventListener('change', function () {
+    if (!this.value)
+        this.value = '${text || title || search}'
+})
 
 clearTime.addEventListener('click', () => {
     startTime.value = ''

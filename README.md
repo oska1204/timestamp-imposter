@@ -3,4 +3,4 @@
 ## Todo-list
 
 - [x] Set custom timezone
-- [ ] Set custom format
+- [x] Set custom format

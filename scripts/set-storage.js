@@ -33,6 +33,7 @@ const setSessionStorage = (elm, name) => {
 }
 setLocalStorage(textarea, 'textarea')
 setLocalStorage(split, 'split')
+setLocalStorage(customFormatInput, 'customFormatInput')
 setLocalStorage(join, 'join')
 setLocalStorage(tail, 'tail')
 setLocalStorage(timezoneInput, 'timezone-input')
@@ -52,3 +53,4 @@ setCheckbox(streamElementsCurTimeCheck,
 setCheckbox(imdbCheck, 'imdb-check')
 setCheckbox(tomatoCheck, 'tomato-check')
 setCheckbox(metacriticCheck, 'metacritic-check')
+setCheckbox(customFormatCheck, 'customFormatCheck')
