@@ -60,10 +60,12 @@ input.imdb {
 }
 
 .select-title-wrapper {
-    display: grid;
-    grid-template-columns: minmax(100px, 30rem);
     margin-bottom: 0.75rem;
-    grid-auto-flow: column;
+}
+
+.select-title {
+    width: 100%;
+    max-width: 23rem;
 }
 
 .title-wrapper {
