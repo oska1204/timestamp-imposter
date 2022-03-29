@@ -155,8 +155,14 @@ customElements.define('elm-', class extends HTMLElement {
             elm.addEventListener('change', () => {
                 if (elm.valueAsNumber <= 0 && elm.valueAsNumber !== undefined)
                     elm.value = ''
-                this.classList.remove('err')
                 const [id, type] = selectTitle.value.split(',')
+                if (type === 'series' && (
+                    season.value === '' && episode.value !== '' ||
+                    season.value !== '' && episode.value === '') &&
+                    (elm === season || elm === episode)
+                )
+                    return
+                this.classList.remove('err')
                 let queryUrl = `&i=${id}`
                 if (type === 'series' && !(
                     season.value === '' && episode.value !== '' ||
