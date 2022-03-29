@@ -26,6 +26,14 @@ template.innerHTML = `
     </div>
     <div class="title-wrapper">
         <span class="title"></span>
+        <div class="warning-wrapper" hidden>
+            <div class="warning-outer">
+                <div class="warning-inner">
+                    <span>!</span>
+                </div>
+            </div>
+            <span>might be wrong title</span>
+        </div>
         <label class="minute-label">Minutes: <input type="number" value="0" min="0" class="minutes"></label>
     </div>
 </div>
@@ -243,12 +251,19 @@ customElements.define('elm-', class extends HTMLElement {
                 `)
             })
         }
+        const minTitle = str => {
+            return str.match(/\w+/g).join(' ').toLowerCase()
+        }
         this.searchFunc = e => {
-            title.innerHTML = ''
+            title.innerHTML = 'Loading...'
             selectTitle.innerHTML = ''
             if (e.Response === 'True') {
                 this.titleJson = e.Search
                 const s = e.Search[0]
+                if (minTitle(s.Title) !== minTitle(search.value))
+                    this.classList.add('warning')
+                else
+                    this.classList.remove('warning')
                 let queryUrl = `&i=${s.imdbID}`
                 if (s.Type === 'series' && !(
                     season.value === '' && episode.value !== '' ||
