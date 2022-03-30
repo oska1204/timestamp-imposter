@@ -60,7 +60,8 @@ input.imdb {
 }
 
 .select-title-wrapper {
-    margin-bottom: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .select-title {
@@ -80,7 +81,7 @@ elm-.movie .select-title-wrapper label {
 
 .title {
     margin: 0.25rem 0.75rem 0.25rem 0;
-    max-width: 30rem;
+    max-width: 27rem;
 }
 
 .title-wrapper label {
@@ -143,6 +144,7 @@ elm-.warning .warning-wrapper {
 
 .warning-wrapper {
     display: none;
+    margin-bottom: 0.5rem;
 }
 
 .warning-outer {

@@ -23,10 +23,7 @@ template.innerHTML = `
         <select class="select-title"></select>
         <label>s<input type="number" class="season" placeholder="Season" min="0"></label>
         <label>ep<input type="number" class="episode" placeholder="Episode" min="0"></label>
-    </div>
-    <div class="title-wrapper">
-        <span class="title"></span>
-        <div class="warning-wrapper" hidden>
+        <div class="warning-wrapper">
             <div class="warning-outer">
                 <div class="warning-inner">
                     <span>!</span>
@@ -34,6 +31,9 @@ template.innerHTML = `
             </div>
             <span>might be wrong title</span>
         </div>
+    </div>
+    <div class="title-wrapper">
+        <span class="title"></span>
         <label class="minute-label">Minutes: <input type="number" value="0" min="0" class="minutes"></label>
     </div>
 </div>
@@ -259,15 +259,14 @@ customElements.define('elm-', class extends HTMLElement {
             }).match(/\w+/g).join(' ').toLowerCase()
         }
         this.searchFunc = e => {
-            title.innerHTML = 'Loading...'
+            title.innerHTML = ''
             selectTitle.innerHTML = ''
             if (e.Response === 'True') {
+                title.innerHTML = 'Loading...'
                 this.titleJson = e.Search
                 const s = e.Search[0]
                 if (minTitle(s.Title) !== minTitle(search.value))
                     this.classList.add('warning')
-                else
-                    this.classList.remove('warning')
                 let queryUrl = `&i=${s.imdbID}`
                 if (s.Type === 'series' && !(
                     season.value === '' && episode.value !== '' ||
@@ -307,6 +306,9 @@ customElements.define('elm-', class extends HTMLElement {
                 return
             title.innerHTML = 'Loading...'
             this.classList.remove('err')
+            this.classList.remove('warning')
+            this.json = []
+            this.titleJson = []
             if (imdb.value.match(imdbIDRegex)) {
                 fetchApi(this.resFunc, `&i=${imdb.value}`, e => {
                     this.titleJson = [e]
