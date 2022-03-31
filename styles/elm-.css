@@ -73,6 +73,10 @@ elm-.movie .select-title-wrapper label {
     display: none;
 }
 
+elm-:not(.movie) .select-title-wrapper {
+    max-width: fit-content;
+}
+
 .title-wrapper {
     display: flex;
     flex-wrap: wrap;
