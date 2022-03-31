@@ -73,27 +73,43 @@ elm-.movie .select-title-wrapper label {
     display: none;
 }
 
-elm-:not(.movie) .select-title-wrapper {
+elm-.series .select-title-wrapper {
     max-width: fit-content;
 }
 
 .title-wrapper {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
 .title {
     margin: 0.25rem 0.75rem 0.25rem 0;
-    max-width: 27rem;
+    max-width: 20.5rem;
+    margin-right: auto;
 }
 
-.title-wrapper label {
-    margin-left: auto;
+.rated {
+    margin: 0 0 0.75rem 0.75rem;
+    height: max-content;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    color: var(--tertiary-color);
+    background-color: var(--tertiary-background);
+}
+
+.rated.err {
+    background: rgba(255, 255, 0, 15%);
 }
 
 .minute-label {
     place-self: end;
+    margin-left: 0.75rem;
+}
+
+.minute-label input {
+    margin-right: 0;
+    margin-left: 0.75rem;
 }
 
 .poster {

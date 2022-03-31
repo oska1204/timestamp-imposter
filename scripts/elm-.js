@@ -34,6 +34,7 @@ template.innerHTML = `
     </div>
     <div class="title-wrapper">
         <span class="title"></span>
+        <span class="rated" hidden><span></span></span>
         <label class="minute-label">Minutes: <input type="number" value="0" min="0" class="minutes"></label>
     </div>
 </div>
@@ -131,6 +132,7 @@ customElements.define('elm-', class extends HTMLElement {
         const selectTitle = query('.select-title')
         const season = query('.season')
         const episode = query('.episode')
+        const rated = query('.rated')
         this.update = update
         this.minutes = minutes
         this.year = year
@@ -141,6 +143,7 @@ customElements.define('elm-', class extends HTMLElement {
         this.select_title = selectTitle
         this.season = season
         this.episode = episode
+        this.rated = rated
 
         const imdbIDRegex = /[a-z]{2}\d{7,}/
         this.imdbIDRegex = imdbIDRegex
@@ -236,9 +239,15 @@ customElements.define('elm-', class extends HTMLElement {
                 }
                 if (e.Type === 'movie') {
                     this.classList.add('movie')
+                    this.classList.remove('series')
                 } else {
                     this.classList.remove('movie')
+                    this.classList.add('series')
                 }
+                rated.textContent = `Rated ${e.Rated}`
+                rated.hidden = false
+                if (e.Rated === 'R')
+                    rated.classList.add('err')
             } else if (e.Response === 'False') {
                 resFalse(e)
             }
@@ -287,6 +296,9 @@ customElements.define('elm-', class extends HTMLElement {
             this.classList.add('loading')
             poster.removeAttribute('src')
             poster.removeAttribute('alt')
+            rated.classList.remove('err')
+            rated.textContent = ''
+            rated.hidden = true
             return fetch(baseUrl + queryUrl)
                 .then(res => res.json())
                 .then(fn)
