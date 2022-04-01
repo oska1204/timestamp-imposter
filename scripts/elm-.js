@@ -84,7 +84,15 @@ customElements.define('elm-', class extends HTMLElement {
                 this.setAttribute(name, val)
             else
                 this.search.value = val
-        } else if (name === 'imdb') {
+        } else if (name === 'year') {
+            if (newVal.length === 2) {
+                const d = new Date()
+                const firstPart = d.getFullYear().toString().slice(0, -2)
+                let isWhat = firstPart + newVal
+                if (isWhat > d.getFullYear())
+                    isWhat = firstPart - 1 + newVal
+                this.year.value = isWhat
+            }        } else if (name === 'imdb') {
             this[name].value = newVal.match(this.imdbIDRegex)?.toString() || newVal
         } else if (name === 'json') {
             try {
@@ -156,11 +164,28 @@ customElements.define('elm-', class extends HTMLElement {
         updateEnter(search)
         updateEnter(year)
         updateEnter(imdb)
+        year.addEventListener('change', () => {
+            if (year.value.length === 2) {
+                const d = new Date()
+                const firstPart = d.getFullYear().toString().slice(0, -2)
+                let isWhat = firstPart + year.value
+                if (isWhat > d.getFullYear())
+                    isWhat = firstPart - 1 + year.value
+                year.value = isWhat
+            }
+        })
         imdb.addEventListener('change', function () {
             this.value = this.value.match(imdbIDRegex)?.toString() || this.value
         })
         selectType.addEventListener('change', () => {
             this.updateFunc()
+            if (selectType.value === 'movie') {
+                this.classList.add('movie')
+                this.classList.remove('series')
+            } else {
+                this.classList.remove('movie')
+                this.classList.add('series')
+            }
         })
         const updateChange = elm => {
             elm.addEventListener('change', () => {
@@ -173,20 +198,23 @@ customElements.define('elm-', class extends HTMLElement {
                     (elm === season || elm === episode)
                 )
                     return
-                this.classList.remove('err')
-                let queryUrl = `&i=${id}`
-                if (type === 'series' && !(
-                    season.value === '' && episode.value !== '' ||
-                    season.value !== '' && episode.value === '' ||
-                    season.value === '' && episode.value === ''
-                ))
-                    queryUrl += `&season=${season.value}&episode=${episode.value}`
                 if (type !== 'series' && (
                     elm === season ||
                     elm === episode
                 ))
                     return
-                fetchApi(this.resFunc, queryUrl)
+                this.classList.remove('err')
+                let queryUrl = `&i=${id}`
+                if (season.value === '' && episode.value === '')
+                    fetchApi(this.resFunc, queryUrl)
+                if (type === 'series' && !(
+                    season.value === '' && episode.value !== '' ||
+                    season.value !== '' && episode.value === '' ||
+                    season.value === '' && episode.value === ''
+                )) {
+                    queryUrl += `&season=${season.value}&episode=${episode.value}`
+                    fetchApi(this.epFunc, queryUrl)
+                }
             })
         }
         updateChange(selectTitle)
@@ -199,6 +227,8 @@ customElements.define('elm-', class extends HTMLElement {
         this.errFunc = () => {
             minutes.value = 0
             this.classList.add('err')
+            poster.removeAttribute('src')
+            poster.removeAttribute('alt')
         }
         const resFalse = e => {
             errCount++
@@ -236,6 +266,9 @@ customElements.define('elm-', class extends HTMLElement {
                 if (e.Poster && e.Poster !== 'N/A') {
                     poster.src = e.Poster
                     poster.alt = `${e.Title} poster`
+                } else {
+                    poster.removeAttribute('src')
+                    poster.removeAttribute('alt')
                 }
                 if (e.Type === 'movie') {
                     this.classList.add('movie')
@@ -244,13 +277,21 @@ customElements.define('elm-', class extends HTMLElement {
                     this.classList.remove('movie')
                     this.classList.add('series')
                 }
-                rated.textContent = `Rated ${e.Rated}`
+                if (e.Rated === 'N/A' || !e.Rated)
+                    rated.textContent = 'Unrated'
+                else
+                    rated.textContent = `Rated ${e.Rated}`
                 rated.hidden = false
-                if (e.Rated === 'R')
+                if (e.Rated === 'R' || e.Rated === 'TV-MA')
                     rated.classList.add('err')
             } else if (e.Response === 'False') {
                 resFalse(e)
             }
+            return e
+        }
+        this.epFunc = e => {
+            if (e.Response === 'True')
+                this.resFunc(e)
             return e
         }
         this.formatSearch = searchArr => {
@@ -267,25 +308,33 @@ customElements.define('elm-', class extends HTMLElement {
                 return ''
             }).match(/\w+/g).join(' ').toLowerCase()
         }
-        this.searchFunc = e => {
+        this.searchFunc = async e => {
             title.innerHTML = ''
             selectTitle.innerHTML = ''
             if (e.Response === 'True') {
                 title.innerHTML = 'Loading...'
-                this.titleJson = e.Search
-                const s = e.Search[0]
-                if (minTitle(s.Title) !== minTitle(search.value))
+                const searchArr = e.Search.filter(e => e.Type !== 'game')
+                this.titleJson = searchArr
+                this.formatSearch(searchArr)
+                const minTitleFunc = f => minTitle(f.Title) === minTitle(search.value)
+                let index = searchArr.findIndex(minTitleFunc)
+                if (index === -1)
+                    index = 0
+                selectTitle.value = selectTitle.children[index].value
+                const s = searchArr[index]
+                if (minTitle(s.Title) !== minTitle(search.value) ||
+                    searchArr.slice(1).findIndex(minTitleFunc) !== -1)
                     this.classList.add('warning')
                 let queryUrl = `&i=${s.imdbID}`
+                await fetchApi(this.resFunc, queryUrl)
                 if (s.Type === 'series' && !(
                     season.value === '' && episode.value !== '' ||
                     season.value !== '' && episode.value === '' ||
                     season.value === '' && episode.value === ''
-                ))
+                )) {
                     queryUrl += `&season=${season.value}&episode=${episode.value}`
-                fetchApi(this.resFunc, queryUrl)
-                selectTitle.innerHTML = ''
-                this.formatSearch(e.Search)
+                    fetchApi(this.epFunc, queryUrl)
+                }
             } else if (e.Response === 'False') {
                 resFalse(e)
             }
@@ -294,8 +343,6 @@ customElements.define('elm-', class extends HTMLElement {
         const fetchApi = (fn, queryUrl, extraFn = ff => ff) => {
             const baseUrl = `https://www.omdbapi.com/?apikey=${apikey || default_apikey}`
             this.classList.add('loading')
-            poster.removeAttribute('src')
-            poster.removeAttribute('alt')
             rated.classList.remove('err')
             rated.textContent = ''
             rated.hidden = true
