@@ -246,6 +246,7 @@ customElements.define('elm-', class extends HTMLElement {
         }
         this.resFunc = e => {
             this.json = e
+            this.dispatchEvent(new CustomEvent('send-data', { detail: { json: e } }))
             title.innerHTML = ''
             if (e.Response === 'True') {
                 errCount = 0

@@ -78,6 +78,20 @@ button {
     background: var(--secondary-light, #aaa);
 }
 
+code {
+    color: var(--primary-background);
+    background-color: var(--primary-color);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    display: inline-block;
+    margin-bottom: 0.25rem;
+}
+
+.pre-json {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 header {
     display: flex;
     align-items: flex-start;
@@ -169,8 +183,8 @@ label.io {
     display: inline;
 }
 
-[name="custom-format"]:checked + label {
-    display: block;
+[name="custom-format"]:not(:checked) ~ .custom-format-wrapper {
+    display: none;
 }
 .config-wrapper .custom-format-input,
 .config-wrapper .custom-format-input textarea {
@@ -178,6 +192,5 @@ label.io {
 }
 
 .config-wrapper .custom-format-input {
-    display: none;
     font-family: monospace;
 }

@@ -24,6 +24,7 @@ function getList(arr, minOffset, startTime, preset) {
             const text = e.getAttribute('text')
             const title = e.json?.Title
             const search = e.search.value
+            const j = e.json
             const defaultFormat = `${text || title || search}`
             if (customFormatCheck.checked) {
                 try {
