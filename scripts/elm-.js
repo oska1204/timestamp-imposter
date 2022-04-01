@@ -215,8 +215,13 @@ customElements.define('elm-', class extends HTMLElement {
                     season.value !== '' && episode.value === '' ||
                     season.value === '' && episode.value === ''
                 )) {
+                    const extraQueryUrl = queryUrl
                     queryUrl += `&season=${season.value}&episode=${episode.value}`
-                    fetchApi(this.epFunc, queryUrl)
+                    fetchApi(this.epFunc, queryUrl, e => {
+                        if (e.Response === 'False')
+                            fetchApi(this.resFunc, extraQueryUrl)
+                        return e
+                    })
                 }
             })
         }
