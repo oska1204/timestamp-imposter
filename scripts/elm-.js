@@ -122,6 +122,7 @@ customElements.define('elm-', class extends HTMLElement {
             }
         } else if (name === 'update') {
             this.updateFunc()
+            this.removeAttribute('update')
         } else {
             this[name].value = newVal
         }
@@ -389,9 +390,12 @@ customElements.define('elm-', class extends HTMLElement {
             if (imdb.value.match(imdbIDRegex)) {
                 fetchApi(this.resFunc, `&i=${imdb.value}`, e => {
                     this.titleJson = [e]
-                    selectTitle.innerHTML = `
-                        <option value="${e.imdbID},${e.Type}">${e.Title} (${e.Year})</option>
-                    `
+                    if (e.Response === 'True') {
+                        selectTitle.innerHTML = `
+                            <option value="${e.imdbID},${e.Type}">${e.Title} (${e.Year})</option>
+                        `
+                    }
+                    return e
                 })
             } else {
                 fetchApi(this.searchFunc, `&s=${search.value.trim()}&y=${year.value}&type=${selectType.value}`)
