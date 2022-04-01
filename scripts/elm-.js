@@ -92,7 +92,10 @@ customElements.define('elm-', class extends HTMLElement {
                 if (isWhat > d.getFullYear())
                     isWhat = firstPart - 1 + newVal
                 this.year.value = isWhat
-            }        } else if (name === 'imdb') {
+            } else {
+                this.year.value = newVal
+            }
+        } else if (name === 'imdb') {
             this[name].value = newVal.match(this.imdbIDRegex)?.toString() || newVal
         } else if (name === 'json') {
             try {
@@ -313,9 +316,10 @@ customElements.define('elm-', class extends HTMLElement {
             selectTitle.innerHTML = ''
             if (e.Response === 'True') {
                 title.innerHTML = 'Loading...'
-                const searchArr = e.Search.filter(e => e.Type !== 'game')
-                this.titleJson = searchArr
-                this.formatSearch(searchArr)
+                const searchFiltered = e.Search.filter(e => e.Type !== 'game')
+                const searchArr = searchFiltered
+                this.titleJson = searchFiltered
+                this.formatSearch(searchFiltered)
                 const minTitleFunc = f => minTitle(f.Title) === minTitle(search.value)
                 let index = searchArr.findIndex(minTitleFunc)
                 if (index === -1)
