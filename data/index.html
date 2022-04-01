@@ -16,7 +16,7 @@
 <body>
     <div data-const="elmWrapper">
         <p>You can access the data with <code>j.</code>. Example: <code>j.Title</code> returns the title "Aladdin".</p>
-        <p>If you need to access the ratings. <code>j.Ratings[0].Value</code>, <code>j.Ratings[1].Value</code> and <code>j.Ratings[2].Value</code></p>
+        <p>If you need to access the ratings. <code>j.Ratings[0]?.Value || ''</code>, <code>j.Ratings[1]?.Value || ''</code> and <code>j.Ratings[2]?.Value || ''</code></p>
         <elm- data-const="elmItem" text="aladdin"></elm->
         <pre class="pre-json" data-const="preJson"></pre>
     </div>
