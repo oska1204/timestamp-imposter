@@ -73,7 +73,7 @@ elm-.movie .select-title-wrapper label {
     display: none;
 }
 
-elm-.series .select-title-wrapper {
+elm-.series.warning .select-title-wrapper {
     max-width: fit-content;
 }
 

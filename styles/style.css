@@ -92,6 +92,10 @@ code {
     text-overflow: ellipsis;
 }
 
+.display-flex {
+    display: flex;
+}
+
 header {
     display: flex;
     align-items: flex-start;

@@ -54,6 +54,9 @@ customElements.define('elm-', class extends HTMLElement {
     connectedCallback() {
         this.init()
     }
+    disconnectedCallback() {
+        elmWrapper.dispatchEvent(new CustomEvent('elm-removed', { bubbles: true }))
+    }
     static get observedAttributes() {
         return [
             'text',
@@ -66,7 +69,8 @@ customElements.define('elm-', class extends HTMLElement {
             'select_title',
             'title_json',
             'season',
-            'episode'
+            'episode',
+            'update'
         ]
     }
     attributeChangedCallback() {
@@ -116,6 +120,8 @@ customElements.define('elm-', class extends HTMLElement {
             } catch (err) {
                 console.error(err);
             }
+        } else if (name === 'update') {
+            this.updateFunc()
         } else {
             this[name].value = newVal
         }
@@ -251,7 +257,7 @@ customElements.define('elm-', class extends HTMLElement {
         }
         this.resFunc = e => {
             this.json = e
-            this.dispatchEvent(new CustomEvent('send-data', { detail: { json: e } }))
+            this.dispatchEvent(new CustomEvent('send-data', { bubbles: true }))
             title.innerHTML = ''
             if (e.Response === 'True') {
                 errCount = 0
@@ -286,8 +292,10 @@ customElements.define('elm-', class extends HTMLElement {
                     this.classList.remove('movie')
                     this.classList.add('series')
                 }
-                if (e.Rated === 'N/A' || !e.Rated)
-                    rated.textContent = 'Unrated'
+                if (e.Rated === 'N/A' ||
+                    !e.Rated ||
+                    e.Rated === 'Not Rated')
+                    rated.textContent = 'Not Rated'
                 else
                     rated.textContent = `Rated ${e.Rated}`
                 rated.hidden = false
@@ -370,7 +378,7 @@ customElements.define('elm-', class extends HTMLElement {
                     this.classList.remove('loading')
                 })
         }
-        this.updateFunc = () => {
+        this.updateFunc = (isSearch = false) => {
             if (!this.search.value && !this.imdb.value)
                 return
             title.innerHTML = 'Loading...'
