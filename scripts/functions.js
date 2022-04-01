@@ -22,10 +22,9 @@ function getList(arr, minOffset, startTime, preset) {
         let baseStr
         if (e) {
             const text = e.getAttribute('text')
-            const title = e.json?.Title
             const search = e.search.value
             const j = e.json
-            const defaultFormat = `${text || title || search}`
+            const defaultFormat = `${text || j.Title || search}`
             if (customFormatCheck.checked) {
                 try {
                     baseStr = eval(`\`${customFormatInput.value}\``) || defaultFormat
@@ -73,7 +72,7 @@ function getList(arr, minOffset, startTime, preset) {
                 ? `{${ratings.join(' ')}}`
                 : ''
         }
-        let result
+        let result = baseStr
         switch (preset) {
             case 'time':
                 result = `${baseStr} ${timeStr}`

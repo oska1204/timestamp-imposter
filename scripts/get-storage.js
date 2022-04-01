@@ -1,6 +1,6 @@
 textarea.value = localStorage.getItem('textarea') || 'Aladdin ⏩ The Hangover'
 split.value = localStorage.getItem('split') || '⏩'
-customFormatInput.value = localStorage.getItem('customFormatInput') || '${text || title || search}'
+customFormatInput.value = localStorage.getItem('customFormatInput') || '${text || j.Title || search}'
 join.value = localStorage.getItem('join') || ' ⏩ '
 tail.value = localStorage.getItem('tail') || 'Cartoons'
 

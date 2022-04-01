@@ -12,7 +12,7 @@ offset.addEventListener('change', function () {
 })
 customFormatInput.addEventListener('change', function () {
     if (!this.value)
-        this.value = '${text || title || search}'
+        this.value = '${text || j.Title || search}'
 })
 
 clearTime.addEventListener('click', () => {
@@ -47,19 +47,19 @@ format.addEventListener('click', () => {
             }
         })}} `
     const timeStr = `[${streamElementsCurTime}${timezoneFunc()}]`
-    let startMsg
+    let startMsg = ''
     switch (preset.value) {
         case 'time':
-            startMsg = timeStr
+            startMsg = timeStr + ' '
             break;
         case 'rating':
-            startMsg = ratingsInfo
+            startMsg = ratingsInfo + ' '
             break;
         case 'rating + time':
             startMsg = `${ratingsInfo} ${timeStr}`.trim()
             break;
     }
-    output.value = `${startMsg} ${list.join(join.value || ' ⏩ ')}`
+    output.value = `${startMsg}${list.join(join.value || ' ⏩ ')}`
 })
 add.addEventListener('click', () => {
     elmWrapper.insertAdjacentHTML('beforeend', `<elm-></elm->`)
