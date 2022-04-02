@@ -175,11 +175,8 @@ customElements.define('elm-', class extends HTMLElement {
         const imdbIDRegex = /[a-z]{2}\d{7,}/
         this.imdbIDRegex = imdbIDRegex
         let errCount = 0
-        infoButton.addEventListener('click', () => {
-            const isOn = infoWrapper.classList.toggle('info')
+        this.infoFunc = () => {
             infoWrapper.innerHTML = ''
-            if (isOn && !this.json)
-                return
             for (const key in this.json) {
                 if (key === 'minutes')
                     break
@@ -197,6 +194,12 @@ customElements.define('elm-', class extends HTMLElement {
                 div.appendChild(span2)
                 infoWrapper.appendChild(div)
             }
+        }
+        infoButton.addEventListener('click', () => {
+            const isOn = infoWrapper.classList.toggle('info')
+            if (isOn && !this.json)
+                return
+            this.infoFunc()
         })
         const updateEnter = elm =>
             elm.addEventListener('keyup', e => {
@@ -291,6 +294,7 @@ customElements.define('elm-', class extends HTMLElement {
         this.resFunc = e => {
             this.json = e
             this.dispatchEvent(new CustomEvent('send-data', { bubbles: true }))
+            this.infoFunc()
             title.innerHTML = ''
             if (e.Response === 'True') {
                 errCount = 0
