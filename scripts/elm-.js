@@ -33,9 +33,12 @@ template.innerHTML = `
         </div>
     </div>
     <div class="title-wrapper">
+        <span class="info-button">i</span>
         <span class="title"></span>
         <span class="rated" hidden><span></span></span>
         <label class="minute-label">Minutes: <input type="number" value="0" min="0" class="minutes"></label>
+    </div>
+    <div class="info-wrapper">
     </div>
 </div>
 <div>
@@ -155,6 +158,8 @@ customElements.define('elm-', class extends HTMLElement {
         const season = query('.season')
         const episode = query('.episode')
         const rated = query('.rated')
+        const infoButton = query('.info-button')
+        const infoWrapper = query('.info-wrapper')
         this.update = update
         this.minutes = minutes
         this.year = year
@@ -170,6 +175,29 @@ customElements.define('elm-', class extends HTMLElement {
         const imdbIDRegex = /[a-z]{2}\d{7,}/
         this.imdbIDRegex = imdbIDRegex
         let errCount = 0
+        infoButton.addEventListener('click', () => {
+            const isOn = infoWrapper.classList.toggle('info')
+            infoWrapper.innerHTML = ''
+            if (isOn && !this.json)
+                return
+            for (const key in this.json) {
+                if (key === 'minutes')
+                    break
+                const element = this.json[key]
+                const div = document.createElement('div')
+                div.textContent = ': '
+                const span1 = document.createElement('span')
+                const span2 = document.createElement('span')
+                span1.textContent = key
+                if (typeof element === 'string')
+                    span2.textContent = element
+                else
+                    span2.textContent = JSON.stringify(element)
+                div.prepend(span1)
+                div.appendChild(span2)
+                infoWrapper.appendChild(div)
+            }
+        })
         const updateEnter = elm =>
             elm.addEventListener('keyup', e => {
                 if (e.key === 'Enter')
