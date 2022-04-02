@@ -2,7 +2,10 @@ textarea.value = localStorage.getItem('textarea') || 'Aladdin ⏩ The Hangover'
 split.value = localStorage.getItem('split') || '⏩'
 customFormatInput.value = localStorage.getItem('customFormatInput') || '${text || j.Title || search}'
 join.value = localStorage.getItem('join') || ' ⏩ '
-tail.value = localStorage.getItem('tail') || 'Cartoons'
+const tailVal = localStorage.getItem('tail')
+tail.value = tailVal === null
+    ? 'Cartoons'
+    : tailVal
 
 const getCheckbox = (elm, name) => {    
     switch (localStorage.getItem(name)) {

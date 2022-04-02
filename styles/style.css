@@ -198,3 +198,12 @@ label.io {
 .config-wrapper .custom-format-input {
     font-family: monospace;
 }
+
+footer {
+    display: flex;
+    justify-content: center;
+}
+
+footer svg {
+    color: var(--primary-color);
+}

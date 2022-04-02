@@ -1,7 +1,7 @@
 const updateListLink = e => {
     const elms = Array.from(document.querySelectorAll('elm-'))
-    const idArr = elms.map(elm => elm.json?.imdbID || elm.imdb?.value)
-        .filter(e => e)
+    const idArr = elms.map(elm => elm.json?.imdbID || elm.imdb?.value || '')
+        .filter(e => e.match(elms[0].imdbIDRegex))
     const url = new URL(location)
     url.searchParams.set('list', idArr.join('_'))
     listLink.href = url

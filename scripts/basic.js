@@ -138,3 +138,7 @@ suggestionForm.addEventListener('submit', function (e) {
     if (!this.elements.text.value.trim())
         e.preventDefault()
 })
+resetStorage.addEventListener('click', () => {
+    localStorage.clear()
+    sessionStorage.clear()
+})
