@@ -24,7 +24,6 @@ function getList(arr, minOffset, startTime, preset) {
             const text = e.getAttribute('text')
             const search = e.search.value
             const j = e.json
-            console.log(j);
             for (const key in j) {
                 if (j[key] === 'N/A')
                     j[key] = ''

@@ -102,21 +102,25 @@ customElements.define('elm-', class extends HTMLElement {
         } else if (name === 'imdb') {
             this[name].value = newVal.match(this.imdbIDRegex)?.toString() || newVal
         } else if (name === 'json') {
+            if (!newVal)
+                return
             try {
                 const json = JSON.parse(newVal)
                 this.resFunc(json)
                 this.json = json
+                this.removeAttribute('json')
             } catch (err) {
                 console.error(err);
             }
         } else if (name === 'title_json') {
+            if (!newVal)
+                return
             try {
-                if (!newVal)
-                    return
                 const json = JSON.parse(newVal)
                 this.titleJson = json
                 this.formatSearch(json)
                 this['select_title'].value = this.getAttribute('select_title')
+                this.removeAttribute('title_json')
             } catch (err) {
                 console.error(err);
             }
