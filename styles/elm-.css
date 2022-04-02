@@ -128,7 +128,7 @@ elm-.series.warning .select-title-wrapper {
 
 .info-wrapper {
     font-family: monospace;
-    word-break: break-all;
+    word-break: break-word;
     max-width: 500px;
 }
 

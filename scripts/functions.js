@@ -23,7 +23,7 @@ function getList(arr, minOffset, startTime, preset) {
         if (e) {
             const text = e.getAttribute('text')
             const search = e.search.value
-            const j = e.json
+            const j = { ...e.json }
             for (const key in j) {
                 if (j[key] === 'N/A')
                     j[key] = ''
