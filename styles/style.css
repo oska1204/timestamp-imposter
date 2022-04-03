@@ -106,6 +106,15 @@ header h1 {
     margin-top: 0;
 }
 
+.h1-link:link {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+.h1-link:visited {
+    color: var(--primary-color);
+}
+
 .toggle-theme {
     width: 1.5em;
     height: 1.5em;
@@ -131,6 +140,11 @@ section {
 
 section > :first-child {
     margin-top: 0;
+}
+
+.wrapper {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 label.ta {

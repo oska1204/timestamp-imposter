@@ -33,13 +33,12 @@ template.innerHTML = `
         </div>
     </div>
     <div class="title-wrapper">
-        <span class="info-button">i</span>
+        <span class="info-button" hidden>i</span>
         <span class="title"></span>
         <span class="rated" hidden><span></span></span>
         <label class="minute-label">Minutes: <input type="number" value="0" min="0" class="minutes"></label>
     </div>
-    <div class="info-wrapper">
-    </div>
+    <div class="info-wrapper"></div>
 </div>
 <div>
     <img class="poster" width="100" height="150">
@@ -182,14 +181,19 @@ customElements.define('elm-', class extends HTMLElement {
                     break
                 const element = this.json[key]
                 const div = document.createElement('div')
-                div.textContent = ': '
                 const span1 = document.createElement('span')
                 const span2 = document.createElement('span')
                 span1.textContent = key
-                if (typeof element === 'string')
+                span1.insertAdjacentHTML('beforeend', `<span>: </span>`)
+                if (key === 'Poster') {
+                    const imgElm = document.createElement('img')
+                    imgElm.src = element
+                    imgElm.alt = element
+                    span2.appendChild(imgElm)
+                } else if (typeof element === 'string')
                     span2.textContent = element
                 else
-                    span2.textContent = JSON.stringify(element)
+                    span2.textContent = JSON.stringify(element, null, 2)
                 div.prepend(span1)
                 div.appendChild(span2)
                 infoWrapper.appendChild(div)
@@ -279,6 +283,8 @@ customElements.define('elm-', class extends HTMLElement {
             this.classList.add('err')
             poster.removeAttribute('src')
             poster.removeAttribute('alt')
+            infoButton.hidden = true
+            infoWrapper.innerHTML = ''
         }
         const resFalse = e => {
             errCount++
@@ -335,6 +341,7 @@ customElements.define('elm-', class extends HTMLElement {
                     rated.textContent = 'Not Rated'
                 else
                     rated.textContent = `Rated ${e.Rated}`
+                infoButton.hidden = false
                 rated.hidden = false
                 if (e.Rated === 'R' || e.Rated === 'TV-MA')
                     rated.classList.add('err')
@@ -474,19 +481,17 @@ customElements.define('elm-', class extends HTMLElement {
                     }
                 }
             }
-            this.style.zIndex = ''
-            this.style.background = ''
+            this.classList.remove('drag-elm')
             this.style.transform = ''
-            document.removeEventListener('mousemove', this.mouseMove)
+            document.removeEventListener('pointermove', this.mouseMove)
             document.removeEventListener('mouseup', this.mouseUp)
             this.mouseMoveVal = null
         }
         drag.onmousedown = e => {
-            this.style.zIndex = '1'
-            this.style.background = '#8888'
+            this.classList.add('drag-elm')
             this.mouseMove = mouseMove.bind(this, e)
             this.mouseUp = mouseUp.bind(this, e)
-            document.addEventListener('mousemove', this.mouseMove)
+            document.addEventListener('pointermove', this.mouseMove)
             document.addEventListener('mouseup', this.mouseUp)
         }
     }
