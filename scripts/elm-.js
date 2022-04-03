@@ -500,9 +500,11 @@ customElements.define('elm-', class extends HTMLElement {
             const img = document.createElement('img')
             img.src = poster.src
             posterOverlay.appendChild(img)
+            document.documentElement.style.overflow = 'hidden'
         })
         posterOverlay.addEventListener('click', e => {
             posterOverlay.classList.remove('overlay')
+            document.documentElement.style.overflow = ''
         })
     }
 })
