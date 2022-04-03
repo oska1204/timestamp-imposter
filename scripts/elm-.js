@@ -40,9 +40,10 @@ template.innerHTML = `
     </div>
     <div class="info-wrapper"></div>
 </div>
-<div>
+<div class="poster-wrapper">
     <img class="poster" width="100" height="150">
 </div>
+<div class="poster-overlay"></div>
 <div class="loading-overlay">
     <div class="circle"></div>
 </div>
@@ -159,6 +160,8 @@ customElements.define('elm-', class extends HTMLElement {
         const rated = query('.rated')
         const infoButton = query('.info-button')
         const infoWrapper = query('.info-wrapper')
+        const posterWrapper = query('.poster-wrapper')
+        const posterOverlay = query('.poster-overlay')
         this.update = update
         this.minutes = minutes
         this.year = year
@@ -185,12 +188,7 @@ customElements.define('elm-', class extends HTMLElement {
                 const span2 = document.createElement('span')
                 span1.textContent = key
                 span1.insertAdjacentHTML('beforeend', `<span>: </span>`)
-                if (key === 'Poster') {
-                    const imgElm = document.createElement('img')
-                    imgElm.src = element
-                    imgElm.alt = element
-                    span2.appendChild(imgElm)
-                } else if (typeof element === 'string')
+                if (typeof element === 'string')
                     span2.textContent = element
                 else
                     span2.textContent = JSON.stringify(element, null, 2)
@@ -487,12 +485,24 @@ customElements.define('elm-', class extends HTMLElement {
             document.removeEventListener('mouseup', this.mouseUp)
             this.mouseMoveVal = null
         }
-        drag.onmousedown = e => {
+        drag.addEventListener('mousedown', e => {
             this.classList.add('drag-elm')
             this.mouseMove = mouseMove.bind(this, e)
             this.mouseUp = mouseUp.bind(this, e)
             document.addEventListener('pointermove', this.mouseMove)
             document.addEventListener('mouseup', this.mouseUp)
-        }
+        })
+        poster.addEventListener('click', () => {
+            if (!poster.src)
+                return
+            posterOverlay.classList.add('overlay')
+            posterOverlay.innerHTML = ''
+            const img = document.createElement('img')
+            img.src = poster.src
+            posterOverlay.appendChild(img)
+        })
+        posterOverlay.addEventListener('click', e => {
+            posterOverlay.classList.remove('overlay')
+        })
     }
 })
