@@ -82,7 +82,8 @@ elm-.movie .select-title-wrapper label {
     display: none;
 }
 
-elm-.series.warning .select-title-wrapper {
+elm-.series.warning .select-title-wrapper,
+elm-.loading .select-title-wrapper {
     max-width: fit-content;
 }
 
@@ -109,8 +110,9 @@ elm-.series.warning .select-title-wrapper {
 
 .title {
     margin: 0.25rem 0.75rem 0.25rem 0;
-    max-width: 20.5rem;
+    max-width: 18.5rem;
     margin-right: auto;
+    word-wrap: break-word;
 }
 
 .rated {

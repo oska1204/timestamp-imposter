@@ -165,6 +165,10 @@ label.io {
     margin: 0.75rem 0;
 }
 
+.config-wrapper > button {
+    margin-left: 0;
+}
+
 .radio {
     display: inline-block;
     padding: 0.5rem;
