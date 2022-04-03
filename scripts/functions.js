@@ -21,7 +21,7 @@ function getList(arr, minOffset, startTime, preset) {
             break
         let baseStr
         if (e) {
-            const text = e._text?.trim() || e.getAttribute('text')
+            const text = e.dataset.rawText?.trim()
             const search = e.search.value
             const j = { ...e.json }
             for (const key in j) {

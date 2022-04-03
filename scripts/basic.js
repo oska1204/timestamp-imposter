@@ -73,7 +73,7 @@ generate.addEventListener('click', () => {
         const radioElm = radioGenerate.filter(e => e.checked)[0]
         switch (radioElm.value) {
             case 'text':
-                elm._text = val
+                elm.dataset.rawText = val
                 const reg = /s(\d+)ep?(\d+)/i
                 const [searchVal, yearVal = ''] = val.trim().split(/(?= (\d{2}|\d{4})$)/)
                 elm.setAttribute(radioElm.value, searchVal.replace(reg, ''))
