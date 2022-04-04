@@ -91,21 +91,28 @@ elm-.loading .select-title-wrapper {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
+    align-items: flex-start;
 }
 
 .info-button {
+    padding: 0.25rem;
+    margin: 0 0.25rem 0 0;
+    border-radius: 0.375rem;
+}
+
+.info-button span {
+    display: inline-block;
     background: #0072ff;
     color: white;
     width: 1.25em;
     height: 1.25em;
     border-radius: 50%;
-    margin: 0.25rem 0.5rem 0.25rem 0.25rem;
     text-align: center;
     user-select: none;
 }
 
 .info-button:hover {
-    background: #00b2ff;
+    background: #5558;
 }
 
 .title {
@@ -146,6 +153,8 @@ elm-.loading .select-title-wrapper {
     word-break: break-word;
     max-width: 500px;
     white-space: pre-wrap;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
 }
 
 .info-wrapper:not(.info) {
@@ -155,22 +164,21 @@ elm-.loading .select-title-wrapper {
 .info-wrapper > div {
     margin-bottom: 0.5rem;
     line-height: 1.25em;
+    display: contents;
 }
 
 .info-wrapper div span:first-of-type {
     font-weight: bolder;
     color: #298b8b;
     vertical-align: top;
+    text-align: right;
 }
 
 .light .info-wrapper div span:first-of-type {
-    font-weight: bolder;
     color: #005050;
-    vertical-align: top;
 }
 
-.info-wrapper div span:first-of-type span,
-.light .info-wrapper div span:first-of-type span {
+.info-wrapper div .seperator {
     color: #626262;
 }
 
@@ -261,13 +269,27 @@ elm-:not(.loading) .loading-overlay {
     display: none;
 }
 
-elm-.warning .warning-wrapper {
-    display: flex;
+elm-:not(.warning) .warning-wrapper {
+    display: none;
 }
 
 .warning-wrapper {
-    display: none;
-    margin-bottom: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    place-self: start;
+    padding: 0.125rem 0.375rem 0.25rem 0.25rem;
+    align-items: flex-end;
+    margin-bottom: 0.25rem;
+    border-radius: 0.375rem;
+    user-select: none;
+}
+
+.warning-wrapper:hover {
+    background-color: #5558;
+}
+
+.warning-icon {
+    display: flex;
 }
 
 .warning-outer {
@@ -299,6 +321,11 @@ elm-.warning .warning-wrapper {
     transform: translate(-50%, -50%);
 }
 
-.warning-wrapper > span {
-    margin: 0.25rem 0.75rem 0.25rem 0;
+.warning-span {
+    font-family: impact, fantasy;
+    color: yellow;
+    text-shadow: 0.5px 0.5px black, -0.5px -0.5px black, 0.5px -0.5px black, -0.5px 0.5px black;
+    -webkit-text-stroke: 1px black;
+    text-transform: uppercase;
+    height: max-content;
 }

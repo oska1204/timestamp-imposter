@@ -24,16 +24,20 @@ template.innerHTML = `
         <label>s<input type="number" class="season" placeholder="Season" min="0"></label>
         <label>ep<input type="number" class="episode" placeholder="Episode" min="0"></label>
         <div class="warning-wrapper">
-            <div class="warning-outer">
-                <div class="warning-inner">
-                    <span>!</span>
+            <div class="warning-icon">
+                <div class="warning-outer">
+                    <div class="warning-inner">
+                        <span>!</span>
+                    </div>
                 </div>
             </div>
-            <span>might be wrong title</span>
+            <span class="warning-span">might be wrong title</span>
         </div>
     </div>
     <div class="title-wrapper">
-        <span class="info-button" hidden>i</span>
+        <span class="info-button" hidden>
+            <span>i</span>
+        </span>
         <span class="title"></span>
         <span class="rated" hidden><span></span></span>
         <label class="minute-label">Minutes: <input type="number" value="0" min="0" class="minutes"></label>
@@ -162,6 +166,7 @@ customElements.define('elm-', class extends HTMLElement {
         const infoWrapper = query('.info-wrapper')
         const posterWrapper = query('.poster-wrapper')
         const posterOverlay = query('.poster-overlay')
+        const warningWrapper = query('.warning-wrapper')
         this.update = update
         this.minutes = minutes
         this.year = year
@@ -179,22 +184,31 @@ customElements.define('elm-', class extends HTMLElement {
         let errCount = 0
         this.infoFunc = () => {
             infoWrapper.innerHTML = ''
-            for (const key in this.json) {
-                if (key === 'minutes')
-                    break
-                const element = this.json[key]
+            const newDiv = (key, elm) => {
                 const div = document.createElement('div')
                 const span1 = document.createElement('span')
                 const span2 = document.createElement('span')
                 span1.textContent = key
-                span1.insertAdjacentHTML('beforeend', `<span>: </span>`)
+                span2.textContent = elm
+                div.appendChild(span1)
+                div.insertAdjacentHTML('beforeend', `<span class="seperator">: </span>`)
+                div.appendChild(span2)
+                return div
+            }
+            for (const key in this.json) {
+                const element = this.json[key]
+                if (key === 'minutes')
+                    break
                 if (typeof element === 'string')
-                    span2.textContent = element
+                    infoWrapper.appendChild(newDiv(key, element))
+                else if (key === 'Ratings')
+                    element.forEach(obj => {
+                        const { Source, Value } = obj
+                        if (Source === 'Rotten Tomatoes')
+                            infoWrapper.appendChild(newDiv('Tomato', Value))
+                    })
                 else
                     span2.textContent = JSON.stringify(element, null, 2)
-                div.prepend(span1)
-                div.appendChild(span2)
-                infoWrapper.appendChild(div)
             }
         }
         infoButton.addEventListener('click', () => {
@@ -505,6 +519,9 @@ customElements.define('elm-', class extends HTMLElement {
         posterOverlay.addEventListener('click', e => {
             posterOverlay.classList.remove('overlay')
             document.documentElement.style.overflow = ''
+        })
+        warningWrapper.addEventListener('click', () => {
+            this.classList.remove('warning')
         })
     }
 })
