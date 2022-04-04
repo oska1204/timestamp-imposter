@@ -1,3 +1,9 @@
+if (localStorage.version !== '1.0.0') {
+    localStorage.clear()
+    sessionStorage.clear()
+    localStorage.version = '1.0.0'
+}
+
 apikeyElm.value = apikey || ''
 apikeyElm.addEventListener('input', function () {
     apikey = this.value
@@ -59,7 +65,15 @@ format.addEventListener('click', () => {
             startMsg = `${ratingsInfo}\n${timeStr}\n`
             break;
     }
-    output.value = `${startMsg}${list.join(join.value || ' ⏩\n')}`
+    const val = `${startMsg}${list.join(join.value || ' ⏩\n')}`
+    output.value = val
+    const lengthArr = val.split('\n')
+        ?.sort((a, b) => b.length - a.length)
+    if (lengthArr.length > 1) {
+        output.cols = lengthArr[0].length
+    } else {
+        output.cols = 30
+    }
 })
 add.addEventListener('click', () => {
     elmWrapper.insertAdjacentHTML('afterbegin', `<elm-></elm->`)
