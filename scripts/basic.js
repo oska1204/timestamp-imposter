@@ -62,6 +62,9 @@ format.addEventListener('click', () => {
     output.value = `${startMsg}${list.join(join.value || ' ⏩\n')}`
 })
 add.addEventListener('click', () => {
+    elmWrapper.insertAdjacentHTML('afterbegin', `<elm-></elm->`)
+})
+add2.addEventListener('click', () => {
     elmWrapper.insertAdjacentHTML('beforeend', `<elm-></elm->`)
 })
 generate.addEventListener('click', () => {

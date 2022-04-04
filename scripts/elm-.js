@@ -308,6 +308,7 @@ customElements.define('elm-', class extends HTMLElement {
             poster.removeAttribute('alt')
             infoButton.hidden = true
             infoWrapper.innerHTML = ''
+            infoOuterWrapper.classList.remove('info')
         }
         const resFalse = e => {
             errCount++
