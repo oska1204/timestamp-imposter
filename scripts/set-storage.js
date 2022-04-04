@@ -52,4 +52,3 @@ setCheckbox(streamElementsCurTimeCheck,
 setCheckbox(imdbCheck, 'imdb-check')
 setCheckbox(tomatoCheck, 'tomato-check')
 setCheckbox(metacriticCheck, 'metacritic-check')
-setCheckbox(customFormatCheck, 'customFormatCheck')

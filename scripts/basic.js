@@ -50,16 +50,16 @@ format.addEventListener('click', () => {
     let startMsg = ''
     switch (preset.value) {
         case 'time':
-            startMsg = timeStr + ' '
+            startMsg = timeStr + '\n'
             break;
         case 'rating':
-            startMsg = ratingsInfo + ' '
+            startMsg = ratingsInfo + '\n'
             break;
         case 'rating + time':
-            startMsg = `${ratingsInfo} ${timeStr}`.trim()
+            startMsg = `${ratingsInfo}\n${timeStr}\n`
             break;
     }
-    output.value = `${startMsg}${list.join(join.value || ' ⏩ ')}`
+    output.value = `${startMsg}${list.join(join.value || ' ⏩\n')}`
 })
 add.addEventListener('click', () => {
     elmWrapper.insertAdjacentHTML('beforeend', `<elm-></elm->`)
@@ -136,7 +136,7 @@ suggestionForm.addEventListener('submit', function (e) {
     if (!this.elements.text.value.trim())
         e.preventDefault()
 })
-resetStorage.addEventListener('click', () => {
+clearStorage.addEventListener('click', () => {
     localStorage.clear()
     sessionStorage.clear()
 })

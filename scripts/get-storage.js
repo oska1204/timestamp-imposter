@@ -1,7 +1,7 @@
-textarea.value = localStorage.getItem('textarea') || 'Aladdin ⏩ The Hangover'
+textarea.value = localStorage.getItem('textarea') || 'Aladdin ⏩\ntt1119646 ⏩\nSherlock S01E01 ⏩\nhttps://www.imdb.com/title/tt0325980'
 split.value = localStorage.getItem('split') || '⏩'
 customFormatInput.value = localStorage.getItem('customFormatInput') || '${text || j.Title || search}'
-join.value = localStorage.getItem('join') || ' ⏩ '
+join.value = localStorage.getItem('join') || ' ⏩\n'
 const tailVal = localStorage.getItem('tail')
 tail.value = tailVal === null
     ? 'Cartoons'
@@ -17,7 +17,6 @@ const getCheckbox = (elm, name) => {
             break;
     }
 }
-getCheckbox(customFormatCheck, 'customFormatCheck')
 getCheckbox(squareBrackets, 'square-brackets')
 getCheckbox(streamElementsCurTimeCheck,
     'stream-elements-cur-time-check')

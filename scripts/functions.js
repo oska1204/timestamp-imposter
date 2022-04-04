@@ -27,17 +27,17 @@ function getList(arr, minOffset, startTime, preset) {
             for (const key in j) {
                 if (j[key] === 'N/A')
                     j[key] = ''
+                j.Ratings?.forEach(e => {
+                    if (e.Source === 'Rotten Tomatoes')
+                        j.Tomato = e.Value
+                })
             }
             const defaultFormat = `${text || j.Title || search}`
-            if (customFormatCheck.checked) {
-                try {
-                    baseStr = eval(`\`${customFormatInput.value}\``) || defaultFormat
-                } catch (err) {
-                    baseStr = defaultFormat
-                    console.error(err)
-                }
-            } else {
+            try {
+                baseStr = eval(`\`${customFormatInput.value}\``) || defaultFormat
+            } catch (err) {
                 baseStr = defaultFormat
+                console.error(err)
             }
         } else
             baseStr = tail.value
@@ -88,6 +88,8 @@ function getList(arr, minOffset, startTime, preset) {
                 result = `${ratingStr} ${baseStr} ${timeStr}`
                 break;
         }
+        if (!e && preset === 'rating + time')
+            result = result.slice(1)
         finalArr.push(result)
     }
     return finalArr
