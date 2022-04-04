@@ -148,6 +148,10 @@ elm-.loading .select-title-wrapper {
     margin-right: 0;
 }
 
+.info-outer-wrapper:not(.info) {
+    display: none;
+}
+
 .info-wrapper {
     font-family: monospace;
     word-break: break-word;
@@ -155,10 +159,6 @@ elm-.loading .select-title-wrapper {
     white-space: pre-wrap;
     display: grid;
     grid-template-columns: max-content max-content auto;
-}
-
-.info-wrapper:not(.info) {
-    display: none;
 }
 
 .info-wrapper > div {

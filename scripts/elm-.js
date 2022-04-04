@@ -49,7 +49,10 @@ template.innerHTML = `
         <span class="rated" hidden><span></span></span>
         <label class="minute-label">Minutes: <input type="number" value="0" min="0" class="minutes"></label>
     </div>
-    <div class="info-wrapper"></div>
+    <div class="info-outer-wrapper">
+        Access custom format <code>\${j.&lt;name>}</code>. Example <code>\${j.Released}</code>
+        <div class="info-wrapper"></div>
+    </div>
 </div>
 <div class="poster-wrapper">
     <img class="poster" width="100" height="150">
@@ -170,6 +173,7 @@ customElements.define('elm-', class extends HTMLElement {
         const episode = query('.episode')
         const rated = query('.rated')
         const infoButton = query('.info-button')
+        const infoOuterWrapper = query('.info-outer-wrapper')
         const infoWrapper = query('.info-wrapper')
         const posterWrapper = query('.poster-wrapper')
         const posterOverlay = query('.poster-overlay')
@@ -219,7 +223,7 @@ customElements.define('elm-', class extends HTMLElement {
             }
         }
         infoButton.addEventListener('click', () => {
-            const isOn = infoWrapper.classList.toggle('info')
+            const isOn = infoOuterWrapper.classList.toggle('info')
             if (isOn && !this.json)
                 return
             this.infoFunc()
