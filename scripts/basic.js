@@ -70,24 +70,21 @@ generate.addEventListener('click', () => {
     arr.forEach(val => {
         const elm = document.createElement('elm-')
         elmWrapper.append(elm)
-        const radioElm = radioGenerate.filter(e => e.checked)[0]
-        switch (radioElm.value) {
-            case 'text':
-                elm.dataset.rawText = val
-                const reg = /s(\d+)ep?(\d+)/i
-                const [searchVal, yearVal = ''] = val.trim().split(/(?= (\d{2}|\d{4})$)/)
-                elm.setAttribute(radioElm.value, searchVal.replace(reg, ''))
-                elm.setAttribute('year', yearVal.trim())
-                const [s = '', ep = ''] = val.match(reg)?.slice(1) || []
-                elm.setAttribute('season', s)
-                elm.setAttribute('episode', ep)
-                if (s && ep)
-                    elm.setAttribute('select_type', 'series')
-                break;
-            case 'imdb':
-                elm.setAttribute(radioElm.value, val)
-                break;
+        const imdbVal = val.match(elm.imdbIDRegex)?.toString()
+        if (imdbVal) {
+            elm.setAttribute('imdb', imdbVal)
+            return
         }
+        elm.dataset.rawText = val
+        const reg = /s(\d+)ep?(\d+)/i
+        const [searchVal, yearVal = ''] = val.trim().split(/(?= (\d{2}|\d{4})$)/)
+        elm.setAttribute('text', searchVal.replace(reg, ''))
+        elm.setAttribute('year', yearVal.trim())
+        const [s = '', ep = ''] = val.match(reg)?.slice(1) || []
+        elm.setAttribute('season', s)
+        elm.setAttribute('episode', ep)
+        if (s && ep)
+            elm.setAttribute('select_type', 'series')
     });
 })
 updateAll.addEventListener('click', () => {

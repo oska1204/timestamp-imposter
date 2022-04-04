@@ -25,11 +25,6 @@ getCheckbox(imdbCheck, 'imdb-check')
 getCheckbox(tomatoCheck, 'tomato-check')
 getCheckbox(metacriticCheck, 'metacritic-check')
 
-const radioGenerateVal = localStorage.getItem('radio-generate')
-radioGenerate.forEach(e => {
-    if (e.value === radioGenerateVal)
-        e.checked = true
-})
 preset.value = sessionStorage.getItem('preset') || preset.value
 offset.value = sessionStorage.getItem('offset') || offset.value
 
