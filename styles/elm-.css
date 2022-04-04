@@ -154,7 +154,7 @@ elm-.loading .select-title-wrapper {
     max-width: 500px;
     white-space: pre-wrap;
     display: grid;
-    grid-template-columns: repeat(3, auto);
+    grid-template-columns: max-content max-content auto;
 }
 
 .info-wrapper:not(.info) {
@@ -223,14 +223,12 @@ elm-.loading .select-title-wrapper {
     width: 100%;
     height: 100%;
     z-index: 1;
-    cursor: zoom-out;
 }
 
 .poster-overlay img {
     margin: auto;
     max-width: 100%;
     max-height: 100vh;
-    cursor: auto;
 }
 
 .poster-overlay:not(.overlay) {
@@ -328,4 +326,21 @@ elm-:not(.warning) .warning-wrapper {
     -webkit-text-stroke: 1px black;
     text-transform: uppercase;
     height: max-content;
+}
+
+.drag {
+    display: grid;
+    grid-template-columns: min-content min-content;
+    margin: 0 0.5rem 0.75rem 0;
+    justify-content: center;
+    width: min-content;
+    padding: 0.25rem;
+}
+
+.drag div {
+    width: 0.1875rem;
+    height: 0.1875rem;
+    background: var(--primary-color);
+    margin: 0.0625rem .125rem 0.0625rem .125rem;
+    border-radius: 0.125rem;
 }

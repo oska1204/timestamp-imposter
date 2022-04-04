@@ -2,7 +2,14 @@ const template = document.createElement('template')
 template.innerHTML = `
 <div>
     <button class="up">⬆</button>
-    <button class="drag">:::</button>
+    <div class="drag">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
     <button class="down">⬇</button>
 </div>
 <div>
