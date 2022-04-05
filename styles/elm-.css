@@ -27,6 +27,15 @@ elm-.err:nth-of-type(2n) {
     background-color: rgba(255, 0, 0, 35%);
 }
 
+elm- > div:nth-of-type(2) > div {
+    display: flex;
+}
+
+elm- > div:first-of-type > *,
+elm- > div:nth-of-type(2) > div:first-of-type > :last-child {
+    margin-right: 0;
+}
+
 .drag-elm {
     z-index: 1;
     box-shadow: #222 0 0 0 100vmax inset;
@@ -38,13 +47,13 @@ elm-.err:nth-of-type(2n) {
 
 elm- > div:first-of-type,
 elm- > div:nth-of-type(2) {
-    padding: 0.5rem 0 0.5rem 0.5rem;
+    padding: 0.5rem 0 0.5rem 0.75rem;
 }
 
 elm- input,
 elm- button,
 elm- select {
-    margin: 0 0.5rem 0.75rem 0;
+    margin: 0 0.75rem 0.75rem 0;
 }
 
 .up,
@@ -117,7 +126,7 @@ elm-.loading .select-title-wrapper {
 
 .title {
     margin: 0.25rem 0.75rem 0.25rem 0;
-    max-width: 18.5rem;
+    max-width: 17.5rem;
     margin-right: auto;
     word-wrap: break-word;
 }
@@ -341,6 +350,6 @@ elm-:not(.warning) .warning-wrapper {
     width: 0.1875rem;
     height: 0.1875rem;
     background: var(--primary-color);
-    margin: 0.0625rem .125rem 0.0625rem .125rem;
+    margin: 0.0625rem 0.125rem 0.0625rem 0.125rem;
     border-radius: 0.125rem;
 }
