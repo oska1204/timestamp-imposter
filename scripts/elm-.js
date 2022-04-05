@@ -423,7 +423,7 @@ customElements.define('elm-', class extends HTMLElement {
                 }
             } else if (e.Response === 'False') {
                 if (e.Error === 'Too many results.')
-                    fetchApi(this.resFunc, `&t=${search.value.trim()}&y=${year.value}&type=${selectType.value}`)
+                    fetchApi(this.resFunc, `&t=${search.value.trim()}&y=${year.value}&type=${selectType.value}`, extraFn)
                 else
                     resFalse(e)
             }
@@ -449,6 +449,15 @@ customElements.define('elm-', class extends HTMLElement {
                     this.classList.remove('loading')
                 })
         }
+        const extraFn = e => {
+            this.titleJson = [e]
+            if (e.Response === 'True') {
+                selectTitle.innerHTML = `
+                    <option value="${e.imdbID},${e.Type}">${e.Title} (${e.Year})</option>
+                `
+            }
+            return e
+        }
         this.updateFunc = (isSearch = false) => {
             if (!this.search.value && !this.imdb.value)
                 return
@@ -458,15 +467,7 @@ customElements.define('elm-', class extends HTMLElement {
             this.json = []
             this.titleJson = []
             if (imdb.value.match(imdbIDRegex)) {
-                fetchApi(this.resFunc, `&i=${imdb.value}`, e => {
-                    this.titleJson = [e]
-                    if (e.Response === 'True') {
-                        selectTitle.innerHTML = `
-                            <option value="${e.imdbID},${e.Type}">${e.Title} (${e.Year})</option>
-                        `
-                    }
-                    return e
-                })
+                fetchApi(this.resFunc, `&i=${imdb.value}`, extraFn)
             } else {
                 fetchApi(this.searchFunc, `&s=${search.value.trim()}&y=${year.value}&type=${selectType.value}`)
             }
