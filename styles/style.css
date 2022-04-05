@@ -41,6 +41,7 @@
 .light :link {
     color: rgb(40, 40, 240);
 }
+
 .light :visited {
     color: rgb(200, 00, 140);
 }
@@ -134,6 +135,14 @@ main {
     flex-wrap: wrap;
 }
 
+@media screen and (min-width: 1200px) {
+    main {
+        display: grid;
+        grid-template-columns: max-content auto;
+        align-items: start;
+    }
+}
+
 section {
     margin: 1rem 0.5rem 1rem 0;
 }
@@ -145,6 +154,21 @@ section > :first-child {
 .wrapper {
     display: flex;
     flex-wrap: wrap;
+}
+
+.list-wrapper {
+    max-width: max-content;
+}
+
+.add {
+    font-size: 1.4rem;
+    vertical-align: middle;
+    width: 1.25em;
+    height: 1.25em;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
 }
 
 label.ta {
@@ -184,7 +208,7 @@ label.io {
 }
 
 .elm-wrapper {
-    margin: 1rem 0;
+    margin: 0.5rem 0;
 }
 
 .api-wrapper p {
@@ -208,6 +232,7 @@ label.io {
 [name="custom-format"]:not(:checked) ~ .custom-format-wrapper {
     display: none;
 }
+
 .config-wrapper .custom-format-input,
 .config-wrapper .custom-format-input textarea {
     width: 100%;

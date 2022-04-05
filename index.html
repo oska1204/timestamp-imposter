@@ -34,78 +34,80 @@
         <button class="toggle-theme" data-const="toggleTheme"><span>☀</span></button>
     </header>
     <main>
-        <section class="split-wrapper">
-            <button data-const="generate">Generate</button>
-            <label class="io">Input: <textarea cols="30" rows="10" data-const="textarea"></textarea></label>
-            <label class="ta">Split: <textarea data-const="split"></textarea></label>
-        </section>
         <section class="list-wrapper">
+            <button class="add" data-const="add">+</button>
             <button data-const="updateAll">Update all</button>
             <button data-const="removeAll">Remove all</button>
-            <button data-const="add">Add</button>
             <div class="elm-wrapper" data-const="elmWrapper">
                 <elm-></elm->
             </div>
-            <button data-const="add2">Add</button>
+            <button class="add" data-const="add2">+</button>
         </section>
-        <section class="output-wrapper">
-            <button data-const="format">Format</button>
-            <label class="io">Output: <textarea cols="30" rows="15" data-const="output"></textarea></label>
-        </section>
-        <section class="config-wrapper">
-            <h3>Format config</h3>
-            <div>
-                Preset:
-                <select data-const="preset">
-                    <option value="time">Time</option>
-                    <option value="rating">Rating</option>
-                    <option value="rating + time">Rating + Time</option>
-                    <option value="blank">Blank</option>
-                </select>
-            </div>
-            <div>
-                <label class="time-label">Start time: <input type="time" data-const="startTime"></label>
-                <button data-const="clearTime">Clear</button>
-                <span data-const="currentTime"></span>
-            </div>
-            <div>
-                <label>Timezone: <input type="number" class="timezone-input" data-const="timezoneInput" max="14"
-                        min="-12" step=".25"></label>
-                <button data-const="timezoneReset">Reset</button>
-                <span data-const="timezoneSpan"></span>
-            </div>
-            <label>Offset in min: <input type="number" value="0" class="offset" data-const="offset"></label>
-            <label class="custom-format" for="custom-format">Custom format: </label>
-            <div class="custom-format-wrapper">
-                <label class="ta custom-format-input"><textarea data-const="customFormatInput"></textarea></label>
-            </div>
-            <label class="ta">Join: <textarea data-const="join"></textarea></label>
-            <label>Tail: <textarea data-const="tail"></textarea></label>
-            <label>Stream Elements current time: <input type="checkbox" data-const="streamElementsCurTimeCheck"
-                    checked></label>
-            <label>Square brackets: <input type="checkbox" data-const="squareBrackets"></label>
-            <label>IMDb rating: <input type="checkbox" data-const="imdbCheck" checked></label>
-            <label>Rotten Tomatoes: <input type="checkbox" data-const="tomatoCheck" checked></label>
-            <label>Metacritic: <input type="checkbox" data-const="metacriticCheck" checked></label>
-            <button data-const="clearStorage">Clear storage</button>
-        </section>
-        <section>
-            <form data-const="suggestionForm" name="suggestion" netlify>
-                <label class="ta">
-                    Suggestion:
-                    <textarea name="text" id="text" cols="30" rows="10"></textarea>
-                </label>
-                <button type="submit">Submit</button>
-            </form>
-        </section>
-        <section class="api-wrapper">
-            <h2>Api</h2>
-            <p>Should the api key expire, you can register for a free key at <a href="https://www.omdbapi.com"
-                    target="_blank" rel="noopener noreferrer">omdbapi.com</a>.</p>
-            <p>You can either set the key here: <input type="text" data-const="apikeyElm" placeholder="api key"></p>
-            <p>Or you can add <a href="?apikey=KEY" target="_blank" rel="noopener noreferrer"
-                    data-const="keyLink">?apikey=<span data-const="keyPlaceholder">KEY</span></a> to the url.</p>
-        </section>
+        <div class="wrapper">
+            <section class="split-wrapper">
+                <button data-const="generate">Generate</button>
+                <label class="io">Input: <textarea cols="30" rows="10" data-const="textarea"></textarea></label>
+                <label class="ta">Split: <textarea data-const="split"></textarea></label>
+            </section>
+            <section class="output-wrapper">
+                <button data-const="format">Format</button>
+                <label class="io">Output: <textarea cols="30" rows="15" data-const="output"></textarea></label>
+            </section>
+            <section class="config-wrapper">
+                <h3>Format config</h3>
+                <div>
+                    Preset:
+                    <select data-const="preset">
+                        <option value="time">Time</option>
+                        <option value="rating">Rating</option>
+                        <option value="rating + time">Rating + Time</option>
+                        <option value="blank">Blank</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="time-label">Start time: <input type="time" data-const="startTime"></label>
+                    <button data-const="clearTime">Clear</button>
+                    <span data-const="currentTime"></span>
+                </div>
+                <div>
+                    <label>Timezone: <input type="number" class="timezone-input" data-const="timezoneInput" max="14"
+                            min="-12" step=".25"></label>
+                    <button data-const="timezoneReset">Reset</button>
+                    <span data-const="timezoneSpan"></span>
+                </div>
+                <label>Offset in min: <input type="number" value="0" class="offset" data-const="offset"></label>
+                <label class="custom-format" for="custom-format">Custom format: </label>
+                <div class="custom-format-wrapper">
+                    <label class="ta custom-format-input"><textarea data-const="customFormatInput"></textarea></label>
+                </div>
+                <label class="ta">Join: <textarea data-const="join"></textarea></label>
+                <label>Tail: <textarea data-const="tail"></textarea></label>
+                <label>Stream Elements current time: <input type="checkbox" data-const="streamElementsCurTimeCheck"
+                        checked></label>
+                <label>Square brackets: <input type="checkbox" data-const="squareBrackets"></label>
+                <label>IMDb rating: <input type="checkbox" data-const="imdbCheck" checked></label>
+                <label>Rotten Tomatoes: <input type="checkbox" data-const="tomatoCheck" checked></label>
+                <label>Metacritic: <input type="checkbox" data-const="metacriticCheck" checked></label>
+                <button data-const="clearStorage">Clear storage</button>
+            </section>
+            <section>
+                <form data-const="suggestionForm" name="suggestion" netlify>
+                    <label class="ta">
+                        Suggestion:
+                        <textarea name="text" id="text" cols="30" rows="10"></textarea>
+                    </label>
+                    <button type="submit">Submit</button>
+                </form>
+            </section>
+            <section class="api-wrapper">
+                <h2>Api</h2>
+                <p>Should the api key expire, you can register for a free key at <a href="https://www.omdbapi.com"
+                        target="_blank" rel="noopener noreferrer">omdbapi.com</a>.</p>
+                <p>You can either set the key here: <input type="text" data-const="apikeyElm" placeholder="api key"></p>
+                <p>Or you can add <a href="?apikey=KEY" target="_blank" rel="noopener noreferrer"
+                        data-const="keyLink">?apikey=<span data-const="keyPlaceholder">KEY</span></a> to the url.</p>
+            </section>
+        </div>
     </main>
     <footer>
         <a href="https://github.com/oska1204/timestamp-imposter" target="_blank" rel="noopener noreferrer">
