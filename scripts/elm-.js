@@ -422,7 +422,10 @@ customElements.define('elm-', class extends HTMLElement {
                     fetchApi(this.epFunc, queryUrl)
                 }
             } else if (e.Response === 'False') {
-                resFalse(e)
+                if (e.Error === 'Too many results.')
+                    fetchApi(this.resFunc, `&t=${search.value.trim()}&y=${year.value}&type=${selectType.value}`)
+                else
+                    resFalse(e)
             }
             return e
         }
