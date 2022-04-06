@@ -27,7 +27,7 @@ elm-.err:nth-of-type(2n) {
     background-color: rgba(255, 0, 0, 35%);
 }
 
-elm- > div:nth-of-type(2) > div {
+elm- > div:nth-of-type(2) > div:first-of-type {
     display: flex;
 }
 
