@@ -227,12 +227,7 @@ label.io {
 }
 
 .config-wrapper .custom-format-wrapper {
-    display: grid;
-    grid-gap: 0.25rem;
-}
-
-.config-wrapper .custom-format {
-    width: 100%;
+    width: auto;
 }
 
 footer {
