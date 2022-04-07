@@ -26,7 +26,6 @@
             <h2>Instructions</h2>
             <ol>
                 <li>Click, Generate button</li>
-                <li>Click, Update all button</li>
                 <li>Click, Format button</li>
             </ol>
             Save the list with this <a data-const="listLink" href="#" target="_blank" rel="noopener noreferrer">link</a>
@@ -76,10 +75,12 @@
                     <span data-const="timezoneSpan"></span>
                 </div>
                 <label>Offset in min: <input type="number" value="0" class="offset" data-const="offset"></label>
-                <label class="io custom-format-wrapper">Custom format:
+                <label class="io custom-format-wrapper">
+                    <span>Custom format: </span>
                     <textarea data-const="customFormatInput"></textarea>
                 </label>
                 <label class="ta">Join: <textarea data-const="join"></textarea></label>
+                <label class="io"><span>Start: </span><textarea data-const="startInput"></textarea></label>
                 <label class="ta">Tail: <textarea data-const="tail"></textarea></label>
                 <label>Stream Elements current time: <input type="checkbox" data-const="streamElementsCurTimeCheck"
                         checked></label>
@@ -89,9 +90,34 @@
                 <label>Metacritic: <input type="checkbox" data-const="metacriticCheck" checked></label>
                 <button data-const="clearStorage">Clear storage</button>
             </section>
+            <section class="var-list">
+                <h3>Custom format vars</h3>
+                <div>
+                    <code>${time}</code> 12:34
+                </div>
+                <div>
+                    <code>${timeStr}</code> (12:34) or [12:34]
+                </div>
+                <div>
+                    <code>${text}</code> from generate
+                </div>
+                <div>
+                    <code>${search}</code> from search input
+                </div>
+                <div>
+                    <code>${baseStr}</code> short for <code>${text || f.Title || search}</code>
+                </div>
+                <div>
+                    <code>${ratingStr}</code> {5.5 55% 55} is {imdb tomato metacritic}
+                </div>
+                <h4>Advanced:</h4>
+                <div>
+                    You can access the Date object with <code>${d}</code>. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" rel="noopener noreferrer">Reference</a>. Recommended <code>${d.toJSON()}</code>.
+                </div>
+            </section>
             <section>
                 <form data-const="suggestionForm" name="suggestion" netlify>
-                    <label class="ta">
+                    <label class="io">
                         Suggestion:
                         <textarea name="text" id="text" cols="30" rows="10"></textarea>
                     </label>

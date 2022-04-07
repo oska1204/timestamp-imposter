@@ -1,13 +1,39 @@
-textarea.value = localStorage.getItem('textarea') || 'Aladdin ⏩\ntt1119646 ⏩\nSherlock S01E01 ⏩\nhttps://www.imdb.com/title/tt0325980'
-split.value = localStorage.getItem('split') || '⏩'
-customFormatInput.value = localStorage.getItem('customFormatInput') || '${text || j.Title || search}'
-join.value = localStorage.getItem('join') || ' ⏩\n'
-const tailVal = localStorage.getItem('tail')
-tail.value = tailVal === null
-    ? 'Cartoons'
-    : tailVal
+const currentVersion = '1.1.0'
+if (localStorage.version !== currentVersion) {
+    localStorage.clear()
+    sessionStorage.clear()
+    localStorage.version = currentVersion
+}
 
-const getCheckbox = (elm, name) => {    
+textarea.value = localStorage.getItem('textarea') || 'Aladdin 92 ⏩\ntt1119646 ⏩\nSherlock S01E01 ⏩\nhttps://www.imdb.com/title/tt0449088'
+split.value = localStorage.getItem('split') || '⏩'
+join.value = localStorage.getItem('join') || ' ⏩\n'
+window.tempPresetObj = localStorage.getItem('presetObj')
+const presetObj = tempPresetObj
+    ? JSON.parse(tempPresetObj)
+    : {
+        startInput: {
+            time: '${timezoneStr}\n',
+            rating: '${ratingsInfo}\n',
+            'rating + time': '${ratingsInfo}\n${timezoneStr}\n',
+            blank: '',
+        },
+        customFormatInput: {
+            time: '${baseStr} ${timeStr}',
+            rating: '${ratingStr} ${baseStr}',
+            'rating + time': '${ratingStr} ${baseStr} ${timeStr}',
+            blank: '${baseStr}',
+        },
+        tail: {
+            time: 'Cartoons ${timeStr}',
+            rating: '',
+            'rating + time': 'Cartoons ${timeStr}',
+            blank: 'Cartoons',
+        }
+    }
+delete window.tempPresetObj
+
+const getCheckbox = (elm, name) => {
     switch (localStorage.getItem(name)) {
         case 'true':
             elm.checked = true
@@ -25,6 +51,9 @@ getCheckbox(tomatoCheck, 'tomato-check')
 getCheckbox(metacriticCheck, 'metacritic-check')
 
 preset.value = sessionStorage.getItem('preset') || preset.value
+startInput.value = presetObj.startInput[preset.value]
+customFormatInput.value = presetObj.customFormatInput[preset.value]
+tail.value = presetObj.tail[preset.value]
 offset.value = sessionStorage.getItem('offset') || offset.value
 
 const defaultTimezone = (new Date).getTimezoneOffset() / - 60

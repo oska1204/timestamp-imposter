@@ -458,7 +458,7 @@ customElements.define('elm-', class extends HTMLElement {
             }
             return e
         }
-        this.updateFunc = (isSearch = false) => {
+        this.updateFunc = () => {
             if (!this.search.value && !this.imdb.value)
                 return
             title.innerHTML = 'Loading...'
@@ -539,5 +539,16 @@ customElements.define('elm-', class extends HTMLElement {
         warningWrapper.addEventListener('click', () => {
             this.classList.remove('warning')
         })
+        this.querySelectorAll('code').forEach(code => {
+            code.addEventListener('click', e => {
+                const selection = window.getSelection()
+                selection.removeAllRanges()
+
+                const range = document.createRange()
+                range.selectNodeContents(e.target)
+                selection.addRange(range)
+            })
+        })
+        return this
     }
 })

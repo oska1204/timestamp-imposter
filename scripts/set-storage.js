@@ -33,9 +33,7 @@ const setSessionStorage = (elm, name) => {
 }
 setLocalStorage(textarea, 'textarea')
 setLocalStorage(split, 'split')
-setLocalStorage(customFormatInput, 'customFormatInput')
 setLocalStorage(join, 'join')
-setLocalStorage(tail, 'tail')
 setLocalStorage(timezoneInput, 'timezone-input')
 setSessionStorage(startTime, 'start-time')
 setSessionStorage(preset, 'preset')

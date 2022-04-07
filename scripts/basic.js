@@ -1,9 +1,3 @@
-if (localStorage.version !== '1.0.0') {
-    localStorage.clear()
-    sessionStorage.clear()
-    localStorage.version = '1.0.0'
-}
-
 apikeyElm.value = apikey || ''
 apikeyElm.addEventListener('input', function () {
     apikey = this.value
@@ -16,10 +10,16 @@ offset.addEventListener('change', function () {
     if (!this.value)
         this.value = 0
 })
-customFormatInput.addEventListener('change', function () {
-    if (!this.value)
-        this.value = '${text || j.Title || search}'
-})
+const presetObjEvent = (obj) => {
+    for (const key in obj) {
+        const elm = obj[key]
+        elm.addEventListener('change', function () {
+            presetObj[key][preset.value] = this.value
+            localStorage.setItem('presetObj', JSON.stringify(presetObj))
+        })
+    }
+}
+presetObjEvent({ startInput, customFormatInput, tail })
 
 clearTime.addEventListener('click', () => {
     startTime.value = ''
@@ -52,29 +52,26 @@ format.addEventListener('click', () => {
                     break
             }
         })}} `
-    const timeStr = `[${streamElementsCurTime}${timezoneFunc()}]`
-    let startMsg = ''
-    switch (preset.value) {
-        case 'time':
-            startMsg = timeStr + '\n'
-            break;
-        case 'rating':
-            startMsg = ratingsInfo + '\n'
-            break;
-        case 'rating + time':
-            startMsg = `${ratingsInfo}\n${timeStr}\n`
-            break;
-    }
-    const val = `${startMsg}${list.join(join.value || ' ⏩\n')}`
+    const timezoneStr = `[${streamElementsCurTime}${timezoneFunc()}]`
+    const val = `${eval(`\`${startInput.value}\``)}${list.join(join.value || ' ⏩\n')}`
     output.value = val
     const lengthArr = val.split('\n')
         ?.sort((a, b) => b.length - a.length)
     if (lengthArr.length > 1) {
         output.cols = lengthArr[0].length
+        output.rows = lengthArr.length * 1.13 + 1
     } else {
         output.cols = 30
+        output.rows = 15
     }
 })
+
+preset.addEventListener('change', e => {
+    startInput.value = presetObj.startInput[e.target.value]
+    customFormatInput.value = presetObj.customFormatInput[e.target.value]
+    tail.value = presetObj.tail[e.target.value]
+})
+
 add.addEventListener('click', () => {
     elmWrapper.insertAdjacentHTML('afterbegin', `<elm-></elm->`)
 })
@@ -90,18 +87,19 @@ generate.addEventListener('click', () => {
         const imdbVal = val.match(elm.imdbIDRegex)?.toString()
         if (imdbVal) {
             elm.setAttribute('imdb', imdbVal)
-            return
+        } else {
+            elm.dataset.rawText = val
+            const reg = /s(\d+)ep?(\d+)/i
+            const [searchVal, yearVal = ''] = val.trim().split(/(?= (\d{2}|\d{4})$)/)
+            elm.setAttribute('text', searchVal.replace(reg, ''))
+            elm.setAttribute('year', yearVal.trim())
+            const [s = '', ep = ''] = val.match(reg)?.slice(1) || []
+            elm.setAttribute('season', s)
+            elm.setAttribute('episode', ep)
+            if (s && ep)
+                elm.setAttribute('select_type', 'series')
         }
-        elm.dataset.rawText = val
-        const reg = /s(\d+)ep?(\d+)/i
-        const [searchVal, yearVal = ''] = val.trim().split(/(?= (\d{2}|\d{4})$)/)
-        elm.setAttribute('text', searchVal.replace(reg, ''))
-        elm.setAttribute('year', yearVal.trim())
-        const [s = '', ep = ''] = val.match(reg)?.slice(1) || []
-        elm.setAttribute('season', s)
-        elm.setAttribute('episode', ep)
-        if (s && ep)
-            elm.setAttribute('select_type', 'series')
+        elm.update.click()
     });
 })
 updateAll.addEventListener('click', () => {
@@ -157,3 +155,16 @@ clearStorage.addEventListener('click', () => {
     localStorage.clear()
     sessionStorage.clear()
 })
+document.querySelectorAll('.var-list code').forEach(code => {
+    code.addEventListener('click', e => {
+      const selection = window.getSelection()
+      selection.removeAllRanges()
+        
+      const range = document.createRange()
+      range.selectNodeContents(e.target)
+      selection.addRange(range)
+    })
+})
+window._tempDate = new Date
+dateSpan.textContent = window._tempDate.toJSON()
+delete window._tempDate

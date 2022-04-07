@@ -29,6 +29,7 @@ elm-.err:nth-of-type(2n) {
 
 elm- > div:nth-of-type(2) > div:first-of-type {
     display: flex;
+    flex-wrap: wrap;
 }
 
 elm- > div:first-of-type > *,
@@ -196,7 +197,9 @@ elm-.loading .select-title-wrapper {
 }
 
 .poster-wrapper {
-    height: max-content;
+    min-height: 150px;
+    min-width: 100px;
+    margin-left: 0.75rem;
 }
 
 .poster-wrapper.overlay {
@@ -210,10 +213,8 @@ elm-.loading .select-title-wrapper {
 }
 
 .poster {
-    width: 100px;
-    height: 150px;
+    height: auto;
     display: block;
-    margin-left: 0.75rem;
     object-fit: contain;
     object-position: top right;
     cursor: zoom-in;
