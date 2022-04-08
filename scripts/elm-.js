@@ -422,9 +422,11 @@ customElements.define('elm-', class extends HTMLElement {
                     fetchApi(this.epFunc, queryUrl)
                 }
             } else if (e.Response === 'False') {
-                if (e.Error === 'Too many results.')
-                    fetchApi(this.resFunc, `&t=${search.value.trim()}&y=${year.value}&type=${selectType.value}`, extraFn)
-                else
+                if (e.Error === 'Too many results.') {
+                    let queryUrl = `&t=${encodeURIComponent(search.value.trim())}`
+                    queryUrl += `&y=${year.value}&type=${selectType.value}`
+                    fetchApi(this.resFunc, queryUrl, extraFn)
+                } else
                     resFalse(e)
             }
             return e
@@ -469,7 +471,9 @@ customElements.define('elm-', class extends HTMLElement {
             if (imdb.value.match(imdbIDRegex)) {
                 fetchApi(this.resFunc, `&i=${imdb.value}`, extraFn)
             } else {
-                fetchApi(this.searchFunc, `&s=${search.value.trim()}&y=${year.value}&type=${selectType.value}`)
+                let queryUrl = `&s=${encodeURIComponent(search.value.trim())}`
+                queryUrl += `&y=${year.value}&type=${selectType.value}`
+                fetchApi(this.searchFunc, queryUrl)
             }
         }
         update.addEventListener('click', this.updateFunc)
