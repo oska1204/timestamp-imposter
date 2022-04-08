@@ -51,6 +51,7 @@ template.innerHTML = `
     </div>
     <div class="info-outer-wrapper">
         Access custom format <code>\${j.&lt;name>}</code>. Example <code>\${j.Released}</code>
+        <label>Full plot: <input type="checkbox" class="full-plot"></label>
         <div class="info-wrapper"></div>
     </div>
 </div>
@@ -178,6 +179,7 @@ customElements.define('elm-', class extends HTMLElement {
         const posterWrapper = query('.poster-wrapper')
         const posterOverlay = query('.poster-overlay')
         const warningWrapper = query('.warning-wrapper')
+        const fullPlot = query('.full-plot')
         this.update = update
         this.minutes = minutes
         this.year = year
@@ -277,6 +279,8 @@ customElements.define('elm-', class extends HTMLElement {
                     return
                 this.classList.remove('err')
                 let queryUrl = `&i=${id}`
+                if (fullPlot.checked)
+                    queryUrl += '&plot=full'
                 if (season.value === '' && episode.value === '')
                     fetchApi(this.resFunc, queryUrl)
                 if (type === 'series' && !(
@@ -297,6 +301,7 @@ customElements.define('elm-', class extends HTMLElement {
         updateChange(selectTitle)
         updateChange(season)
         updateChange(episode)
+        updateChange(fullPlot)
         minutes.addEventListener('change', function () {
             if (this.value !== '0')
                 this.classList.remove('err')
@@ -412,6 +417,8 @@ customElements.define('elm-', class extends HTMLElement {
                     searchArr.slice(1).findIndex(minTitleFunc) !== -1)
                     this.classList.add('warning')
                 let queryUrl = `&i=${s.imdbID}`
+                if (fullPlot.checked)
+                    queryUrl += '&plot=full'
                 await fetchApi(this.resFunc, queryUrl)
                 if (s.Type === 'series' && !(
                     season.value === '' && episode.value !== '' ||
@@ -424,6 +431,8 @@ customElements.define('elm-', class extends HTMLElement {
             } else if (e.Response === 'False') {
                 if (e.Error === 'Too many results.') {
                     let queryUrl = `&t=${encodeURIComponent(search.value.trim())}`
+                    if (fullPlot.checked)
+                        queryUrl += '&plot=full'
                     queryUrl += `&y=${year.value}&type=${selectType.value}`
                     fetchApi(this.resFunc, queryUrl, extraFn)
                 } else
@@ -469,7 +478,10 @@ customElements.define('elm-', class extends HTMLElement {
             this.json = []
             this.titleJson = []
             if (imdb.value.match(imdbIDRegex)) {
-                fetchApi(this.resFunc, `&i=${imdb.value}`, extraFn)
+                let queryUrl = `&i=${imdb.value}`
+                if (fullPlot.checked)
+                    queryUrl += '&plot=full'
+                fetchApi(this.resFunc, queryUrl, extraFn)
             } else {
                 let queryUrl = `&s=${encodeURIComponent(search.value.trim())}`
                 queryUrl += `&y=${year.value}&type=${selectType.value}`
