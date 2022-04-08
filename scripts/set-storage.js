@@ -11,6 +11,10 @@ addEventListener('beforeunload', () => {
         e.setAttribute('select_title', e.select_title.value)
         e.setAttribute('season', e.season.value)
         e.setAttribute('episode', e.episode.value)
+        if (e.fullPlot.checked)
+            e.setAttribute('full_plot', '')
+        else
+            e.removeAttribute('full_plot')
         if (!e.json)
             return
         e.json.minutes = e.minutes.value
@@ -19,25 +23,33 @@ addEventListener('beforeunload', () => {
     const elmsHTML = elms.map(e => e.cloneNode().outerHTML)
     const jsonString = JSON.stringify(elmsHTML)
     localStorage.setItem('elms', jsonString)
+    localStorage.setItem('output', output.value)
+    localStorage.setItem('output-cols', output.cols)
+    localStorage.setItem('output-rows', output.rows)
 })
 
-const setLocalStorage = (elm, name) => {
-    elm.addEventListener('change', () => {
-        localStorage.setItem(name, elm.value)
-    })
+const setStorage = storage => obj => {
+    for (const key in obj) {
+        const elm = obj[key];
+        elm.addEventListener('change', () => {
+            storage.setItem(key, elm.value)
+        })
+    }
 }
-const setSessionStorage = (elm, name) => {
-    elm.addEventListener('change', () => {
-        sessionStorage.setItem(name, elm.value)
-    })
-}
-setLocalStorage(textarea, 'textarea')
-setLocalStorage(split, 'split')
-setLocalStorage(join, 'join')
-setLocalStorage(timezoneInput, 'timezone-input')
-setSessionStorage(startTime, 'start-time')
-setSessionStorage(preset, 'preset')
-setSessionStorage(offset, 'offset')
+const setLocalStorage = setStorage(localStorage)
+const setSessionStorage = setStorage(sessionStorage)
+
+setLocalStorage({
+    textarea,
+    split,
+    join,
+    'timezone-input': timezoneInput,
+})
+setSessionStorage({
+    'start-time': startTime,
+    preset,
+    offset,
+})
 
 const setCheckbox = (elm, name) => {
     elm.addEventListener('change', function () {

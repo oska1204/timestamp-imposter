@@ -6,6 +6,9 @@ if (localStorage.version !== currentVersion) {
 }
 
 textarea.value = localStorage.getItem('textarea') || 'Aladdin 92 ⏩\ntt1119646 ⏩\nSherlock S01E01 ⏩\nhttps://www.imdb.com/title/tt0449088'
+output.value = localStorage.getItem('output')
+output.cols = localStorage.getItem('output-cols') || output.cols
+output.rows = localStorage.getItem('output-rows') || output.rows
 split.value = localStorage.getItem('split') || '⏩'
 join.value = localStorage.getItem('join') || ' ⏩\n'
 window.tempPresetObj = localStorage.getItem('presetObj')

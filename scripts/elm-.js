@@ -88,7 +88,8 @@ customElements.define('elm-', class extends HTMLElement {
             'title_json',
             'season',
             'episode',
-            'update'
+            'update',
+            'full_plot'
         ]
     }
     attributeChangedCallback() {
@@ -145,6 +146,11 @@ customElements.define('elm-', class extends HTMLElement {
         } else if (name === 'update') {
             this.updateFunc()
             this.removeAttribute('update')
+        } else if (name === 'full_plot') {
+            if (newVal === null)
+                this.fullPlot.checked = false
+            else
+                this.fullPlot.checked = true
         } else {
             this[name].value = newVal
         }
@@ -191,6 +197,7 @@ customElements.define('elm-', class extends HTMLElement {
         this.season = season
         this.episode = episode
         this.rated = rated
+        this.fullPlot = fullPlot
 
         const imdbIDRegex = /[a-z]{2}\d{7,}/
         this.imdbIDRegex = imdbIDRegex
