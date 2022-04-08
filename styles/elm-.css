@@ -169,12 +169,15 @@ elm-.loading .select-title-wrapper {
     white-space: pre-wrap;
     display: grid;
     grid-template-columns: max-content max-content auto;
+    word-spacing: 0;
 }
 
 .info-wrapper > div {
-    margin-bottom: 0.5rem;
-    line-height: 1.25em;
     display: contents;
+}
+
+.info-wrapper > div span {
+    margin-bottom: 0.1875rem;
 }
 
 .info-wrapper div span:first-of-type {

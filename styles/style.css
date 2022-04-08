@@ -85,15 +85,7 @@ code {
     border-radius: 0.5rem;
     display: inline-block;
     margin-bottom: 0.25rem;
-}
-
-.pre-json {
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.display-flex {
-    display: flex;
+    word-spacing: 0;
 }
 
 header {

@@ -165,6 +165,3 @@ document.querySelectorAll('.var-list code').forEach(code => {
       selection.addRange(range)
     })
 })
-window._tempDate = new Date
-dateSpan.textContent = window._tempDate.toJSON()
-delete window._tempDate
