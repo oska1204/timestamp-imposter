@@ -200,8 +200,6 @@ elm-.loading .select-title-wrapper {
 }
 
 .poster-wrapper {
-    min-height: 150px;
-    min-width: 100px;
     margin-left: 0.75rem;
 }
 
@@ -210,13 +208,9 @@ elm-.loading .select-title-wrapper {
     top: 0;
 }
 
-.poster-wrapper.overlay .poster {
-    height: auto;
-    width: auto;
-}
-
 .poster {
-    height: auto;
+    width: 100px;
+    height: 150px;
     display: block;
     object-fit: contain;
     object-position: top right;

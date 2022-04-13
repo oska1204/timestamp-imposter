@@ -28,8 +28,8 @@ template.innerHTML = `
     </div>
     <div class="select-title-wrapper">
         <select class="select-title"></select>
-        <label>s<input type="number" class="season" placeholder="Season" min="0"></label>
-        <label>ep<input type="number" class="episode" placeholder="Episode" min="0"></label>
+        <label>S<input type="number" class="season" placeholder="Season" min="0"></label>
+        <label>E<input type="number" class="episode" placeholder="Episode" min="0"></label>
         <div class="warning-wrapper">
             <div class="warning-icon">
                 <div class="warning-outer">
@@ -63,6 +63,13 @@ template.innerHTML = `
     <div class="circle"></div>
 </div>
 `
+
+const infoDiv = document.createElement('div')
+infoDiv.appendChild(document.createElement('span'))
+infoDiv.insertAdjacentHTML('beforeend', `<span class="seperator">: </span>`)
+infoDiv.appendChild(document.createElement('span'))
+
+const optionElm = document.createElement('option')
 
 customElements.define('elm-', class extends HTMLElement {
     constructor() {
@@ -144,6 +151,8 @@ customElements.define('elm-', class extends HTMLElement {
                 console.error(err);
             }
         } else if (name === 'update') {
+            if (newVal === null)
+                return
             this.updateFunc()
             this.removeAttribute('update')
         } else if (name === 'full_plot') {
@@ -205,14 +214,10 @@ customElements.define('elm-', class extends HTMLElement {
         this.infoFunc = () => {
             infoWrapper.innerHTML = ''
             const newDiv = (key, elm) => {
-                const div = document.createElement('div')
-                const span1 = document.createElement('span')
-                const span2 = document.createElement('span')
+                const div = infoDiv.cloneNode(true)
+                const [span1, , span2] = div.children
                 span1.textContent = key
                 span2.textContent = elm
-                div.appendChild(span1)
-                div.insertAdjacentHTML('beforeend', `<span class="seperator">: </span>`)
-                div.appendChild(span2)
                 return div
             }
             for (const key in this.json) {
@@ -237,14 +242,11 @@ customElements.define('elm-', class extends HTMLElement {
                 return
             this.infoFunc()
         })
-        const updateEnter = elm =>
-            elm.addEventListener('keyup', e => {
-                if (e.key === 'Enter')
-                    this.updateFunc()
-            })
-        updateEnter(search)
-        updateEnter(year)
-        updateEnter(imdb)
+        const updateSearch = elm =>
+            elm.addEventListener('change', () => this.updateFunc())
+        updateSearch(search)
+        updateSearch(year)
+        updateSearch(imdb)
         year.addEventListener('change', () => {
             if (year.value.length === 2) {
                 const d = new Date()
@@ -272,7 +274,8 @@ customElements.define('elm-', class extends HTMLElement {
             elm.addEventListener('change', () => {
                 if (elm.valueAsNumber <= 0 && elm.valueAsNumber !== undefined)
                     elm.value = ''
-                const [id, type] = selectTitle.value.split(',')
+                const selected = selectTitle.children[selectTitle.value]
+                const { id, type, title } = selected.dataset
                 if (type === 'series' && (
                     season.value === '' && episode.value !== '' ||
                     season.value !== '' && episode.value === '') &&
@@ -373,9 +376,10 @@ customElements.define('elm-', class extends HTMLElement {
                 }
                 if (e.Rated === 'N/A' ||
                     !e.Rated ||
-                    e.Rated === 'Not Rated')
+                    e.Rated === 'Not Rated') {
                     rated.textContent = 'Not Rated'
-                else
+                    rated.classList.add('err')
+                } else
                     rated.textContent = `Rated ${e.Rated}`
                 infoButton.hidden = false
                 rated.hidden = false
@@ -391,11 +395,18 @@ customElements.define('elm-', class extends HTMLElement {
                 this.resFunc(e)
             return e
         }
+        const optionFn = (e, i = 0) => {
+            const option = optionElm.cloneNode()
+            option.value = i
+            option.dataset.title = e.Title
+            option.dataset.id = e.imdbID
+            option.dataset.type = e.Type
+            option.textContent = `${e.Title} (${e.Year})`
+            selectTitle.appendChild(option)
+        }
         this.formatSearch = searchArr => {
-            searchArr.forEach(f => {
-                selectTitle.insertAdjacentHTML('beforeend', `
-                    <option value="${f.imdbID},${f.Type}">${f.Title} (${f.Year})</option>
-                `)
+            searchArr.forEach((e, i) => {
+                optionFn(e, i)
             })
         }
         const minTitle = str => {
@@ -469,10 +480,19 @@ customElements.define('elm-', class extends HTMLElement {
         }
         const extraFn = e => {
             this.titleJson = [e]
+            selectTitle.innerHTML = ''
             if (e.Response === 'True') {
-                selectTitle.innerHTML = `
-                    <option value="${e.imdbID},${e.Type}">${e.Title} (${e.Year})</option>
-                `
+                if (e.seriesID && e.seriesID !== 'N/A') {
+                    fetchApi(f => {
+                        if (f.Response === 'True') {
+                            this.titleJson = [f]
+                            optionFn(f)
+                            season.value = e.Season
+                            episode.value = e.Episode
+                        }
+                    }, `&i=${e.seriesID}`)
+                } else
+                    optionFn(e)
             }
             return e
         }

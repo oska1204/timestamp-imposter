@@ -2,6 +2,17 @@ function minToMs(minutes) {
     return parseInt(minutes) * 60 * 1000
 }
 
+function seasonEpisode(str, sVal, eVal) {
+    str += ' S'
+    if (sVal < 10 && sVal > 0)
+        str += '0'
+    str += sVal + 'E'
+    if (eVal < 10 && eVal > 0)
+        str += '0'
+    str += eVal
+    return str
+}
+
 function getList(arr, minOffset, startTime, preset) {
     const startDate = new Date
     if (startTime) {
@@ -24,10 +35,22 @@ function getList(arr, minOffset, startTime, preset) {
         arr.push(tailElm)
     for (let i = 0; i < arr.length; i++) {
         const e = arr[i]
+        const j = { ...e.json }
         let baseStr
         const text = e.dataset.rawText?.trim()
         const search = e.search.value
-        const j = { ...e.json }
+        const selectTitle = e.select_title
+        const selectedTitle = selectTitle.children[selectTitle.value]
+        let titleStr
+        if (selectedTitle) {
+            const { title } = selectedTitle.dataset
+            titleStr = title
+            if (j.Type === 'episode') {
+                titleStr = seasonEpisode(titleStr, j.Season, j.Episode)
+            } else if (j.Type === 'series') {
+                titleStr = seasonEpisode(titleStr, e.season.value, e.episode.value)
+            }
+        }
         for (const key in j) {
             if (j[key] === 'N/A')
                 j[key] = ''
@@ -36,7 +59,7 @@ function getList(arr, minOffset, startTime, preset) {
                     j.Tomato = e.Value
             })
         }
-        const defaultFormat = `${text || j.Title || search}`
+        const defaultFormat = `${text || titleStr || j.Title || search}`
         try {
             baseStr = defaultFormat
         } catch (err) {

@@ -138,10 +138,13 @@
                     <code>${text}</code> from generate
                 </div>
                 <div>
+                    <code>${titleStr}</code> title, season & episode (Sherlock S01E01)
+                </div>
+                <div>
                     <code>${search}</code> from search input
                 </div>
                 <div>
-                    <code>${baseStr}</code> short for <code>${text || f.Title || search}</code>
+                    <code>${baseStr}</code> short for <code>${text || titleStr || f.Title || search}</code>
                 </div>
                 <div>
                     <code>${ratingStr}</code> {5.5 55% 55} is {imdb tomato metacritic}
