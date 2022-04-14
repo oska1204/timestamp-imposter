@@ -351,3 +351,14 @@ elm-:not(.warning) .warning-wrapper {
     margin: 0.0625rem 0.125rem 0.0625rem 0.125rem;
     border-radius: 0.125rem;
 }
+.include input {
+    appearance: none;
+}
+
+.include input:checked::before {
+    content: "✔️"
+}
+
+.include input::before {
+    content: "❌"
+}

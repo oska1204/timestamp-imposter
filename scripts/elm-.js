@@ -25,6 +25,7 @@ template.innerHTML = `
         </select>
         <button class="update">Update</button>
         <button class="remove">Remove</button>
+        <label class="include"><input type="checkbox" checked></label>
     </div>
     <div class="select-title-wrapper">
         <select class="select-title"></select>
@@ -195,6 +196,7 @@ customElements.define('elm-', class extends HTMLElement {
         const posterOverlay = query('.poster-overlay')
         const warningWrapper = query('.warning-wrapper')
         const fullPlot = query('.full-plot')
+        const include = query('.include input')
         this.update = update
         this.minutes = minutes
         this.year = year
@@ -207,6 +209,7 @@ customElements.define('elm-', class extends HTMLElement {
         this.episode = episode
         this.rated = rated
         this.fullPlot = fullPlot
+        this.include = include
 
         const imdbIDRegex = /[a-z]{2}\d{7,}/
         this.imdbIDRegex = imdbIDRegex
