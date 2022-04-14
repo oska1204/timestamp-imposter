@@ -90,7 +90,7 @@ generate.addEventListener('click', () => {
         } else {
             elm.dataset.rawText = val
             const reg = /s(\d+)ep?(\d+)/i
-            const [searchVal, yearVal = ''] = val.trim().split(/(?= (\d{2}|\d{4})$)/)
+            const [searchVal, yearVal = ''] = val.trim().split(/(?= \d{4}$)/)
             elm.setAttribute('text', searchVal.replace(reg, ''))
             elm.setAttribute('year', yearVal.trim())
             const [s = '', ep = ''] = val.match(reg)?.slice(1) || []
