@@ -29,7 +29,7 @@ clearTime.addEventListener('click', () => {
 
 format.addEventListener('click', () => {
     const elms = Array.from(document.querySelectorAll('elm-'))
-    const arr = elms.filter(e => e.minutes.value > 0 && e.include.checked)
+    const arr = elms.filter(e => e.minutes.value > 0 && !e.exclude.checked)
     const list = getList(arr, offset.value, startTime.value, preset.value)
     const ratingsListUnfiltered = [
         imdbCheck.checked ? 'IMDb' : '',

@@ -25,7 +25,7 @@ template.innerHTML = `
         </select>
         <button class="update">Update</button>
         <button class="remove">Remove</button>
-        <label class="include"><input type="checkbox" checked></label>
+        <label class="exclude"><input type="checkbox"></label>
     </div>
     <div class="select-title-wrapper">
         <select class="select-title"></select>
@@ -97,7 +97,8 @@ customElements.define('elm-', class extends HTMLElement {
             'season',
             'episode',
             'update',
-            'full_plot'
+            'full_plot',
+            'exclude',
         ]
     }
     attributeChangedCallback() {
@@ -156,6 +157,11 @@ customElements.define('elm-', class extends HTMLElement {
                 return
             this.updateFunc()
             this.removeAttribute('update')
+        } else if (name === 'exclude') {
+            if (newVal === null)
+                this.exclude.checked = false
+            else
+                this.exclude.checked = true
         } else if (name === 'full_plot') {
             if (newVal === null)
                 this.fullPlot.checked = false
@@ -196,7 +202,7 @@ customElements.define('elm-', class extends HTMLElement {
         const posterOverlay = query('.poster-overlay')
         const warningWrapper = query('.warning-wrapper')
         const fullPlot = query('.full-plot')
-        const include = query('.include input')
+        const exclude = query('.exclude input')
         this.update = update
         this.minutes = minutes
         this.year = year
@@ -209,7 +215,7 @@ customElements.define('elm-', class extends HTMLElement {
         this.episode = episode
         this.rated = rated
         this.fullPlot = fullPlot
-        this.include = include
+        this.exclude = exclude
 
         const imdbIDRegex = /[a-z]{2}\d{7,}/
         this.imdbIDRegex = imdbIDRegex

@@ -1,3 +1,9 @@
+const setElmCheckbox = (bool, attr, elm) => {
+    if (bool)
+        elm.setAttribute(attr, '')
+    else
+        elm.removeAttribute(attr)
+}
 addEventListener('beforeunload', () => {
     window.isUnloading = true
     const elms = Array.from(document.querySelectorAll('elm-'))
@@ -11,10 +17,8 @@ addEventListener('beforeunload', () => {
         e.setAttribute('select_title', e.select_title.value)
         e.setAttribute('season', e.season.value)
         e.setAttribute('episode', e.episode.value)
-        if (e.fullPlot.checked)
-            e.setAttribute('full_plot', '')
-        else
-            e.removeAttribute('full_plot')
+        setElmCheckbox(e.fullPlot.checked, 'full_plot', e)
+        setElmCheckbox(e.exclude.checked, 'exclude', e)
         if (!e.json)
             return
         e.json.minutes = e.minutes.value
