@@ -353,12 +353,17 @@ elm-:not(.warning) .warning-wrapper {
 }
 .exclude input {
     appearance: none;
-}
-
-.exclude input:checked::before {
-    content: "❌"
+    width: 2em;
+    text-align: center;
+    font-size: 1em;
 }
 
 .exclude input::before {
-    content: "✔️"
+    content: "✔";
+    color: green;
+}
+
+.exclude input:checked::before {
+    content: "✘";
+    color: red;
 }
