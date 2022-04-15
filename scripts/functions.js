@@ -13,6 +13,35 @@ function seasonEpisode(str, sVal, eVal) {
     return str
 }
 
+function getDay(date) {
+    switch (date.getDay()) {
+        case 0:
+            return 'SUNDAY'
+        case 1:
+            return 'MONDAY'
+        case 2:
+            return 'TUESDAY'
+        case 3:
+            return 'WEDNESDAY'
+        case 4:
+            return 'THURSDAY'
+        case 5:
+            return 'FRIDAY'
+        case 6:
+            return 'SATURDAY'
+    }
+}
+
+function hhmm(strMin) {
+    const min = parseInt(strMin)
+    const hoursFloat = min / 60
+    const hours = Math.floor(hoursFloat)
+    const minFloat = (hoursFloat - hours) * 60
+    const minutes = Math.round(minFloat)
+    const minutesStr = ('0' + minutes).slice(-2)
+    return `${hours}:${minutesStr}`
+}
+
 function getList(arr, minOffset, startTime, preset) {
     const startDate = new Date
     if (startTime) {

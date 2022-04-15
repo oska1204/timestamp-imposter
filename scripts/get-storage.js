@@ -27,9 +27,15 @@ const presetObj = tempPresetObj
             'rating + time': '${ratingStr} ${baseStr} ${timeStr}',
             blank: '${baseStr}',
             watchlist: `{
+    "total": "\${1212 + arr.length - i}"
+    "day": "\${getDay(startDate)}",
     "date": "\${startDate.getDate()}/\${startDate.getMonth() + 1}/\${startDate.getFullYear()}",
+    "order": "\${arr.length - i}",
     "title": "\${baseStr.replace(/"/g, '\\\\"')}",
-    "year": "\${j.Year || ''}"
+    "year": "\${j.Year || ''}",
+    "score": "\${j.imdbRating && j.imdbRating !== 'N/A' ? j.imdbRating.replace('.', '') + '%' : ''}",
+    "mm": "\${j.Runtime && j.Runtime !== 'N/A' ? j.Runtime.replace(/\D/g, '') : '0'}",
+    "hhmm": "\${j.Runtime && j.Runtime !== 'N/A' ? hhmm(j.Runtime.replace(/\D/g, '')) : '0:00'}"
 },
 `,
         },
