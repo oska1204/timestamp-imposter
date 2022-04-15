@@ -19,7 +19,7 @@ const presetObjEvent = (obj) => {
         })
     }
 }
-presetObjEvent({ startInput, customFormatInput, tail })
+presetObjEvent({ startInput, customFormatInput, tail, join })
 
 clearTime.addEventListener('click', () => {
     startTime.value = ''
@@ -29,7 +29,9 @@ clearTime.addEventListener('click', () => {
 
 format.addEventListener('click', () => {
     const elms = Array.from(document.querySelectorAll('elm-'))
-    const arr = elms.filter(e => e.minutes.value > 0 && !e.exclude.checked)
+    let arr = elms.filter(e => e.minutes.value > 0 && !e.exclude.checked)
+    if (preset.value === 'watchlist')
+        arr = arr.reverse()
     const list = getList(arr, offset.value, startTime.value, preset.value)
     const ratingsListUnfiltered = [
         imdbCheck.checked ? 'IMDb' : '',
@@ -53,7 +55,7 @@ format.addEventListener('click', () => {
             }
         })}} `
     const timezoneStr = `[${streamElementsCurTime}${timezoneFunc()}]`
-    const val = `${eval(`\`${startInput.value}\``)}${list.join(join.value || ' ⏩\n')}`
+    const val = `${eval(`\`${startInput.value}\``)}${list.join(join.value)}`
     output.value = val
     const lengthArr = val.split('\n')
         ?.sort((a, b) => b.length - a.length)
@@ -70,6 +72,7 @@ preset.addEventListener('change', e => {
     startInput.value = presetObj.startInput[e.target.value]
     customFormatInput.value = presetObj.customFormatInput[e.target.value]
     tail.value = presetObj.tail[e.target.value]
+    join.value = presetObj.join[e.target.value]
 })
 
 add.addEventListener('click', () => {

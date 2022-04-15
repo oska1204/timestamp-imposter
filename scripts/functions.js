@@ -84,7 +84,7 @@ function getList(arr, minOffset, startTime, preset) {
             ? `[${time}]`
             : `(${time})`
         let tomato
-        e.json?.Ratings.forEach(e => {
+        e.json?.Ratings?.forEach(e => {
             if (e.Source === 'Rotten Tomatoes')
                 tomato = e.Value
         })

@@ -251,6 +251,9 @@ customElements.define('elm-', class extends HTMLElement {
                 return
             this.infoFunc()
         })
+        imdb.addEventListener('change', function () {
+            this.value = this.value.match(imdbIDRegex)?.toString() || this.value
+        })
         const updateSearch = elm =>
             elm.addEventListener('change', () => this.updateFunc())
         updateSearch(search)
@@ -265,9 +268,6 @@ customElements.define('elm-', class extends HTMLElement {
                     isWhat = firstPart - 1 + year.value
                 year.value = isWhat
             }
-        })
-        imdb.addEventListener('change', function () {
-            this.value = this.value.match(imdbIDRegex)?.toString() || this.value
         })
         selectType.addEventListener('change', () => {
             this.updateFunc()

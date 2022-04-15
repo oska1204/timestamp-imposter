@@ -10,7 +10,6 @@ output.value = localStorage.getItem('output')
 output.cols = localStorage.getItem('output-cols') || output.cols
 output.rows = localStorage.getItem('output-rows') || output.rows
 split.value = localStorage.getItem('split') || '⏩'
-join.value = localStorage.getItem('join') || ' ⏩\n'
 window.tempPresetObj = localStorage.getItem('presetObj')
 const presetObj = tempPresetObj
     ? JSON.parse(tempPresetObj)
@@ -20,18 +19,33 @@ const presetObj = tempPresetObj
             rating: '${ratingsInfo}\n',
             'rating + time': '${ratingsInfo}\n${timezoneStr}\n',
             blank: '',
+            watchlist: '',
         },
         customFormatInput: {
             time: '${baseStr} ${timeStr}',
             rating: '${ratingStr} ${baseStr}',
             'rating + time': '${ratingStr} ${baseStr} ${timeStr}',
             blank: '${baseStr}',
+            watchlist: `{
+    "date": "\${d.getDate()}/\${d.getMonth()}/\${d.getFullYear()}",
+    "title": "\${baseStr.replace(/"/g, '\\\\"')}",
+    "year": "\${j.Year || ''}"
+},
+`,
         },
         tail: {
             time: 'Cartoons ${timeStr}',
             rating: '',
             'rating + time': 'Cartoons ${timeStr}',
             blank: 'Cartoons',
+            watchlist: '',
+        },
+        join: {
+            time: ' ⏩\n',
+            rating: ' ⏩\n',
+            'rating + time': ' ⏩\n',
+            blank: ' ⏩\n',
+            watchlist: '',
         }
     }
 delete window.tempPresetObj
@@ -57,6 +71,7 @@ preset.value = sessionStorage.getItem('preset') || preset.value
 startInput.value = presetObj.startInput[preset.value]
 customFormatInput.value = presetObj.customFormatInput[preset.value]
 tail.value = presetObj.tail[preset.value]
+join.value = presetObj.join[preset.value]
 offset.value = sessionStorage.getItem('offset') || offset.value
 
 const defaultTimezone = (new Date).getTimezoneOffset() / - 60
