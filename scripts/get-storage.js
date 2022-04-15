@@ -27,7 +27,7 @@ const presetObj = tempPresetObj
             'rating + time': '${ratingStr} ${baseStr} ${timeStr}',
             blank: '${baseStr}',
             watchlist: `{
-    "date": "\${d.getDate()}/\${d.getMonth()}/\${d.getFullYear()}",
+    "date": "\${startDate.getDate()}/\${startDate.getMonth() + 1}/\${startDate.getFullYear()}",
     "title": "\${baseStr.replace(/"/g, '\\\\"')}",
     "year": "\${j.Year || ''}"
 },
