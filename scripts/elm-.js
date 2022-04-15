@@ -354,7 +354,6 @@ customElements.define('elm-', class extends HTMLElement {
                 errCount = 0
                 const link = document.createElement('a')
                 link.href = 'https://www.imdb.com/title/' + e.imdbID
-                link.target = '_blank'
                 link.rel = 'noopener noreferrer'
                 link.textContent = `${e.Title} (${e.Year})`
                 const technical = link.cloneNode()
