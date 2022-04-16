@@ -1,4 +1,4 @@
-const default_apikey = '80bf610a'
+const default_apikey = '9d50e66a'
 let apikey
 
 const updateKeyLink = function (key) {
