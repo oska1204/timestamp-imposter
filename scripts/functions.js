@@ -74,9 +74,9 @@ function getList(arr, minOffset, startTime, preset) {
         if (selectedTitle) {
             const { title } = selectedTitle.dataset
             titleStr = title
-            if (j.Type === 'episode') {
+            if (j.Type === 'episode' && e.season.value && e.episode.value) {
                 titleStr = seasonEpisode(titleStr, j.Season, j.Episode)
-            } else if (j.Type === 'series') {
+            } else if (j.Type === 'series' && e.season.value && e.episode.value) {
                 titleStr = seasonEpisode(titleStr, e.season.value, e.episode.value)
             }
         }
