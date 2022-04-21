@@ -361,6 +361,12 @@ customElements.define('elm-', class extends HTMLElement {
                 technical.textContent = 'versions'
                 title.append(link, ' — ', technical)
                 minutes.classList.remove('err')
+                const imdbVotesNum = parseInt(e.imdbVotes?.replace(/,/g, ''))
+                if (e.imdbVotes === 'N/A' ||
+                    imdbVotesNum < 1000)
+                    this.classList.add('warning', 'warning-red')
+                else
+                    this.classList.remove('warning-red')
                 if (e.minutes)
                     minutes.value = e.minutes
                 else if (!e.Runtime || e.Runtime === 'N/A') {
