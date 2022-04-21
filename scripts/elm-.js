@@ -418,11 +418,10 @@ customElements.define('elm-', class extends HTMLElement {
             })
         }
         const minTitle = str => {
-            return str.replace(/\W/g, e => {
-                if (e === ' ')
-                    return ' '
-                return ''
-            }).match(/\w+/g).join(' ').toLowerCase()
+            return str.replace(/\W|\s/g, ' ')
+                .match(/\w+/g)
+                .join(' ')
+                .toLowerCase()
         }
         this.searchFunc = async e => {
             title.innerHTML = ''
