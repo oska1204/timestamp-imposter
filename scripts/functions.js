@@ -4,10 +4,10 @@ function minToMs(minutes) {
 
 function seasonEpisode(str, sVal, eVal) {
     str += ' S'
-    if (sVal < 10 && sVal > 0)
+    if (sVal < 10 && sVal >= 0)
         str += '0'
     str += sVal + 'E'
-    if (eVal < 10 && eVal > 0)
+    if (eVal < 10 && eVal >= 0)
         str += '0'
     str += eVal
     return str
