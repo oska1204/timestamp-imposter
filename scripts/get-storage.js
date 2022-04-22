@@ -34,7 +34,8 @@ const presetObj = tempPresetObj
     "year": "\${j.Year || ''}",
     "score": "\${j.imdbRating && j.imdbRating !== 'N/A' ? j.imdbRating.replace('.', '') + '%' : ''}",
     "mm": "\${e.minutes.value}",
-    "hhmm": "\${hhmm(e.minutes.value)}"
+    "hhmm": "\${hhmm(e.minutes.value)}",
+    "id": "\${j.imdbID}"
 },
 `,
         },
