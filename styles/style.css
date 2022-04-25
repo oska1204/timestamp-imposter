@@ -91,6 +91,12 @@ code {
     word-spacing: 0;
 }
 
+.flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 4rem;
+}
+
 header {
     display: flex;
     align-items: flex-start;

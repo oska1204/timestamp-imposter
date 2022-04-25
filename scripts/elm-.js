@@ -25,7 +25,7 @@ template.innerHTML = `
         </select>
         <button class="update">Update</button>
         <button class="remove">Remove</button>
-        <label class="exclude"><input type="checkbox"></label>
+        <label class="exclude"><input data-_exclude type="checkbox"></label>
     </div>
     <div class="select-title-wrapper">
         <select class="select-title"></select>
@@ -605,6 +605,33 @@ customElements.define('elm-', class extends HTMLElement {
                 selection.addRange(range)
             })
         })
+        exclude.addEventListener('click', e => {
+            if (e.altKey ||
+                e.ctrlKey ||
+                e.metaKey ||
+                !e.shiftKey) {
+                window._elmExclude = null
+            } else {
+                if (window._elmExclude) {
+                    const { _elmExclude } = window
+                    const children = Array.from(elmWrapper.children)
+                    const first = children.indexOf(_elmExclude)
+                    const second = children.indexOf(this)
+                    const [start, end] = [first, second].sort((a, b) => a - b)
+                    const list = children.slice(start, end + 1)
+                    list.forEach(f => {
+                        f.exclude.checked = _elmExclude.exclude.checked
+                    })
+                    window._elmExclude = null
+                } else {
+                    window._elmExclude = this
+                }
+            }
+        })
         return this
     }
+})
+addEventListener('click', e => {
+    if (e.target.dataset._exclude === undefined)
+        window._elmExclude = null
 })
