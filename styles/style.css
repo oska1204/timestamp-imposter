@@ -73,6 +73,12 @@ select {
 button {
     background: var(--tertiary-background, #2b2b2b);
     color: var(--tertiary-color, #bbb);
+    border-style: outset;
+    border-color: rgb(118, 118, 118);
+}
+
+button:active {
+    border-style: inset;
 }
 
 [type="time"] {
