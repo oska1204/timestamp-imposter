@@ -108,8 +108,6 @@ customElements.define('elm-', class extends HTMLElement {
             this.attributeChangedHandler(...arguments)
     }
     attributeChangedHandler(name, oldVal, newVal) {
-        if (window.isUnloading)
-            return
         if (name === 'text') {
             const val = newVal.trim()
             if (newVal !== val)

@@ -100,7 +100,7 @@ code {
 .flex-wrap {
     display: flex;
     flex-wrap: wrap;
-    grid-gap: 4rem;
+    grid-gap: 2rem 4rem;
 }
 
 header {
