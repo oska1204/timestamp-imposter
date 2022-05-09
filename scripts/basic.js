@@ -1,4 +1,3 @@
-apikeyElm.value = apikey || ''
 apikeyElm.addEventListener('input', function () {
     apikey = this.value
     updateKeyLink(apikey)

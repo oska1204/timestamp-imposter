@@ -8,7 +8,10 @@ const updateKeyLink = function (key) {
 }
 const storageKey = sessionStorage.getItem('apikey')
 const urlKey = new URL(location).searchParams.get('apikey')
-if (storageKey)
+if (storageKey) {
     apikey = storageKey
+    apikeyElm.value = storageKey
+    updateKeyLink(storageKey)
+}
 else if (urlKey)
     apikey = urlKey
