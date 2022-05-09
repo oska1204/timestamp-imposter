@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Allows you to create a timestamp list from movies/series, by using the Open Movie Database api (omdbapi.com).">
+    <meta name="description"
+        content="Allows you to create a timestamp list from movies/series, by using the Open Movie Database api (omdbapi.com).">
     <title>Timestamp imposter</title>
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/elm-.css">
@@ -66,12 +67,11 @@
                         <li>Click, Generate button</li>
                         <li>Click, Format button</li>
                     </ol>
-                    Save the list with this <a data-const="listLink" href="#"  rel="noopener noreferrer">link</a>
+                    Save the list with this <a data-const="listLink" href="#" rel="noopener noreferrer">link</a>
                 </article>
                 <article>
-                    <h2>Other</h2>
-                    <p>Now you can shift click, to check multiple elements to include/exclude.</p>
-                    <p>Check out my twitch chat bot source code <a href="https://github.com/oska1204/tmi">here</a>.</p>
+                    <h2>New</h2>
+                    <p>Clear storage button now doesn't clear custom api key.</p>
                 </article>
             </div>
         </div>
@@ -163,7 +163,7 @@
                 <div>
                     <p>You can access the Date object with <code>${d}</code>.</p>
                     <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date"
-                             rel="noopener noreferrer">Reference</a>. Recommended
+                            rel="noopener noreferrer">Reference</a>. Recommended
                         <code>${d.toJSON()}</code>.</p>
                 </div>
             </section>
@@ -179,15 +179,18 @@
             <section class="api-wrapper">
                 <h2>Api</h2>
                 <p>Should the api key expire, you can register for a free key at <a href="https://www.omdbapi.com"
-                         rel="noopener noreferrer">omdbapi.com</a>.</p>
+                        rel="noopener noreferrer">omdbapi.com</a>.</p>
                 <p>You can either set the key here: <input type="text" data-const="apikeyElm" placeholder="api key"></p>
-                <p>Or you can add <a href="?apikey=KEY"  rel="noopener noreferrer"
-                        data-const="keyLink">?apikey=<span data-const="keyPlaceholder">KEY</span></a> to the url.</p>
+                <p>Or you can add <a href="?apikey=KEY" rel="noopener noreferrer" data-const="keyLink">?apikey=<span
+                            data-const="keyPlaceholder">KEY</span></a> to the url.</p>
+                <p>You can use a temp email service like <a href="https://mail.gw">mail.gw</a>.</p>
+                <p>Remember to open the active api key link.</p>
+                <p>Key doesn't work? Use backup key: <a href="?apikey=80bf610a">80bf610a</a>.</p>
             </section>
         </div>
     </main>
     <footer>
-        <a href="https://github.com/oska1204/timestamp-imposter"  rel="noopener noreferrer">
+        <a href="https://github.com/oska1204/timestamp-imposter" rel="noopener noreferrer">
             <svg aria-hidden="true" role="img" viewBox="0 0 16 16" width="32" height="32" fill="currentColor"
                 style="display:inline-block;user-select:none;vertical-align:text-bottom;overflow:visible">
                 <path fill-rule="evenodd"
