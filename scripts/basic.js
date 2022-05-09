@@ -153,10 +153,7 @@ suggestionForm.addEventListener('submit', function (e) {
     if (!this.elements.text.value.trim())
         e.preventDefault()
 })
-clearStorage.addEventListener('click', () => {
-    localStorage.clear()
-    sessionStorage.clear()
-})
+clearStorage.addEventListener('click', clearStorages)
 document.querySelectorAll('.var-list code').forEach(code => {
     code.addEventListener('click', e => {
       const selection = window.getSelection()

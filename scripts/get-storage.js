@@ -1,8 +1,23 @@
 const currentVersion = '1.1.0'
 if (localStorage.version !== currentVersion) {
-    localStorage.clear()
-    sessionStorage.clear()
+    clearStorages()
     localStorage.version = currentVersion
+}
+
+function clearStorages() {
+    const excludeKeys = [
+        'version',
+        'apikey',
+    ]
+    const storages = [
+        localStorage,
+        sessionStorage,
+    ]
+    storages.forEach(storage => {
+        const keys = Object.keys(storage)
+        const keysFiltered = keys.filter(key => !excludeKeys.includes(key))
+        keysFiltered.forEach(key => delete storage[key])
+    })
 }
 
 textarea.value = localStorage.getItem('textarea') || 'Aladdin 1992 ⏩\ntt1119646 ⏩\nSherlock S01E01 ⏩\nhttps://www.imdb.com/title/tt0449088'
