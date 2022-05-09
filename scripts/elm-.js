@@ -243,11 +243,11 @@ customElements.define('elm-', class extends HTMLElement {
                     span2.textContent = JSON.stringify(element, null, 2)
             }
         }
+        this.isInfoOn = () => infoOuterWrapper.classList.contains('info')
         infoButton.addEventListener('click', () => {
             const isOn = infoOuterWrapper.classList.toggle('info')
-            if (isOn && !this.json)
-                return
-            this.infoFunc()
+            if (isOn && this.json)
+                this.infoFunc()
         })
         year.addEventListener('change', () => {
             if (year.value.length === 2) {
@@ -346,7 +346,8 @@ customElements.define('elm-', class extends HTMLElement {
         this.resFunc = e => {
             this.json = e
             this.dispatchEvent(new CustomEvent('send-data', { bubbles: true }))
-            this.infoFunc()
+            if (this.isInfoOn())
+                this.infoFunc()
             title.innerHTML = ''
             if (e.Response === 'True') {
                 errCount = 0
