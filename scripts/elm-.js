@@ -344,6 +344,11 @@ customElements.define('elm-', class extends HTMLElement {
             this.errFunc()
         }
         this.resFunc = e => {
+            const selectTitleId = selectTitle.children[selectTitle.value]?.dataset.id
+            if (e.imdbID !== selectTitleId &&
+                e.seriesID !== selectTitleId &&
+                selectTitle.value)
+                return
             this.json = e
             this.dispatchEvent(new CustomEvent('send-data', { bubbles: true }))
             if (this.isInfoOn())
