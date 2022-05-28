@@ -156,11 +156,11 @@ suggestionForm.addEventListener('submit', function (e) {
 clearStorage.addEventListener('click', clearStorages)
 document.querySelectorAll('.var-list code').forEach(code => {
     code.addEventListener('click', e => {
-      const selection = window.getSelection()
-      selection.removeAllRanges()
-        
-      const range = document.createRange()
-      range.selectNodeContents(e.target)
-      selection.addRange(range)
+        const selection = window.getSelection()
+        selection.removeAllRanges()
+
+        const range = document.createRange()
+        range.selectNodeContents(e.target)
+        selection.addRange(range)
     })
 })

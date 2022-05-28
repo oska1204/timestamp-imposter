@@ -128,9 +128,12 @@ function getList(arr, minOffset, startTime, preset) {
             ? `{${ratings.join(' ')}}`
             : ''
         let result = eval(`\`${customFormatInput.value}\``)
-        if (e.isTail)
+        if (e.isTail) {
             result = eval(`\`${tail.value}\``)
-        finalArr.push(result)
+            if (includeTailCheck.checked)
+                finalArr.push(result)
+        } else
+            finalArr.push(result)
     }
     return finalArr
 }

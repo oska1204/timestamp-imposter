@@ -62,10 +62,10 @@ const presetObj = tempPresetObj
             watchlist: '',
         },
         join: {
-            time: ' ⏩\n',
-            rating: ' ⏩\n',
-            'rating + time': ' ⏩\n',
-            blank: ' ⏩\n',
+            time: ' ⏩ \n',
+            rating: ' ⏩ \n',
+            'rating + time': ' ⏩ \n',
+            blank: ' ⏩ \n',
             watchlist: '',
         }
     }
@@ -87,6 +87,7 @@ getCheckbox(streamElementsCurTimeCheck,
 getCheckbox(imdbCheck, 'imdb-check')
 getCheckbox(tomatoCheck, 'tomato-check')
 getCheckbox(metacriticCheck, 'metacritic-check')
+getCheckbox(includeTailCheck, 'include-tail-check')
 
 preset.value = sessionStorage.getItem('preset') || preset.value
 startInput.value = presetObj.startInput[preset.value]
