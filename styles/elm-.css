@@ -141,11 +141,11 @@ elm-.loading .select-title-wrapper {
     background-color: var(--tertiary-background);
 }
 
-.rated.err {
+.rated.warn {
     background: rgba(61, 61, 0, 50%);
 }
 
-.light .rated.err {
+.light .rated.warn {
     background: rgba(143, 143, 36, 50%);
 }
 

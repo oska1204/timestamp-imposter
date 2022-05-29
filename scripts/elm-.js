@@ -396,13 +396,15 @@ customElements.define('elm-', class extends HTMLElement {
                     !e.Rated ||
                     e.Rated === 'Not Rated') {
                     rated.textContent = 'Not Rated'
-                    rated.classList.add('err')
+                    rated.classList.add('warn')
                 } else
                     rated.textContent = `Rated ${e.Rated}`
                 infoButton.hidden = false
                 rated.hidden = false
-                if (e.Rated === 'R' || e.Rated === 'TV-MA')
-                    rated.classList.add('err')
+                if (e.Rated === 'R' ||
+                    e.Rated === 'TV-MA' ||
+                    e.Rated === 'X')
+                    rated.classList.add('warn')
             } else if (e.Response === 'False') {
                 resFalse(e)
             }
