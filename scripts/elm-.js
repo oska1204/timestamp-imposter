@@ -344,6 +344,7 @@ customElements.define('elm-', class extends HTMLElement {
             this.errFunc()
         }
         this.resFunc = e => {
+            e.seriesID = e.seriesID?.replace(/t+/, 'tt')
             const selectTitleId = selectTitle.children[selectTitle.value]?.dataset.id
             if (e.imdbID !== selectTitleId &&
                 e.seriesID !== selectTitleId &&
