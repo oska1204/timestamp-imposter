@@ -240,7 +240,7 @@ customElements.define('elm-', class extends HTMLElement {
                             infoWrapper.appendChild(newDiv('Tomato', Value))
                     })
                 else
-                    span2.textContent = JSON.stringify(element, null, 2)
+                    infoWrapper.appendChild(newDiv(key, JSON.stringify(element, null, 2)))
             }
         }
         this.isInfoOn = () => infoOuterWrapper.classList.contains('info')
@@ -344,7 +344,8 @@ customElements.define('elm-', class extends HTMLElement {
             this.errFunc()
         }
         this.resFunc = e => {
-            e.seriesID = e.seriesID?.replace(/t+/, 'tt')
+            if (e.seriesID)
+                e.seriesID = e.seriesID?.replace(/t+/, 'tt')
             const selectTitleId = selectTitle.children[selectTitle.value]?.dataset.id
             if (e.imdbID !== selectTitleId &&
                 e.seriesID !== selectTitleId &&
