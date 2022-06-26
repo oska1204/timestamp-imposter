@@ -351,6 +351,7 @@ customElements.define('elm-', class extends HTMLElement {
                 e.seriesID !== selectTitleId &&
                 selectTitle.value)
                 return
+            e.Title = parseStr(e.Title)
             this.json = e
             this.dispatchEvent(new CustomEvent('send-data', { bubbles: true }))
             if (this.isInfoOn())
@@ -443,9 +444,12 @@ customElements.define('elm-', class extends HTMLElement {
             if (e.Response === 'True') {
                 title.innerHTML = 'Loading...'
                 const searchFiltered = e.Search.filter(e => e.Type !== 'game')
-                const searchArr = searchFiltered
-                this.titleJson = searchFiltered
-                this.formatSearch(searchFiltered)
+                const searchArr = searchFiltered.map(e => {
+                    e.Title = parseStr(e.Title)
+                    return e
+                })
+                this.titleJson = searchArr
+                this.formatSearch(searchArr)
                 const minTitleFunc = f => minTitle(f.Title) === minTitle(search.value)
                 let index = searchArr.findIndex(minTitleFunc)
                 if (index === -1)
@@ -643,3 +647,9 @@ addEventListener('click', e => {
     if (e.target.dataset._exclude === undefined)
         window._elmExclude = null
 })
+
+function parseStr(str) {
+    const temp = document.createElement('template')
+    temp.innerHTML = str.replace(/</g, '&lt;')
+    return temp.content.textContent
+}
