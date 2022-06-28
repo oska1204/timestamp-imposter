@@ -230,12 +230,26 @@ elm-.loading .select-title-wrapper {
     width: 100%;
     height: 100%;
     z-index: 1;
+    overflow: auto;
+    --poster-overlay-padding: 6rem;
+    padding: var(--poster-overlay-padding);
+}
+
+.overlay-zoom {
+    padding: 0;
 }
 
 .poster-overlay img {
     margin: auto;
     max-width: 100%;
-    max-height: 100vh;
+    max-height: calc(100vh - var(--poster-overlay-padding) * 2);
+    cursor: zoom-in;
+}
+
+.overlay-zoom img {
+    max-width: unset;
+    max-height: unset;
+    cursor: zoom-out;
 }
 
 .poster-overlay:not(.overlay) {

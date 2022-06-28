@@ -382,7 +382,7 @@ customElements.define('elm-', class extends HTMLElement {
                 } else
                     minutes.value = e.Runtime.replace(/\D/g, '') || e.minutes
                 if (e.Poster && e.Poster !== 'N/A') {
-                    poster.src = e.Poster
+                    poster.src = e.Poster.replace(/X300(?=\.jpg$)/, 'Y450')
                     poster.alt = `${e.Title} poster`
                 } else {
                     poster.removeAttribute('src')
@@ -596,13 +596,27 @@ customElements.define('elm-', class extends HTMLElement {
             posterOverlay.classList.add('overlay')
             posterOverlay.innerHTML = ''
             const img = document.createElement('img')
-            img.src = poster.src
+            img.src = this.json.Poster.replace(/X300(?=\.jpg$)/, '')
             posterOverlay.appendChild(img)
             document.documentElement.style.overflow = 'hidden'
         })
         posterOverlay.addEventListener('click', e => {
-            posterOverlay.classList.remove('overlay')
-            document.documentElement.style.overflow = ''
+            const { target } = e
+            if (target.nodeName === 'IMG') {
+                const { offsetWidth, offsetHeight } = target
+                const { offsetX, offsetY } = e
+                if (posterOverlay.classList.toggle('overlay-zoom')) {
+                    const { scrollWidth, scrollHeight } = posterOverlay
+                    const xScroll = offsetX / offsetWidth * scrollWidth
+                    const yScroll = offsetY / offsetHeight * scrollHeight
+                    const xScrollCenter = xScroll - window.innerWidth / 2
+                    const yScrollCenter = yScroll - window.innerHeight / 2
+                    posterOverlay.scroll(xScrollCenter, yScrollCenter)
+                }
+            } else {
+                posterOverlay.classList.remove('overlay', 'overlay-zoom')
+                document.documentElement.style.overflow = ''
+            }
         })
         warningWrapper.addEventListener('click', () => {
             this.classList.remove('warning')
@@ -643,9 +657,15 @@ customElements.define('elm-', class extends HTMLElement {
         return this
     }
 })
-addEventListener('click', e => {
+window.addEventListener('click', e => {
     if (e.target.dataset._exclude === undefined)
         window._elmExclude = null
+})
+window.addEventListener('keyup', e => {
+    const { classList } = document.querySelector('.overlay')
+    if (!classList || e.key !== 'Escape')
+        return
+    classList.remove('overlay', 'overlay-zoom')
 })
 
 function parseStr(str) {
