@@ -306,7 +306,7 @@ customElements.define('elm-', class extends HTMLElement {
                     season.value === '' && episode.value === ''
                 )) {
                     const extraQueryUrl = queryUrl
-                    queryUrl += `&season=${season.value}&episode=${episode.value}`
+                    queryUrl += `&season=${season.valueAsNumber}&episode=${episode.value}`
                     fetchApi(this.epFunc, queryUrl, e => {
                         if (e.Response === 'False')
                             fetchApi(this.resFunc, extraQueryUrl)
@@ -468,7 +468,7 @@ customElements.define('elm-', class extends HTMLElement {
                     season.value !== '' && episode.value === '' ||
                     season.value === '' && episode.value === ''
                 )) {
-                    queryUrl += `&season=${season.value}&episode=${episode.value}`
+                    queryUrl += `&season=${season.valueAsNumber}&episode=${episode.value}`
                     fetchApi(this.epFunc, queryUrl)
                 }
             } else if (e.Response === 'False') {
@@ -662,7 +662,7 @@ window.addEventListener('click', e => {
         window._elmExclude = null
 })
 window.addEventListener('keyup', e => {
-    const { classList } = document.querySelector('.overlay')
+    const { classList } = document.querySelector('.overlay') || {}
     if (!classList || e.key !== 'Escape')
         return
     classList.remove('overlay', 'overlay-zoom')
