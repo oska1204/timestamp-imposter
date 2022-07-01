@@ -231,8 +231,7 @@ elm-.loading .select-title-wrapper {
     height: 100%;
     z-index: 1;
     overflow: auto;
-    --poster-overlay-padding: 6rem;
-    padding: var(--poster-overlay-padding);
+    padding: 0 6rem;
 }
 
 .overlay-zoom {
@@ -242,7 +241,7 @@ elm-.loading .select-title-wrapper {
 .poster-overlay img {
     margin: auto;
     max-width: 100%;
-    max-height: calc(100vh - var(--poster-overlay-padding) * 2);
+    max-height: 100vh;
     cursor: zoom-in;
 }
 
