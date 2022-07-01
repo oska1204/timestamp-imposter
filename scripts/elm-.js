@@ -382,7 +382,7 @@ customElements.define('elm-', class extends HTMLElement {
                 } else
                     minutes.value = e.Runtime.replace(/\D/g, '') || e.minutes
                 if (e.Poster && e.Poster !== 'N/A') {
-                    poster.src = e.Poster.replace(/X300(?=\.jpg$)/, 'Y450')
+                    poster.src = e.Poster
                     poster.alt = `${e.Title} poster`
                 } else {
                     poster.removeAttribute('src')
